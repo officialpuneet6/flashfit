@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FlashFit Shopkeeper Panel</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="shopkeeper-panel.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+  <main class="seller-root">
+    <section id="shopLoginView" class="login-view">
+      <div class="panel">
+        <h1><img src="50x100logo.png" alt="FlashFit Logo" style="height: 40px; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;" /> Seller Portal</h1>
+        <p>Login with Shop ID and password to manage products and orders.</p>
+        <label>Shop Login ID</label>
+        <input id="shopLoginId" type="text" placeholder="Enter Shop Login ID" />
+        <label>Password</label>
+        <input id="shopLoginPassword" type="password" placeholder="Enter Shop Password" />
+        <button id="shopLoginBtn" class="btn primary" type="button">Login</button>
+        <p id="shopLoginMsg" class="msg"></p>
+      </div>
+    </section>
+
+    <section id="shopAppView" class="app-view hidden">
+      <div class="sidebar-overlay" id="shopSidebarOverlay"></div>
+      <aside class="sidebar" id="shopSidebar">
+        <div class="head">
+          <img src="50x100logo.png" alt="FlashFit Logo" style="height: 32px; margin-bottom: 8px;" />
+          <p id="shopIdentity">Shop -</p>
+        </div>
+        <nav class="tabs">
+          <button class="tab-btn active" data-tab="dashboard">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>Dashboard</span>
+          </button>
+          <button class="tab-btn" data-tab="products">
+            <i class="fa-solid fa-box"></i>
+            <span>Products</span>
+          </button>
+          <button class="tab-btn" data-tab="orders">
+            <i class="fa-solid fa-shopping-bag"></i>
+            <span>Orders</span>
+          </button>
+          <button class="tab-btn" data-tab="earnings">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Earnings</span>
+          </button>
+          <button class="tab-btn" data-tab="reviews">
+            <i class="fa-solid fa-star"></i>
+            <span>Reviews</span>
+          </button>
+          <button class="tab-btn" data-tab="profile">
+            <i class="fa-solid fa-store"></i>
+            <span>Shop Profile</span>
+          </button>
+        </nav>
+      </aside>
+
+      <section class="workspace">
+        <header class="topbar">
+          <div class="topbar-left">
+            <button id="shopSidebarToggle" class="btn ghost menu-toggle"><i class="fa-solid fa-bars"></i></button>
+            <div>
+              <h2>FlashFit Shopkeeper</h2>
+              <p id="shopSessionText">Welcome back, Seller</p>
+            </div>
+          </div>
+          <div class="actions">
+            <select id="sellerSortSelect">
+              <option value="asc">Sort A to Z</option>
+              <option value="desc">Sort Z to A</option>
+            </select>
+            <button id="shopLogoutBtn" class="btn ghost" type="button">
+              <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
+            
+            <a class="btn ghost" href="../flashfitshop/index.html">
+              <i class="fa-solid fa-store"></i> Store
+            </a>
+          </div>
+        </header>
+
+        <section class="tab-content active" data-tab="dashboard">
+          <div class="stats-grid">
+            <article>
+              <p>Net Earnings</p>
+              <strong id="statEarnings">₹0</strong>
+            </article>
+            <article>
+              <p>Delivered</p>
+              <strong id="statDelivered">0</strong>
+            </article>
+            <article>
+              <p>Returns/Cancel</p>
+              <strong id="statReturns">0</strong>
+            </article>
+            <article>
+              <p>Gross Sales (GMV)</p>
+              <strong id="statGMV">₹0</strong>
+            </article>
+          </div>
+
+          <div class="stats-grid secondary-stats">
+            <article>
+              <p>Total Products</p>
+              <strong id="statProducts">0</strong>
+            </article>
+            <article>
+              <p>Pending Verify</p>
+              <strong id="statPending">0</strong>
+            </article>
+            <article>
+              <p>Approved</p>
+              <strong id="statApproved">0</strong>
+            </article>
+            <article>
+              <p>Total Orders</p>
+              <strong id="statOrders">0</strong>
+            </article>
+          </div>
+
+          <div class="dashboard-visuals">
+            <div class="table-card chart-card">
+              <div class="chart-head">
+                <div>
+                  <h3>Performance Overview</h3>
+                  <p>Real-time visual data of your shop's sales trend.</p>
+                </div>
+                <div class="chart-metrics">
+                  <div class="mini-stat">
+                    <span>Total Sales</span>
+                    <strong id="chartStatSales">Rs 0</strong>
+                  </div>
+                  <div class="mini-stat">
+                    <span>Orders</span>
+                    <strong id="chartStatOrders">0</strong>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-container">
+                <canvas id="earningsChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <section class="tab-content" data-tab="products">
+          <div class="hint">
+            <p>New product listings require admin approval before they go live. Verification usually takes 2 to 4 hours.</p>
+          </div>
+          
+          <div class="table-card">
+            <div class="card-header-with-icon">
+              <i class="fa-solid fa-cloud-arrow-down"></i>
+              <div>
+                <h3>Quick Import Listing</h3>
+                <p>Paste a public product link or listing details to auto-fill the FlashFit product form.</p>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <input id="importListingUrlInput" type="url" placeholder="Paste product link (Amazon, Flipkart, etc.)" />
+              <button id="importListingUrlBtn" class="btn ghost" type="button">
+                <i class="fa-solid fa-link"></i> Fetch Link
+              </button>
+            </div>
+            <div class="form-grid">
+              <textarea id="importListingInput" class="full" placeholder='Paste JSON ya text listing details...'></textarea>
+            </div>
+            <div class="form-row" style="margin-top: 12px;">
+              <button id="importListingBtn" class="btn primary" type="button">
+                <i class="fa-solid fa-magic-wand-sparkles"></i> Import Draft
+              </button>
+              <div style="display: flex; gap: 8px;">
+                <button id="downloadListingJsonBtn" class="btn ghost" type="button">
+                  <i class="fa-solid fa-download"></i> JSON
+                </button>
+                <button id="clearImportBtn" class="btn ghost" type="button">
+                  <i class="fa-solid fa-trash-can"></i> Clear
+                </button>
+              </div>
+            </div>
+            <p id="importListingMsg" class="msg"></p>
+          </div>
+
+          <div class="products-layout">
+            <div class="table-card product-form-card">
+              <div class="product-form-head">
+                <div>
+                  <h3><i class="fa-solid fa-pen-to-square"></i> Product Details</h3>
+                  <p>Complete the form below to list your product.</p>
+                </div>
+                <!-- <span class="pricing-badge">Fee: Platform 5% + Gateway 4%</span> -->
+              </div>
+              <div class="form-grid">
+                <div class="form-group full">
+                  <label>Product Title</label>
+                  <input id="productTitleInput" type="text" placeholder="e.g. Premium Cotton Yellow Kurti" />
+                </div>
+                <div class="form-group">
+                  <label>Category</label>
+                  <select id="productCategoryInput">
+                    <option value="">Select Category</option>
+                    <option value="Kurtis">Kurtis</option>
+                    <option value="Tops">Tops</option>
+                    <option value="T-Shirts">T-Shirts</option>
+                    <option value="Jeans">Jeans</option>
+                    <option value="Dresses">Dresses</option>
+                    <option value="Sarees">Sarees</option>
+                    <option value="Ethnic Sets">Ethnic Sets</option>
+                    <option value="Kids Wear">Kids Wear</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Stock Quantity</label>
+                  <input id="productStockInput" type="number" min="0" placeholder="Available units" />
+                </div>
+                <div class="form-group">
+                  <label>Cost Price</label>
+                  <input id="productCostPriceInput" type="number" min="0" placeholder="Your cost" />
+                </div>
+                <div class="form-group">
+                  <label>Your Profit</label>
+                  <input id="productProfitInput" type="number" min="0" placeholder="Desired profit" />
+                </div>
+                <div class="form-group full">
+                  <label>Seller Price (Base)</label>
+                  <input id="productPriceInput" type="number" min="0" placeholder="Final price for platform" />
+                </div>
+                
+                <!-- Attributes Section -->
+                <div class="form-group">
+                  <label>Color</label>
+                  <select id="productColorInput">
+                    <option value="">Select Color</option>
+                    <option value="Black">Black</option>
+                    <option value="Blue">Blue</option>
+                    <option value="Cream">Cream</option>
+                    <option value="Green">Green</option>
+                    <option value="Grey">Grey</option>
+                    <option value="Maroon">Maroon</option>
+                    <option value="Navy Blue">Navy Blue</option>
+                    <option value="Orange">Orange</option>
+                    <option value="Pink">Pink</option>
+                    <option value="Purple">Purple</option>
+                    <option value="Red">Red</option>
+                    <option value="White">White</option>
+                    <option value="Yellow">Yellow</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Color Variants</label>
+                  <input id="productColorVariantsInput" type="text" placeholder="Red, Blue, Black" />
+                </div>
+                <div class="form-group">
+                  <label>Size Variants</label>
+                  <input id="productSizeInput" type="text" placeholder="S, M, L, XL, XXL / Free Size" />
+                </div>
+                <div class="form-group">
+                  <label>Fabric</label>
+                  <select id="productFabricInput">
+                    <option value="">Select Fabric</option>
+                    <option value="Cotton">Cotton</option>
+                    <option value="Rayon">Rayon</option>
+                    <option value="Georgette">Georgette</option>
+                    <option value="Chiffon">Chiffon</option>
+                    <option value="Silk">Silk</option>
+                    <option value="Linen">Linen</option>
+                    <option value="Denim">Denim</option>
+                    <option value="Polyester">Polyester</option>
+                    <option value="Net">Net</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Pattern / Print</label>
+                  <select id="productPatternInput">
+                    <option value="">Select Pattern</option>
+                    <option value="Solid">Solid</option>
+                    <option value="Printed">Printed</option>
+                    <option value="Floral">Floral</option>
+                    <option value="Embroidered">Embroidered</option>
+                    <option value="Striped">Striped</option>
+                    <option value="Checked">Checked</option>
+                    <option value="Graphic">Graphic</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Fit Type</label>
+                  <select id="productFitInput">
+                    <option value="">Select Fit</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Slim">Slim</option>
+                    <option value="Relaxed">Relaxed</option>
+                    <option value="Oversized">Oversized</option>
+                    <option value="A-Line">A-Line</option>
+                    <option value="Straight">Straight</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Sleeve Type</label>
+                  <select id="productSleeveInput">
+                    <option value="">Select Sleeve</option>
+                    <option value="Sleeveless">Sleeveless</option>
+                    <option value="Short Sleeve">Short Sleeve</option>
+                    <option value="3/4 Sleeve">3/4 Sleeve</option>
+                    <option value="Full Sleeve">Full Sleeve</option>
+                    <option value="Bell Sleeve">Bell Sleeve</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Neck Type</label>
+                  <select id="productNeckInput">
+                    <option value="">Select Neck</option>
+                    <option value="Round Neck">Round Neck</option>
+                    <option value="V Neck">V Neck</option>
+                    <option value="Collar Neck">Collar Neck</option>
+                    <option value="Boat Neck">Boat Neck</option>
+                    <option value="Mandarin Collar">Mandarin Collar</option>
+                    <option value="Square Neck">Square Neck</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Occasion</label>
+                  <select id="productOccasionInput">
+                    <option value="">Select Occasion</option>
+                    <option value="Casual">Casual</option>
+                    <option value="Daily Wear">Daily Wear</option>
+                    <option value="Office Wear">Office Wear</option>
+                    <option value="Party Wear">Party Wear</option>
+                    <option value="Festive">Festive</option>
+                    <option value="Wedding">Wedding</option>
+                  </select>
+                </div>
+                <div class="form-group full">
+                  <label>Care Instructions</label>
+                  <input id="productCareInput" type="text" placeholder="Machine wash, gentle cycle, dry in shade" />
+                </div>
+                <div class="form-group full">
+                  <label>Size Chart</label>
+                  <div class="form-grid">
+                    <input id="sizeSChestInput" type="text" placeholder="S Chest" />
+                    <input id="sizeSLengthInput" type="text" placeholder="S Length" />
+                    <input id="sizeMChestInput" type="text" placeholder="M Chest" />
+                    <input id="sizeMLengthInput" type="text" placeholder="M Length" />
+                    <input id="sizeLChestInput" type="text" placeholder="L Chest" />
+                    <input id="sizeLLengthInput" type="text" placeholder="L Length" />
+                    <input id="sizeXLChestInput" type="text" placeholder="XL Chest" />
+                    <input id="sizeXLLengthInput" type="text" placeholder="XL Length" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-grid" style="margin-top: 16px;">
+                <div class="form-group full">
+                  <label>Product Photos</label>
+                  <div class="photo-upload-grid">
+                    <label class="photo-upload-card">
+                      <input id="productImageFileInput" type="file" accept="image/*" />
+                      <span class="photo-icon"><i class="fa-solid fa-camera"></i></span>
+                      <strong>Main Photo</strong>
+                      <small>Required</small>
+                      <img id="productImagePreview" alt="" />
+                    </label>
+                    <label class="photo-upload-card">
+                      <input id="productImage2FileInput" type="file" accept="image/*" />
+                      <span class="photo-icon"><i class="fa-solid fa-image"></i></span>
+                      <strong>Photo 2</strong>
+                      <small>Optional</small>
+                      <img id="productImage2Preview" alt="" />
+                    </label>
+                    <label class="photo-upload-card">
+                      <input id="productImage3FileInput" type="file" accept="image/*" />
+                      <span class="photo-icon"><i class="fa-solid fa-image"></i></span>
+                      <strong>Photo 3</strong>
+                      <small>Optional</small>
+                      <img id="productImage3Preview" alt="" />
+                    </label>
+                    <label class="photo-upload-card">
+                      <input id="productImage4FileInput" type="file" accept="image/*" />
+                      <span class="photo-icon"><i class="fa-solid fa-image"></i></span>
+                      <strong>Photo 4</strong>
+                      <small>Optional</small>
+                      <img id="productImage4Preview" alt="" />
+                    </label>
+                  </div>
+                  <!-- <p id="imageUploadMsg" class="upload-msg">Photos upload to ImgBB when you submit the product.</p> -->
+                  <input id="productImageInput" type="hidden" />
+                  <input id="productImage2Input" type="hidden" />
+                  <input id="productImage3Input" type="hidden" />
+                  <input id="productImage4Input" type="hidden" />
+                </div>
+                <div class="form-group full">
+                  <label>Description</label>
+                  <textarea id="productDescriptionInput" class="full" placeholder="Product details, material, care instructions..."></textarea>
+                </div>
+              </div>
+
+              <button id="addProductBtn" class="btn primary" type="button" style="margin-top: 24px; width: 100%;">
+                <i class="fa-solid fa-paper-plane"></i> Submit Product For Verification
+              </button>
+            </div>
+
+            <aside class="pricing-card table-card">
+              <div class="card-header-with-icon">
+                <i class="fa-solid fa-calculator"></i>
+                <h3>Live Price Chart</h3>
+              </div>
+              <p class="hint">Settlement value is what you receive in bank.</p>
+              <div class="price-sheet">
+                <div><span>Cost Price</span><strong id="calcCostValue">Rs 0</strong></div>
+                <div><span>Your Profit</span><strong id="calcProfitValue">Rs 0</strong></div>
+                <div class="highlight"><span>Seller Price</span><strong id="calcSellerPriceValue">Rs 0</strong></div>
+                <div><span>Gateway Fee (4%)</span><strong id="calcGatewayValue">Rs 0</strong></div>
+                <div><span>Platform Fee (5%)</span><strong id="calcPlatformValue">Rs 0</strong></div>
+                <div><span>Delivery</span><strong id="calcDeliveryValue">Rs 90</strong></div>
+              </div>
+              <div class="price-preview">
+                <span>Customer Sees</span>
+                <strong id="livePricingPreview">Rs 0</strong>
+                <small id="liveSettlementNote">Payout: Rs 0</small>
+              </div>
+            </aside>
+          </div>
+
+          <div class="table-card" style="margin-top: 24px;">
+            <div class="card-header-with-icon">
+              <i class="fa-solid fa-pen-nib"></i>
+              <div>
+                <h3>Quick Update Price & Stock</h3>
+                <p>Use this section to quickly update the pricing or inventory of an existing product.</p>
+              </div>
+            </div>
+            <div class="form-row" style="flex-wrap: wrap;">
+              <input id="updateProductIdInput" type="number" placeholder="Product ID" style="flex: 0.5;" />
+              <input id="updatePriceInput" type="number" placeholder="New Seller Price" style="flex: 1;" />
+              <input id="updateStockInput" type="number" placeholder="New Stock" style="flex: 1;" />
+              <button id="updateProductBtn" class="btn primary" type="button" style="flex: 1;">
+                <i class="fa-solid fa-rotate"></i> Update Inventory
+              </button>
+            </div>
+          </div>
+
+          <div class="table-card" style="margin-top: 24px;">
+            <div class="card-header-with-icon">
+              <i class="fa-solid fa-layer-group"></i>
+              <h3>My Product Inventory</h3>
+            </div>
+            <div id="productsTable"></div>
+          </div>
+        </section>
+
+
+        <section class="tab-content" data-tab="orders">
+          <div class="table-card">
+            <div class="orders-toolbar">
+              <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input id="orderSearchInput" type="text" placeholder="Search order ID, customer name..." />
+              </div>
+              <div class="toolbar-actions">
+                 <button id="refreshOrdersBtn" class="btn ghost" type="button">
+                   <i class="fa-solid fa-arrows-rotate"></i> Sync Orders
+                 </button>
+              </div>
+            </div>
+
+            <div class="order-tabs">
+              <button class="order-tab active" data-status="all">All Orders</button>
+              <button class="order-tab" data-status="on_hold">On Hold</button>
+              <button class="order-tab" data-status="pending">Pending <span id="pendingCount">0</span></button>
+              <button class="order-tab" data-status="ready_to_ship">Ready to Ship</button>
+              <button class="order-tab" data-status="shipped">Shipped</button>
+              <button class="order-tab" data-status="cancelled">Cancelled</button>
+            </div>
+            
+            <div id="ordersSummaryGrid" class="orders-summary-grid"></div>
+            
+            <div class="orders-card-head">
+              <div>
+                <h3><i class="fa-solid fa-terminal"></i> Command Center</h3>
+                <p>Manage order lifecycle from confirmation to delivery.</p>
+              </div>
+              <div class="orders-head-actions">
+                <span class="orders-head-badge"><i class="fa-solid fa-shield-halved"></i> Secure Panel</span>
+                <a class="btn primary" href="#">
+                  <!-- <i class="fa-solid fa-truck-fast"></i>  -->
+                  comming soon
+                </a>
+              </div>
+
+            </div>
+            <p id="orderMsg" class="msg"></p>
+            <div id="ordersTable"></div>
+          </div>
+        </section>
+
+
+        <section class="tab-content" data-tab="earnings">
+          <div class="hint">
+            <p>Earnings calculation: Gross Sale - (Gateway 4% + Platform 5% + Delivery Fee). Settlements are processed within 24-48 hours of successful delivery.</p>
+          </div>
+          
+          <div class="table-card">
+            <div class="card-header-with-icon">
+              <i class="fa-solid fa-file-invoice-dollar"></i>
+              <div>
+                <h3>Settlement History</h3>
+                <p>Order-wise breakdown of your earnings and deductions.</p>
+              </div>
+            </div>
+            <div id="earningsTable" class="responsive-table">
+              <!-- Settlement data injected here -->
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-content" data-tab="reviews">
+          <div class="table-card">
+            <h3>Customer Reviews</h3>
+            <div id="reviewsTable"></div>
+          </div>
+        </section>
+
+        <section class="tab-content" data-tab="profile">
+          <div class="table-card">
+            <h3>Shop Profile</h3>
+            <div id="shopProfileCard"></div>
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="notification-config.js"></script>
+  <script src="notification-service.js"></script>
+  <script src="shopkeeper-panel.js"></script>
+  <script src="flashfit-business-extension.js"></script>
+
+  <!-- Hidden Label Template -->
+  <div id="labelTemplateContainer" style="display: none;">
+    <div id="flashfitLabel" class="shipping-label">
+      <!-- Section 1: Customer Info & Payment/QR -->
+      <div class="label-header-grid">
+        <div class="label-cell">
+          <label>Customer Address:</label>
+          <div id="lblCustomerAddress" class="address-box big">...</div>
+        </div>
+        <div class="label-cell">
+          <div id="lblPaymentMode" class="payment-header">PAYMENT</div>
+          <div class="partner-info">
+            <h4 id="lblPartnerName">Partner</h4>
+            <span class="badge-pickup">PICKUP</span>
+            <p>ID: <span id="lblPartnerId">...</span></p>
+            <p>Mob: <span id="lblPartnerMobile">...</span></p>
+          </div>
+          <div class="qr-box">
+            <img id="lblQRCodeImg" src="" alt="QR Code" style="width: 100px; height: 100px; border: 2px solid #000; padding: 5px;" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Shop Info & Logo -->
+      <div class="label-header-grid">
+        <div class="label-cell">
+          <label>Return to:</label>
+          <div id="lblShopAddress" class="address-box">...</div>
+        </div>
+        <div class="logo-cell">
+          <svg class="thermal-dot-logo" viewBox="0 0 220 70" role="img" aria-label="FlashFit">
+            <g fill="#000">
+              <circle cx="18" cy="38" r="3"/><circle cx="27" cy="33" r="3"/><circle cx="36" cy="27" r="3"/>
+              <circle cx="45" cy="21" r="3"/><circle cx="56" cy="17" r="3"/><circle cx="66" cy="20" r="3"/>
+              <circle cx="58" cy="31" r="3.4"/><circle cx="51" cy="40" r="3.4"/><circle cx="68" cy="35" r="3.4"/>
+              <circle cx="78" cy="31" r="3.4"/><circle cx="61" cy="50" r="3.4"/><circle cx="72" cy="56" r="3.4"/>
+              <circle cx="88" cy="18" r="2.6"/><circle cx="96" cy="18" r="2.6"/><circle cx="104" cy="18" r="2.6"/>
+              <circle cx="88" cy="27" r="2.6"/><circle cx="96" cy="27" r="2.6"/><circle cx="88" cy="36" r="2.6"/>
+              <circle cx="88" cy="45" r="2.6"/>
+            </g>
+            <text x="112" y="42" font-family="Arial Black, Arial, sans-serif" font-size="24" font-weight="900" fill="#000">FlashFit</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Section 3: Product Table -->
+      <div class="label-table-wrapper">
+        <table class="label-table">
+          <thead>
+            <tr>
+              <th>SKU</th>
+              <th>Size</th>
+              <th>Qty</th>
+              <th>Color</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="lblSKU">...</td>
+              <td id="lblSize">...</td>
+              <td id="lblQty">...</td>
+              <td id="lblColor">...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 4: Order Ref -->
+      <div style="padding: 6px 10px; border-bottom: 3px solid #000; font-size: 0.75rem; font-weight: 800;">
+        ORDER NO: <span id="lblOrderNo">...</span>
+        <svg id="lblBarcode" class="label-barcode"></svg>
+      </div>
+
+      <!-- Section 5: Footer -->
+      <div class="label-footer">
+        <span class="total-label">CASH TO BE COLLECTED</span>
+        <h2 id="lblTotalAmount">Rs 0</h2>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

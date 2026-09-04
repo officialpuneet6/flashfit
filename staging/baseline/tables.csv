@@ -1,0 +1,9 @@
+schemaname,tablename,rowsecurity,forcerowsecurity
+storage,buckets,true,false
+storage,buckets_analytics,true,false
+storage,buckets_vectors,true,false
+storage,migrations,true,false
+storage,objects,true,false
+storage,s3_multipart_uploads,true,false
+storage,s3_multipart_uploads_parts,true,false
+storage,vector_indexes,true,false

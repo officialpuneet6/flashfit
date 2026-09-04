@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Cart | FlashFit</title>
+  <meta name="description"
+    content="Review your FlashFit cart with transparent subtotal, free delivery display, GST-inclusive total, and guest checkout details before payment." />
+  <meta name="theme-color" content="#ff7a00" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <meta name="author" content="FlashFit" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="shortcut icon" href="ft.png" type="image/png">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXMT95C1Z5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-YXMT95C1Z5');
+  </script>
+
+  <style>
+    :root {
+      --brand: #c96a16;
+      --brand-dark: #8f4300;
+      --brand-soft: #fff3e4;
+      --accent: #17395f;
+      --text: #1f1a15;
+      --muted: #6d655d;
+      --bg: #f4efe8;
+      --card: #ffffff;
+      --line: rgba(201, 106, 22, 0.12);
+      --shadow: 0 18px 42px rgba(32, 23, 14, 0.08);
+      --shadow-soft: 0 10px 24px rgba(32, 23, 14, 0.06);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Outfit", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255, 223, 190, 0.9) 0%, rgba(255, 223, 190, 0) 28%),
+        radial-gradient(circle at 92% 6%, rgba(193, 214, 237, 0.72) 0%, rgba(193, 214, 237, 0) 24%),
+        linear-gradient(180deg, #fffdf9 0%, #f7f1ea 52%, #f2ece5 100%);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255, 251, 247, 0.86);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      gap: 12px;
+      box-shadow: 0 10px 28px rgba(32, 23, 14, 0.05);
+    }
+
+    .brand {
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .brand img {
+      width: 110px;
+      height: 54px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .home-link {
+      text-decoration: none;
+      color: var(--brand-dark);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 11px 16px;
+      font-weight: 700;
+      box-shadow: var(--shadow-soft);
+    }
+
+    main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 22px 14px 42px;
+    }
+
+    .notice-bar {
+      margin-bottom: 18px;
+      padding: 16px 18px;
+      border: 1px solid #ffd9b4;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #fff8ef 0%, #fffdf9 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .notice-bar p {
+      margin: 0;
+      color: #5f6677;
+      line-height: 1.6;
+    }
+
+    .notice-bar strong {
+      color: #1f2937;
+    }
+
+    .notice-bar a {
+      text-decoration: none;
+      color: #8f4500;
+      background: #fff;
+      border: 1px solid #ffd6ad;
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .cart-shell {
+      display: grid;
+      gap: 18px;
+    }
+
+    .cart-hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 20px 22px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255, 196, 136, 0.38), transparent 28%),
+        linear-gradient(135deg, rgba(255, 251, 247, 0.96) 0%, rgba(255, 242, 229, 0.96) 100%);
+      border: 1px solid rgba(201, 106, 22, 0.14);
+      box-shadow: var(--shadow);
+    }
+
+    .cart-hero h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    .cart-hero p {
+      margin: 0;
+      max-width: 680px;
+      color: #5a6475;
+      line-height: 1.7;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .hero-badges span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(201, 106, 22, 0.12);
+      color: #78400d;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.7fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      border: 1px solid rgba(201, 106, 22, 0.1);
+    }
+
+    .card h2,
+    .card h3 {
+      margin: 0 0 12px;
+      font-size: 1.28rem;
+    }
+
+    .subtext {
+      margin: -4px 0 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .cart-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 116px minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: stretch;
+      border: 1px solid #eef0f4;
+      border-radius: 20px;
+      padding: 14px;
+      background: linear-gradient(180deg, #fff 0%, #fffaf5 100%);
+    }
+
+    .cart-item img {
+      width: 116px;
+      height: 116px;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+
+    .cart-item h4 {
+      margin: 0 0 6px;
+      font-size: 1.02rem;
+      line-height: 1.35;
+    }
+
+    .muted {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .item-info {
+      min-width: 0;
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .item-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .item-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--brand-soft);
+      color: #8a4805;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .item-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .item-price strong {
+      display: block;
+      font-size: 1.08rem;
+      color: var(--text);
+    }
+
+    .item-price span {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .qty-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px;
+      border-radius: 999px;
+      border: 1px solid #f0d3b7;
+      background: #fff7ef;
+    }
+
+    .qty-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 0;
+      background: #fff;
+      color: #a15000;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 1rem;
+      box-shadow: 0 6px 14px rgba(161, 80, 0, 0.08);
+    }
+
+    .remove-btn {
+      border: 1px solid #ffd6d6;
+      background: #fff7f7;
+      color: #bd2b2b;
+      border-radius: 14px;
+      padding: 12px 14px;
+      cursor: pointer;
+      align-self: start;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #3e4c64;
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      border: 1px solid #e0d8cf;
+      border-radius: 14px;
+      padding: 13px 14px;
+      font: inherit;
+      background: #fffcf9;
+    }
+
+    .field textarea {
+      min-height: 106px;
+      resize: vertical;
+    }
+
+    .helper-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .helper-strip span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border: 1px solid #ffe0c1;
+      border-radius: 999px;
+      background: #fff8f1;
+      color: #955000;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .payment-options {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .payment-options label {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 54px;
+      border: 1px solid #f1dac1;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #fffdf9 0%, #fff7ef 100%);
+      padding: 12px;
+      color: #2f3545;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .payment-options input {
+      accent-color: var(--brand);
+    }
+
+    .summary-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+      color: #3f4555;
+    }
+
+    .summary-row.total {
+      border-top: 1px solid #ece3d8;
+      margin-top: 8px;
+      padding-top: 14px;
+      font-size: 1.18rem;
+      font-weight: 800;
+      color: #121620;
+    }
+
+    .summary-note {
+      margin: 14px 0 0;
+      color: #5f6677;
+      line-height: 1.6;
+      font-size: 0.92rem;
+    }
+
+    .summary-card {
+      position: sticky;
+      top: 92px;
+      overflow: hidden;
+    }
+
+    .summary-top {
+      margin: -18px -18px 18px;
+      padding: 18px;
+      background: linear-gradient(135deg, #fff6eb 0%, #fffdfb 100%);
+      border-bottom: 1px solid rgba(201, 106, 22, 0.08);
+    }
+
+    .summary-top p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.92rem;
+    }
+
+    .checkout-btn,
+    .clear-btn {
+      width: 100%;
+      border: 0;
+      border-radius: 16px;
+      padding: 15px 14px;
+      font-weight: 800;
+      cursor: pointer;
+      min-height: 52px;
+    }
+
+    .checkout-btn {
+      margin-top: 18px;
+      background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand) 55%, #ef9a42 100%);
+      color: #fff;
+      box-shadow: 0 18px 30px rgba(201, 106, 22, 0.22);
+    }
+
+    .clear-btn {
+      margin-top: 10px;
+      background: #fff9f3;
+      color: #9a4b00;
+      border: 1px solid #ffd6ad;
+    }
+
+    .empty {
+      border: 1px dashed #dfd3c6;
+      border-radius: 18px;
+      text-align: center;
+      padding: 34px 16px;
+      color: #56607a;
+      background: linear-gradient(180deg, #fffdf9 0%, #fff7ef 100%);
+    }
+
+    .empty i {
+      font-size: 2rem;
+      color: var(--brand);
+      margin-bottom: 10px;
+    }
+
+    .summary-pills {
+      display: grid;
+      gap: 10px;
+      margin: 16px 0 2px;
+    }
+
+    .summary-pills span {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 14px;
+      background: #fff8f1;
+      color: #7d450d;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    @media (max-width: 1024px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-card {
+        position: static;
+      }
+
+      .cart-hero {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-badges {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .payment-options {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+
+      .notice-bar,
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .notice-bar a,
+      .home-link {
+        width: 100%;
+        text-align: center;
+      }
+
+      .cart-hero,
+      .card {
+        border-radius: 18px;
+      }
+
+      .form-grid,
+      .cart-item {
+        grid-template-columns: 1fr;
+      }
+
+      .cart-item {
+        padding: 12px;
+      }
+
+      .cart-item img {
+        width: 100%;
+        height: 240px;
+      }
+
+      .remove-btn {
+        width: 100%;
+      }
+
+      .item-footer {
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="FlashFit Home"><img src="50x100logo.png" alt="FlashFit Logo" /></a>
+    <a class="home-link" href="index.html"><i class="fa-solid fa-house"></i> Continue Shopping</a>
+  </header>
+
+  <main>
+    <div class="cart-shell">
+      <section class="cart-hero" aria-label="Cart overview">
+        <div>
+          <h1>Review Your Cart In One Clean View</h1>
+          <p>Products, delivery address, payment option, and final price ek hi screen par visible hain so checkout flow
+            simple rahe.</p>
+        </div>
+        <div class="hero-badges" aria-label="Cart highlights">
+          <span><i class="fa-solid fa-bag-shopping"></i> Fast cart review</span>
+          <span><i class="fa-solid fa-location-dot"></i> Address before payment</span>
+          <span><i class="fa-solid fa-shield-halved"></i> Clear final total</span>
+        </div>
+      </section>
+
+      <section class="notice-bar" aria-label="Guest checkout notice">
+        <p><strong>Login required.</strong> Orders can be placed only after account login. Before placing the order,
+          please double-check product details, size, quantity, and address. After delivery-time packet check and
+          acceptance, returns may not be allowed.</p>
+        <a href="contact-us.html">Support & Address</a>
+      </section>
+
+      <div class="layout">
+        <div class="stack">
+          <section class="card">
+            <h2>Cart Items</h2>
+            <div id="cartList" class="cart-list"></div>
+          </section>
+
+          <section class="card">
+            <h3>Delivery Details</h3>
+            <!-- <p class="subtext">Login ke baad saved address yahan auto-fill hoga. Payment response page par bhi same
+              summary dikhegi.</p> -->
+            <form id="guestForm" class="form-grid">
+              <div class="field">
+                <label for="fullName">Full Name</label>
+                <input id="fullName" type="text" placeholder="Enter full name" />
+              </div>
+              <div class="field">
+                <label for="mobile">Mobile Number</label>
+                <input id="mobile" type="tel" maxlength="10" inputmode="numeric" placeholder="10-digit mobile number" />
+              </div>
+              <div class="field">
+                <label for="city">City</label>
+                <input id="city" type="text" placeholder="Enter city" />
+              </div>
+              <div class="field">
+                <label for="state">State</label>
+                <input id="state" type="text" placeholder="Enter state" />
+              </div>
+              <div class="field">
+                <label for="pincode">Pincode</label>
+                <input id="pincode" type="text" maxlength="6" inputmode="numeric" placeholder="6-digit pincode" />
+              </div>
+              <div class="field">
+                <label for="landmark">Landmark</label>
+                <input id="landmark" type="text" placeholder="Optional landmark" />
+              </div>
+              <div class="field full">
+                <label for="houseNo">House No / Building</label>
+                <input id="houseNo" type="text" placeholder="Flat, floor, building name" />
+              </div>
+              <div class="field full">
+                <label for="street">Street / Area</label>
+                <textarea id="street" placeholder="Street, area, colony"></textarea>
+              </div>
+            </form>
+            <div class="helper-strip" aria-label="Checkout trust badges">
+              <span><i class="fa-solid fa-lock"></i> SSL Secure</span>
+              <span><i class="fa-brands fa-google-pay"></i> UPI Ready</span>
+              <span><i class="fa-regular fa-credit-card"></i> Visa / RuPay</span>
+              <span><i class="fa-solid fa-money-bill-wave"></i> COD Available</span>
+              <span><i class="fa-solid fa-box-open"></i> Check packet at delivery</span>
+            </div>
+            <div class="payment-options" aria-label="Payment mode">
+              <label>
+                <input type="radio" name="paymentMode" value="COD" checked />
+                <span>Cash on Delivery</span>
+              </label>
+              <label>
+                <input type="radio" name="paymentMode" value="PAYU" />
+                <span>Cards / Netbanking</span>
+              </label>
+              <label>
+                <input type="radio" name="paymentMode" value="UPI" />
+                <span>UPI via PayU</span>
+              </label>
+            </div>
+          </section>
+        </div>
+
+        <aside class="card summary-card">
+          <div class="summary-top">
+            <h2>Price Details</h2>
+            
+          </div>
+          <div class="summary-row"><span>Items</span><strong id="summaryItems">0</strong></div>
+          <div class="summary-row"><span>Subtotal</span><strong id="summarySubtotal">Rs 0</strong></div>
+          <div class="summary-row"><span>Delivery</span><strong id="summaryDelivery">Free</strong></div>
+          <div class="summary-row"><span>Fulfilment</span><strong id="summaryDeliveryMode">Standard Delivery</strong></div>
+          <div class="summary-row"><span>GST</span><strong id="summaryGst">Rs 0</strong></div>
+          <div class="summary-row"><span>Payment Mode</span><strong id="summaryPaymentMode">Cash on Delivery</strong>
+          </div>
+          <div class="summary-row total"><span>Total</span><strong id="summaryTotal">Rs 0</strong></div>
+          <div class="summary-pills" aria-label="Checkout benefits">
+            <span><i class="fa-solid fa-truck-fast"></i> Fast dispatch after confirmation</span>
+            <span><i class="fa-solid fa-wallet"></i> Transparent final total with free delivery display</span>
+            <span><i class="fa-solid fa-headset"></i> Support available from contact page</span>
+          </div>
+          <p class="summary-note">By proceeding, customer confirms product details and address have been checked
+            carefully. At delivery handover, the packet should be checked with the delivery partner. After acceptance,
+            return may not be allowed except approved issue cases.</p>
+          <button class="checkout-btn" id="checkoutBtn" type="button">Place COD Order</button>
+          <button class="clear-btn" id="clearBtn" type="button">Clear Cart</button>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="notification-config.js"></script>
+  <script src="notification-service.js"></script>
+  <script src="flashfit-business-extension.js"></script>
+  <script>
+    const CART_KEY = "flashfitCart";
+    const GUEST_INFO_KEY = "flashfitGuestCheckout";
+    const CHECKOUT_SUMMARY_KEY = "flashfitCheckoutSummary";
+    const PAYMENT_SESSION_KEY = "flashfitPendingPayment";
+    const DELIVERY_CHARGE = 0;
+    const NEAREST_SHOP_ID_KEY = "flashfitNearestShopId";
+    const NEAREST_SHOP_NAME_KEY = "flashfitNearestShopName";
+    const DEFAULT_PAYU_KEY = "WlB08s";
+    // NOTE: Salt should NEVER be stored here. It is moved to backend Edge Function.
+
+    const cartList = document.getElementById("cartList");
+    const summaryItems = document.getElementById("summaryItems");
+    const summarySubtotal = document.getElementById("summarySubtotal");
+    const summaryDelivery = document.getElementById("summaryDelivery");
+    const summaryDeliveryMode = document.getElementById("summaryDeliveryMode");
+    const summaryGst = document.getElementById("summaryGst");
+    const summaryPaymentMode = document.getElementById("summaryPaymentMode");
+    const summaryTotal = document.getElementById("summaryTotal");
+    const checkoutBtn = document.getElementById("checkoutBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const guestForm = document.getElementById("guestForm");
+    const paymentModeInputs = document.querySelectorAll('input[name="paymentMode"]');
+
+    const fullNameInput = document.getElementById("fullName");
+    const mobileInput = document.getElementById("mobile");
+    const cityInput = document.getElementById("city");
+    const stateInput = document.getElementById("state");
+    const pincodeInput = document.getElementById("pincode");
+    const landmarkInput = document.getElementById("landmark");
+    const houseNoInput = document.getElementById("houseNo");
+    const streetInput = document.getElementById("street");
+
+    let loggedInUser = null;
+    let deliveryQuote = null;
+    let securityFlags = {};
+    let checkoutConfig = {
+      codEnabled: true,
+      payuEnabled: true,
+      payuKey: DEFAULT_PAYU_KEY
+    };
+
+    function formatRs(value) {
+      return `Rs ${Number(value || 0)}`;
+    }
+
+    function formatDeliveryDisplay(value) {
+      return Number(value || 0) > 0 ? formatRs(value) : "Free";
+    }
+
+    function getCart() {
+      try {
+        return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+      } catch (_) {
+        return [];
+      }
+    }
+
+    function setCart(cartItems) {
+      localStorage.setItem(CART_KEY, JSON.stringify(cartItems));
+      if (window.flashfitDB && window.flashfitDB.saveCart) {
+        window.flashfitDB.saveCart(cartItems);
+      }
+    }
+
+    function getSelectedPaymentMode() {
+      const selected = document.querySelector('input[name="paymentMode"]:checked');
+      return selected ? selected.value : "COD";
+    }
+
+    function getPaymentLabel(mode) {
+      if (mode === "COD") return "Cash on Delivery";
+      if (mode === "UPI") return "UPI via PayU";
+      return "PayU Online Payment";
+    }
+
+    function getPaymentInput(mode) {
+      return document.querySelector(`input[name="paymentMode"][value="${mode}"]`);
+    }
+
+    function parseBooleanSetting(value, fallback) {
+      if (value === null || value === undefined || value === "") return fallback;
+      const normalized = String(value).trim().toLowerCase();
+      return normalized === "true" || normalized === "1" || normalized === "yes" || normalized === "on";
+    }
+
+    async function loadCheckoutConfig() {
+      if (!window.flashfitDB || !window.flashfitDB.loadSiteSettings) return checkoutConfig;
+      const settings = await window.flashfitDB.loadSiteSettings();
+      checkoutConfig = {
+        codEnabled: parseBooleanSetting(settings.cod_enabled, true),
+        payuEnabled: parseBooleanSetting(settings.payu_enabled, true),
+        payuKey: (settings.payu_key || DEFAULT_PAYU_KEY).trim()
+      };
+      return checkoutConfig;
+    }
+
+    function syncPaymentOptionAvailability() {
+      const codInput = getPaymentInput("COD");
+      const payuInput = getPaymentInput("PAYU");
+      const codLabel = codInput ? codInput.closest("label") : null;
+      const payuLabel = payuInput ? payuInput.closest("label") : null;
+
+      if (codInput) {
+        codInput.disabled = !checkoutConfig.codEnabled;
+      }
+      const upiInput = getPaymentInput("UPI");
+      const upiLabel = upiInput ? upiInput.closest("label") : null;
+      const payuDisabled = !checkoutConfig.payuEnabled || !checkoutConfig.payuKey;
+
+      if (payuInput) {
+        payuInput.disabled = payuDisabled;
+      }
+      if (upiInput) {
+        upiInput.disabled = payuDisabled;
+      }
+
+      if (codLabel) codLabel.style.opacity = codInput && codInput.disabled ? "0.55" : "1";
+      if (payuLabel) payuLabel.style.opacity = payuInput && payuInput.disabled ? "0.55" : "1";
+      if (upiLabel) upiLabel.style.opacity = upiInput && upiInput.disabled ? "0.55" : "1";
+
+      if (codInput && codInput.disabled && codInput.checked && payuInput && !payuInput.disabled) {
+        payuInput.checked = true;
+      }
+      if (payuInput && payuInput.disabled && payuInput.checked && upiInput && !upiInput.disabled) {
+        upiInput.checked = true;
+      }
+      if (upiInput && upiInput.disabled && upiInput.checked && payuInput && !payuInput.disabled) {
+        payuInput.checked = true;
+      }
+      if (payuInput && upiInput && payuInput.disabled && upiInput.disabled && codInput && !codInput.disabled) {
+        codInput.checked = true;
+      }
+      if (codInput && payuInput && upiInput && codInput.disabled && payuInput.disabled && upiInput.disabled) {
+        checkoutBtn.disabled = true;
+        checkoutBtn.textContent = "Payment options unavailable";
+        return;
+      }
+      checkoutBtn.disabled = false;
+    }
+
+    function syncPaymentMode() {
+      syncPaymentOptionAvailability();
+      const mode = getSelectedPaymentMode();
+      summaryPaymentMode.textContent = getPaymentLabel(mode);
+      checkoutBtn.textContent = mode === "COD" ? "Place COD Order" : mode === "UPI" ? "Pay with UPI" : "Proceed to PayU";
+    }
+
+    function syncCheckoutAccess() {
+      if (loggedInUser) {
+        syncPaymentMode();
+        checkoutBtn.disabled = false;
+        return;
+      }
+      checkoutBtn.disabled = false;
+      checkoutBtn.textContent = "Login to Order";
+      summaryPaymentMode.textContent = "Login Required";
+    }
+
+    function getGuestInfo() {
+      try {
+        return JSON.parse(localStorage.getItem(GUEST_INFO_KEY)) || {};
+      } catch (_) {
+        return {};
+      }
+    }
+
+    function saveGuestInfo() {
+      const payload = {
+        fullName: fullNameInput.value.trim(),
+        mobile: mobileInput.value.trim(),
+        city: cityInput.value.trim(),
+        state: stateInput.value.trim(),
+        pincode: pincodeInput.value.trim(),
+        landmark: landmarkInput.value.trim(),
+        houseNo: houseNoInput.value.trim(),
+        street: streetInput.value.trim()
+      };
+      localStorage.setItem(GUEST_INFO_KEY, JSON.stringify(payload));
+      return payload;
+    }
+
+    function hydrateGuestForm(payload) {
+      const data = payload || {};
+      fullNameInput.value = data.fullName || "";
+      mobileInput.value = data.mobile || "";
+      cityInput.value = data.city || "";
+      stateInput.value = data.state || "";
+      pincodeInput.value = data.pincode || localStorage.getItem("flashfitPincode") || "";
+      landmarkInput.value = data.landmark || "";
+      houseNoInput.value = data.houseNo || "";
+      streetInput.value = data.street || "";
+    }
+
+    function renderCart() {
+      const items = getCart();
+      const totalQty = items.reduce((sum, item) => sum + item.qty, 0);
+      const subtotal = items.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.qty || 0), 0);
+      const delivery = items.length ? DELIVERY_CHARGE : 0;
+      const total = subtotal + delivery;
+
+      summaryItems.textContent = String(totalQty);
+      summarySubtotal.textContent = formatRs(subtotal);
+      summaryDelivery.textContent = formatDeliveryDisplay(delivery);
+      summaryDeliveryMode.textContent = deliveryQuote && deliveryQuote.eligible
+        ? `Flash Delivery${deliveryQuote.min_minutes ? ` (${deliveryQuote.min_minutes}-${deliveryQuote.max_minutes} min)` : ""}`
+        : "Standard Delivery";
+      summaryGst.textContent = formatRs(0);
+      summaryPaymentMode.textContent = getPaymentLabel(getSelectedPaymentMode());
+      summaryTotal.textContent = formatRs(total);
+
+      if (!items.length) {
+        cartList.innerHTML = `
+          <div class="empty">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <p><strong>Your cart is empty.</strong></p>
+            <p class="muted">Add products from Home to see them here.</p>
+          </div>
+        `;
+        syncCheckoutAccess();
+        return;
+      }
+
+      cartList.innerHTML = items.map((item) => `
+        <article class="cart-item" data-id="${item.id}">
+          <img src="${item.image}" alt="${item.title}">
+          <div class="item-info">
+            <h4>${item.title}</h4>
+            <div class="item-meta">
+              <span><i class="fa-solid fa-ruler-combined"></i> Size: ${item.size || "Standard"}</span>
+              <span><i class="fa-solid fa-circle-check"></i> GST included</span>
+            </div>
+            <p class="muted">This item is ready for quick checkout with editable quantity controls.</p>
+            <div class="item-footer">
+              <div class="item-price">
+                <strong>${formatRs(Number(item.price || 0) * Number(item.qty || 0))}</strong>
+                <span>${formatRs(item.price)} each</span>
+              </div>
+              <div class="qty-wrap">
+                <button class="qty-btn" data-action="dec" type="button" aria-label="Decrease quantity">-</button>
+                <strong>${item.qty}</strong>
+                <button class="qty-btn" data-action="inc" type="button" aria-label="Increase quantity">+</button>
+              </div>
+            </div>
+          </div>
+          <button class="remove-btn" data-action="remove" type="button" aria-label="Remove item"><i class="fa-solid fa-trash"></i></button>
+        </article>
+      `).join("");
+
+      syncCheckoutAccess();
+    }
+
+    function getDeliveryPayload() {
+      return {
+        fullName: fullNameInput.value.trim(),
+        mobile: mobileInput.value.trim(),
+        city: cityInput.value.trim(),
+        state: stateInput.value.trim(),
+        pincode: pincodeInput.value.trim(),
+        landmark: landmarkInput.value.trim(),
+        houseNo: houseNoInput.value.trim(),
+        street: streetInput.value.trim()
+      };
+    }
+
+    function validateDelivery(payload) {
+      if (!payload.fullName || !payload.mobile || !payload.houseNo || !payload.city || !payload.state || !payload.pincode) {
+        return "Please complete full name, mobile, house/building, city, state, and pincode before checkout.";
+      }
+      if (!/^\d{10}$/.test(payload.mobile)) {
+        return "Please enter a valid 10-digit mobile number.";
+      }
+      if (!/^\d{6}$/.test(payload.pincode)) {
+        return "Please enter a valid 6-digit pincode.";
+      }
+      return "";
+    }
+
+    async function validateServiceablePincode(pincode) {
+      if (!window.flashfitDB || !window.flashfitDB.fetchServiceablePincodes) return true;
+      const pincodes = await window.flashfitDB.fetchServiceablePincodes();
+      if (!pincodes.length) return true;
+      return pincodes.includes(pincode);
+    }
+
+    function redirectWithStatus(page, reason) {
+      if (reason) {
+        sessionStorage.setItem("flashfitPaymentMessage", reason);
+      } else {
+        sessionStorage.removeItem("flashfitPaymentMessage");
+      }
+      window.location.href = page;
+    }
+
+    function buildAddressText(payload) {
+      return `${payload.houseNo}, ${payload.street}, ${payload.landmark}, ${payload.city}, ${payload.state} - ${payload.pincode}`
+        .replace(/\s+/g, " ")
+        .replace(/,\s*,/g, ",")
+        .trim();
+    }
+
+    function buildPayuEmail(payload) {
+      if (loggedInUser && loggedInUser.email) return loggedInUser.email;
+      const mobile = (payload.mobile || "").replace(/\D/g, "") || "guest";
+      return `guest.${mobile}@flashfit.in`;
+    }
+
+    async function getSecureHash(hashStringWithoutSalt) {
+      const client = window.flashfitDB.getSupabaseClient();
+      const { data, error } = await client.functions.invoke('payu-hash', {
+        body: { hashString: hashStringWithoutSalt }
+      });
+      if (error || !data || !data.hash) {
+        throw new Error("Unable to securely generate payment signature.");
+      }
+      return data.hash;
+    }
+
+    function createPayuForm(fields) {
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = "https://secure.payu.in/_payment";
+      Object.entries(fields).forEach(([key, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+      });
+      document.body.appendChild(form);
+      return form;
+    }
+
+    function getDbPaymentMode(selectedPaymentMode) {
+      return selectedPaymentMode === "COD" ? "COD" : "PAYU";
+    }
+
+    async function insertSellerOrdersWithFallback(client, sellerRows) {
+      const { error } = await client.from("seller_orders").insert(sellerRows);
+      if (!error) return;
+
+      const message = (error.message || "").toLowerCase();
+      const missingImageColumn =
+        message.includes("product_image_url") &&
+        (message.includes("could not find") || message.includes("schema cache"));
+
+      if (!missingImageColumn) {
+        throw new Error(`Order creation failed: ${error.message}`);
+      }
+
+      const fallbackRows = sellerRows.map(({ product_image_url, ...row }) => row);
+      const { error: fallbackError } = await client.from("seller_orders").insert(fallbackRows);
+      if (fallbackError) {
+        throw new Error(`Order creation failed: ${fallbackError.message}`);
+      }
+    }
+
+    async function createOrders(client, items, deliveryPayload, selectedPaymentMode) {
+      const productIds = items.map((x) => Number(x.productId || String(x.id).split("::")[0])).filter((x) => !!x);
+      let products = [];
+      if (productIds.length) {
+        const { data, error: productsError } = await client
+          .from("shopkeeper_products")
+          .select("id,shop_id,title,shop_price,commission_amount,delivery_fee,customer_price,image_url")
+          .in("id", productIds);
+
+        if (productsError) {
+          throw new Error(`Unable to load product pricing: ${productsError.message}`);
+        }
+        products = data || [];
+      }
+
+      const productMap = new Map(products.map((p) => [Number(p.id), p]));
+      const orderTime = Date.now();
+      const nearestShopId = Number(localStorage.getItem(NEAREST_SHOP_ID_KEY) || 0);
+      const nearestShopName = localStorage.getItem(NEAREST_SHOP_NAME_KEY) || "";
+      const addressText = buildAddressText(deliveryPayload);
+      const sellerRows = [];
+      const userRows = [];
+      const dbPaymentStatus = "pending";
+
+      const dbPaymentMode = getDbPaymentMode(selectedPaymentMode);
+      items.forEach((item, idx) => {
+        const productId = Number(item.productId || String(item.id).split("::")[0]);
+        const product = productMap.get(productId);
+        const customerPrice = Number((product && product.customer_price) || item.price || 0);
+        const qty = Number(item.qty || 1);
+        const deliveryFee = Number((product && product.delivery_fee) || DELIVERY_CHARGE);
+        const fallbackShopPrice = Math.max(Math.round((customerPrice - deliveryFee) / 1.1), 0);
+        const shopPrice = Number((product && product.shop_price) || fallbackShopPrice);
+        const commissionAmount = Number((product && product.commission_amount) || Math.max(customerPrice - deliveryFee - shopPrice, 0));
+        const resolvedShopId = product && product.shop_id ? Number(product.shop_id) : (Number(item.shopId || 0) || nearestShopId || null);
+        const orderNumber = `FF-${orderTime}-${idx + 1}`;
+        const paymentReference = selectedPaymentMode === "COD" ? "COD" : selectedPaymentMode === "UPI" ? "UPI_PENDING" : "PAYU_PENDING";
+
+        sellerRows.push({
+          shop_id: resolvedShopId,
+          user_id: loggedInUser ? loggedInUser.id : null,
+          order_number: orderNumber,
+          customer_name: deliveryPayload.fullName,
+          customer_mobile: deliveryPayload.mobile,
+          customer_address: addressText,
+          product_id: productId || null,
+          product_title: (product && product.title) || item.title,
+          product_image_url: (product && product.image_url) || item.image || item.image_url,
+          shop_price: shopPrice,
+          commission_amount: commissionAmount,
+          delivery_fee: deliveryFee,
+          platform_earning: commissionAmount,
+          shop_payout: shopPrice,
+          qty,
+          total: customerPrice * qty,
+          payment_mode: dbPaymentMode,
+          payment_status: dbPaymentStatus,
+          payment_reference: paymentReference,
+          order_status: "pending"
+        });
+
+        if (loggedInUser) {
+          userRows.push({
+            user_id: loggedInUser.id,
+            order_number: orderNumber,
+            status: "pending",
+            total: customerPrice * qty
+          });
+        }
+      });
+
+      if (!sellerRows.length) {
+        throw new Error("No valid products were found for checkout.");
+      }
+
+      await insertSellerOrdersWithFallback(client, sellerRows);
+
+      await client.from("admin_activity_logs").insert({
+        admin_username: loggedInUser ? `user:${loggedInUser.email || loggedInUser.id}` : "guest_checkout",
+        action: "user_place_order",
+        entity_type: "seller_orders",
+        entity_id: sellerRows.map((row) => row.order_number).join(","),
+        payload: {
+          item_count: sellerRows.length,
+          total: sellerRows.reduce((sum, row) => sum + Number(row.total || 0), 0),
+          payment_mode: dbPaymentMode,
+          requested_payment_method: selectedPaymentMode
+        }
+      });
+
+      if (userRows.length) {
+        const { error: userError } = await client.from("user_orders").insert(userRows);
+        if (userError) {
+          throw new Error(`User order sync failed: ${userError.message}`);
+        }
+      }
+
+      if (window.flashfitNotifications) {
+        await Promise.allSettled(sellerRows.map((row) => window.flashfitNotifications.create("new_order", {
+          title: `New Order ${row.order_number}`,
+          body: `${row.customer_name} ordered ${row.product_title} for Rs ${row.total}.`,
+          orderNumber: row.order_number,
+          shopId: row.shop_id,
+          userId: loggedInUser ? loggedInUser.id : null,
+          entityType: "seller_orders",
+          entityId: row.order_number,
+          metadata: {
+            payment_mode: row.payment_mode,
+            customer_mobile: row.customer_mobile,
+            product_id: row.product_id
+          }
+        })));
+      }
+
+      const subtotal = items.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.qty || 0), 0);
+      const delivery = items.length ? DELIVERY_CHARGE : 0;
+      const summary = {
+        orderNumbers: sellerRows.map((row) => row.order_number),
+        customerName: deliveryPayload.fullName,
+        customerMobile: deliveryPayload.mobile,
+        customerAddress: addressText,
+        subtotal,
+        delivery,
+        total: subtotal + delivery,
+        itemCount: items.reduce((sum, item) => sum + Number(item.qty || 0), 0),
+        paymentMode: getPaymentLabel(selectedPaymentMode),
+        nearestShopName
+      };
+
+      return { sellerRows, summary };
+    }
+
+    async function initializeCart() {
+      await loadCheckoutConfig();
+      securityFlags = await window.flashfitDB?.getSecurityFeatureFlags?.() || {};
+      if (window.flashfitDB && window.flashfitDB.getCurrentUser) {
+        loggedInUser = await window.flashfitDB.getCurrentUser();
+      }
+
+      if (loggedInUser && window.flashfitDB && window.flashfitDB.loadAddress) {
+        const address = await window.flashfitDB.loadAddress();
+        if (address && address.houseNo) {
+          hydrateGuestForm({
+            fullName: address.fullName || "",
+            mobile: address.mobile || "",
+            city: address.city || "",
+            state: address.state || "",
+            pincode: address.pincode || "",
+            landmark: address.landmark || "",
+            houseNo: address.houseNo || "",
+            street: address.street || ""
+          });
+        } else {
+          hydrateGuestForm(getGuestInfo());
+        }
+      } else {
+        hydrateGuestForm(getGuestInfo());
+      }
+
+      renderCart();
+      syncCheckoutAccess();
+    }
+
+    cartList.addEventListener("click", (event) => {
+      const actionBtn = event.target.closest("button[data-action]");
+      if (!actionBtn) return;
+
+      const card = actionBtn.closest(".cart-item");
+      if (!card) return;
+
+      const id = card.dataset.id;
+      const action = actionBtn.dataset.action;
+      const items = getCart();
+      const idx = items.findIndex((item) => item.id === id);
+      if (idx === -1) return;
+
+      if (action === "inc") items[idx].qty += 1;
+      if (action === "dec") items[idx].qty -= 1;
+      if (action === "remove" || items[idx].qty <= 0) items.splice(idx, 1);
+
+      setCart(items);
+      renderCart();
+    });
+
+    guestForm.addEventListener("input", () => {
+      saveGuestInfo();
+    });
+
+    pincodeInput.addEventListener("change", async () => {
+      deliveryQuote = await window.flashfitDB?.getDeliveryQuote?.(pincodeInput.value, getCart()) || null;
+      renderCart();
+    });
+
+    paymentModeInputs.forEach((input) => {
+      input.addEventListener("change", syncPaymentMode);
+    });
+
+    clearBtn.addEventListener("click", () => {
+      setCart([]);
+      renderCart();
+    });
+
+    checkoutBtn.addEventListener("click", async () => {
+      const items = getCart();
+      if (!items.length) {
+        redirectWithStatus("payment-failed.html", "Cart is empty. Add products first.");
+        return;
+      }
+
+      if (!loggedInUser) {
+        window.location.href = "auth.html?next=cart";
+        return;
+      }
+
+      const deliveryPayload = saveGuestInfo();
+      const validationError = validateDelivery(deliveryPayload);
+      if (validationError) {
+        redirectWithStatus("payment-failed.html", validationError);
+        return;
+      }
+      if (!(await validateServiceablePincode(deliveryPayload.pincode))) {
+        redirectWithStatus("payment-failed.html", "This pincode is not active for delivery right now.");
+        return;
+      }
+
+      // Re-check at submission time. A Flash label is never carried over from a
+      // previous cart/address state; standard delivery remains the safe fallback.
+      deliveryQuote = await window.flashfitDB?.getDeliveryQuote?.(deliveryPayload.pincode, items) || null;
+      const selectedPaymentMode = getSelectedPaymentMode();
+      if (selectedPaymentMode === "COD" && !checkoutConfig.codEnabled) {
+        redirectWithStatus("payment-failed.html", "Cash on Delivery is currently disabled.");
+        return;
+      }
+      if ((selectedPaymentMode === "PAYU" || selectedPaymentMode === "UPI") && (!checkoutConfig.payuEnabled || !checkoutConfig.payuKey)) {
+        redirectWithStatus("payment-failed.html", "PayU online payment is currently unavailable.");
+        return;
+      }
+      // Secure online checkout is an atomic capability: never create a secure
+      // pending order unless its secure PayU hand-off is enabled as well.
+      if (securityFlags.secure_checkout_v1 && (selectedPaymentMode === "PAYU" || selectedPaymentMode === "UPI") && !securityFlags.secure_payu_v1) {
+        redirectWithStatus("payment-failed.html", "Secure online payment is not enabled yet.");
+        return;
+      }
+
+      const client = window.flashfitDB && window.flashfitDB.getSupabaseClient ? window.flashfitDB.getSupabaseClient() : null;
+      if (!client) {
+        redirectWithStatus("payment-failed.html", "Checkout failed because the database connection is unavailable.");
+        return;
+      }
+
+      try {
+        if (securityFlags.secure_checkout_v1) {
+          const secureDelivery = {
+            full_name: deliveryPayload.fullName,
+            mobile: deliveryPayload.mobile,
+            address: buildAddressText(deliveryPayload),
+            pincode: deliveryPayload.pincode,
+            // This is a preference only. The checkout RPC independently
+            // determines whether Flash can actually be offered.
+            delivery_preference: deliveryQuote?.eligible ? "FLASH" : "STANDARD"
+          };
+          const requestKey = crypto.randomUUID ? crypto.randomUUID() : `ff-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+          const secure = await window.flashfitDB.createSecureCheckout(items, secureDelivery, selectedPaymentMode, requestKey);
+          const orderNumbers = (secure.orders || []).map((row) => row.order_number);
+          const secureSummary = {
+            orderNumbers,
+            customerName: deliveryPayload.fullName,
+            customerMobile: deliveryPayload.mobile,
+            customerAddress: secureDelivery.address,
+            total: secure.amount,
+            itemCount: items.reduce((sum, item) => sum + Number(item.qty || 0), 0),
+            paymentMode: getPaymentLabel(selectedPaymentMode),
+            nearestShopName: localStorage.getItem(NEAREST_SHOP_NAME_KEY) || ""
+          };
+          localStorage.setItem(CHECKOUT_SUMMARY_KEY, JSON.stringify(secureSummary));
+          if (selectedPaymentMode === "COD") {
+            setCart([]);
+            redirectWithStatus("payment-success.html", "");
+            return;
+          }
+          const fields = await window.flashfitDB.createSecurePayuRequest(secure.payment_intent_id);
+          sessionStorage.setItem(PAYMENT_SESSION_KEY, JSON.stringify({ paymentIntentId: secure.payment_intent_id, paymentMode: selectedPaymentMode }));
+          createPayuForm(fields).submit();
+          return;
+        }
+        const { sellerRows, summary } = await createOrders(client, items, deliveryPayload, selectedPaymentMode);
+        localStorage.setItem(CHECKOUT_SUMMARY_KEY, JSON.stringify(summary));
+
+        if (selectedPaymentMode === "COD") {
+          sessionStorage.removeItem(PAYMENT_SESSION_KEY);
+          setCart([]);
+          renderCart();
+          redirectWithStatus("payment-success.html", "");
+          return;
+        }
+
+        const amount = Number(summary.total || 0).toFixed(2);
+        const txnid = `FFTXN${Date.now()}`;
+        const firstname = deliveryPayload.fullName;
+        const email = buildPayuEmail(deliveryPayload);
+        const phone = deliveryPayload.mobile;
+        const productinfo = summary.orderNumbers.join(", ");
+        const successUrl = new URL("payment-success.html", window.location.href).href;
+        const failureUrl = new URL("payment-failed.html", window.location.href).href;
+        const hashStringWithoutSalt = [
+          checkoutConfig.payuKey,
+          txnid,
+          amount,
+          productinfo,
+          firstname,
+          email,
+          "", "", "", "", "", "", "", "", "", ""
+        ].join("|");
+        const hash = await getSecureHash(hashStringWithoutSalt);
+
+        sessionStorage.setItem(PAYMENT_SESSION_KEY, JSON.stringify({
+          txnid,
+          amount,
+          orderNumbers: summary.orderNumbers,
+          paymentMode: selectedPaymentMode,
+          customerName: firstname,
+          customerMobile: phone,
+          userId: loggedInUser ? loggedInUser.id : null
+        }));
+
+        const payuFields = {
+          key: checkoutConfig.payuKey,
+          txnid,
+          amount,
+          firstname,
+          email,
+          phone,
+          productinfo,
+          surl: successUrl,
+          furl: failureUrl,
+          hash,
+          service_provider: "payu_paisa"
+        };
+        if (selectedPaymentMode === "UPI") {
+          payuFields.pg = "UPI";
+        }
+        const payuForm = createPayuForm(payuFields);
+        payuForm.submit();
+      } catch (error) {
+        redirectWithStatus("payment-failed.html", error.message || "Checkout failed.");
+      }
+    });
+
+    initializeCart();
+    if (window.flashfitDB && window.flashfitDB.applySiteSettings) {
+      window.flashfitDB.applySiteSettings();
+    }
+  </script>
+</body>
+
+</html>
+

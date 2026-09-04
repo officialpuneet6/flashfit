@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Orders | FlashFit</title>
+  <meta name="description" content="View your FlashFit orders, item status, delivery progress, and payment details in one place." />
+  <meta name="theme-color" content="#ff7a00" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <meta name="author" content="FlashFit" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="shortcut icon" href="ft.png" type="image/png">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXMT95C1Z5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-YXMT95C1Z5');
+  </script>
+
+  <style>
+    :root {
+      --brand: #ff7a00;
+      --ink: #182230;
+      --muted: #667085;
+      --line: #e6eaf2;
+      --bg: #f6f8fc;
+      --card: #fff;
+      --shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Outfit", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(255, 122, 0, 0.12), transparent 25%),
+        var(--bg);
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero,
+    .order-card,
+    .toolbar {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 24px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      margin-bottom: 14px;
+    }
+
+    .brand img {
+      width: 110px;
+      height: 54px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .hero h1 {
+      margin: 0 0 6px;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .toolbar {
+      margin-top: 18px;
+      padding: 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 12px;
+      padding: 11px 15px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      background: linear-gradient(90deg, #ff7a00, #ef5a0b);
+      color: #fff;
+    }
+
+    .btn.ghost {
+      background: #edf3fb;
+      color: #21314f;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      background: #fff4ea;
+      color: #b85a00;
+      border: 1px solid #ffd4af;
+    }
+
+    .orders-list {
+      margin-top: 18px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .order-card {
+      padding: 18px;
+    }
+
+    .order-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .order-head h3 {
+      margin: 0 0 6px;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .pill-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .meta-grid article,
+    .address-box,
+    .otp-box,
+    .timeline {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fbfcff;
+    }
+
+    .meta-grid article {
+      padding: 12px;
+    }
+
+    .meta-grid span {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .address-box {
+      padding: 14px;
+      line-height: 1.65;
+      margin-bottom: 12px;
+    }
+
+    .otp-box {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 16px;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #fff7ed, #fff);
+      border-color: #fed7aa;
+    }
+
+    .otp-box span {
+      display: block;
+      color: #9a3412;
+      font-size: 0.82rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .otp-box p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .otp-code {
+      min-width: 132px;
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      color: #111827;
+      background: #fff;
+      border: 2px dashed var(--brand);
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+
+    .timeline {
+      padding: 14px;
+    }
+
+    .timeline h4 {
+      margin: 0 0 10px;
+    }
+
+    .timeline ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    .timeline li {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.94rem;
+      border-bottom: 1px dashed #e5ebf4;
+      padding-bottom: 8px;
+    }
+
+    .timeline li:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .empty {
+      margin-top: 18px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 22px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    @media (max-width: 920px) {
+
+      .hero,
+      .order-head {
+        flex-direction: column;
+      }
+
+      .meta-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding: 16px;
+      }
+
+      .meta-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline li {
+        flex-direction: column;
+      }
+
+      .otp-box {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .otp-code {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <a class="brand" href="index.html" aria-label="FlashFit Home"><img src="50x100logo.png"
+            alt="FlashFit Logo" /></a>
+        <h1>My Orders</h1>
+        <p>Har order ki full detail, payment state, partner progress aur timestamps yahan live dikhenge.</p>
+      </div>
+      <div class="toolbar-actions">
+        <a class="btn ghost" href="profile.html">Back to Profile</a>
+        <a class="btn ghost" href="index.html">Continue Shopping</a>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <div>
+        <strong id="ordersCount">0 Orders</strong>
+        <div class="sub" id="ordersHint">Login required to view your orders.</div>
+      </div>
+      <div class="toolbar-actions">
+        <button id="refreshOrdersBtn" class="btn primary" type="button">Refresh Orders</button>
+      </div>
+    </section>
+
+    <section id="ordersList" class="orders-list"></section>
+    <section id="emptyState" class="empty" hidden>No orders available.</section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="notification-config.js"></script>
+  <script src="notification-service.js"></script>
+  <script>
+    const ordersList = document.getElementById("ordersList");
+    const emptyState = document.getElementById("emptyState");
+    const refreshOrdersBtn = document.getElementById("refreshOrdersBtn");
+    const ordersCount = document.getElementById("ordersCount");
+    const ordersHint = document.getElementById("ordersHint");
+    let orderChannel = null;
+
+    function pill(text) {
+      return `<span class="pill">${text}</span>`;
+    }
+
+    function formatDateTime(value) {
+      if (!value) return "-";
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? "-" : date.toLocaleString();
+    }
+
+    function labelize(value) {
+      return (value || "-").toString().replace(/_/g, " ");
+    }
+
+    function paymentModeLabel(row) {
+      if (row.payment_reference === "COD") return "Cash on Delivery";
+      if (row.payment_reference === "UPI_PENDING") return "UPI via PayU";
+      if (row.payment_mode === "PAYU") return "PayU Online Payment";
+      return row.payment_mode || "-";
+    }
+
+    function shouldShowDeliveryOtp(row) {
+      const status = String(row.order_status || "").toLowerCase();
+      return Boolean(row.delivery_partner_id)
+        && !["delivered", "cancelled", "rejected", "returned"].includes(status)
+        && ["out_for_delivery", "assigned", "accepted"].includes(status);
+    }
+
+    function otpCard(row) {
+      if (!shouldShowDeliveryOtp(row)) return "";
+      const otp = row.delivery_otp || "";
+      return `
+        <div class="otp-box">
+          <div>
+            <span>Delivery OTP</span>
+            <p>${otp ? "Delivery partner ko ye OTP share karein. OTP ke bina order delivered mark nahi hoga." : "Partner start delivery karega tab OTP yahan show hoga."}</p>
+          </div>
+          <strong class="otp-code">${otp || "----"}</strong>
+        </div>
+      `;
+    }
+
+    async function loadDetailedOrders() {
+      const user = await window.flashfitDB.getCurrentUser();
+      if (!user) {
+        window.location.href = "auth.html?next=my-orders&message=login_required";
+        return [];
+      }
+
+      ordersHint.textContent = "Live sync active for your orders.";
+      const client = window.flashfitDB.getSupabaseClient();
+      const { data: orders, error } = await client
+        .from("seller_orders")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (error || !orders) return [];
+
+      const shopIds = [...new Set(orders.map((row) => row.shop_id).filter(Boolean))];
+      const partnerIds = [...new Set(orders.map((row) => row.delivery_partner_id).filter(Boolean))];
+
+      const [shopsRes, partnersRes] = await Promise.all([
+        shopIds.length ? client.from("shops").select("id,shop_name,address,pincode").in("id", shopIds) : Promise.resolve({ data: [] }),
+        partnerIds.length ? client.from("delivery_partners").select("id,full_name,phone").in("id", partnerIds) : Promise.resolve({ data: [] })
+      ]);
+
+      const shopsMap = new Map((shopsRes.data || []).map((row) => [row.id, row]));
+      const partnersMap = new Map((partnersRes.data || []).map((row) => [row.id, row]));
+
+      return orders.map((row) => ({
+        ...row,
+        shop: shopsMap.get(row.shop_id) || null,
+        partner: partnersMap.get(row.delivery_partner_id) || null
+      }));
+    }
+
+    function renderOrders(rows) {
+      ordersCount.textContent = `${rows.length} Orders`;
+      if (!rows.length) {
+        ordersList.innerHTML = "";
+        emptyState.hidden = false;
+        return;
+      }
+
+      emptyState.hidden = true;
+      ordersList.innerHTML = rows.map((row) => `
+        <article class="order-card">
+          <div class="order-head">
+            <div>
+              <h3>${row.order_number || "-"}</h3>
+              <div class="sub">${row.product_title || "-"} • Qty ${row.qty || 0} • ${formatDateTime(row.created_at)}</div>
+              <div class="pill-row">
+                ${pill(`Order ${labelize(row.order_status)}`)}
+                ${pill(`Payment ${labelize(row.payment_status)}`)}
+                ${pill(`Partner ${labelize(row.delivery_partner_status)}`)}
+              </div>
+            </div>
+            <div class="sub">Customer pays: Rs ${Number(row.total || 0)}</div>
+          </div>
+
+          <div class="meta-grid">
+            <article><span>Shop</span><strong>${row.shop?.shop_name || "-"}</strong></article>
+            <article><span>Delivery Partner</span><strong>${row.partner ? `${row.partner.full_name} (${row.partner.id})` : "-"}</strong></article>
+            <article><span>Partner Mobile</span><strong>${row.partner?.phone || "-"}</strong></article>
+            <article><span>Payment Ref</span><strong>${row.payment_reference || "-"}</strong></article>
+            <article><span>Shop Price</span><strong>Rs ${Number(row.total || 0)}</strong></article>
+            <article><span>Platform Fee</span><strong>Rs0</strong></article>
+            <article><span>Delivery</span><strong>Free</strong></article>
+            <article><span>Payment Mode</span><strong>${paymentModeLabel(row)}</strong></article>
+          </div>
+
+          <div class="address-box">
+            <strong>Delivery Address</strong><br />
+            ${row.customer_address || "-"}
+          </div>
+
+          ${otpCard(row)}
+
+          <div class="timeline">
+            <h4>Order Timeline</h4>
+            <ul>
+              <li><span>Placed</span><strong>${formatDateTime(row.created_at)}</strong></li>
+              <li><span>Shop Accepted</span><strong>${formatDateTime(row.accepted_at)}</strong></li>
+              <li><span>Packed</span><strong>${formatDateTime(row.packed_at)}</strong></li>
+              <li><span>Partner Accepted</span><strong>${formatDateTime(row.partner_accepted_at)}</strong></li>
+              <li><span>On The Way</span><strong>${formatDateTime(row.out_for_delivery_at)}</strong></li>
+              <li><span>Delivered</span><strong>${formatDateTime(row.delivered_at)}</strong></li>
+            </ul>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    async function refreshOrders() {
+      const rows = await loadDetailedOrders();
+      renderOrders(rows);
+    }
+
+    async function bootstrap() {
+      refreshOrdersBtn.addEventListener("click", refreshOrders);
+      await refreshOrders();
+      if (window.flashfitDB && window.flashfitDB.subscribeOrderUpdates) {
+        orderChannel = window.flashfitDB.subscribeOrderUpdates(async () => {
+          await refreshOrders();
+        });
+      }
+    }
+
+    bootstrap();
+  </script>
+</body>
+
+</html>
+

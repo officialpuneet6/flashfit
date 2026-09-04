@@ -1,0 +1,6 @@
+extname,extversion
+pg_stat_statements,1.11
+pgcrypto,1.3
+plpgsql,1.0
+supabase_vault,0.3.1
+uuid-ossp,1.1

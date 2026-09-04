@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Successful | FlashFit</title>
+  <meta name="description" content="FlashFit payment success page with order summary and customer details." />
+  <meta name="theme-color" content="#ff7a00" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <meta name="author" content="FlashFit" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="shortcut icon" href="ft.png" type="image/png">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXMT95C1Z5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-YXMT95C1Z5');
+  </script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Outfit", sans-serif;
+      background: #f6f8fc;
+      color: #1f2937;
+    }
+
+    .wrap {
+      max-width: 840px;
+      margin: 0 auto;
+      padding: 28px 16px 64px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e8edf5;
+      border-radius: 16px;
+      box-shadow: 0 16px 32px rgba(16, 24, 40, 0.08);
+      padding: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      margin-bottom: 14px;
+    }
+
+    .brand img {
+      width: 110px;
+      height: 54px;
+      object-fit: contain;
+      display: block;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 2rem;
+    }
+
+    p {
+      color: #5f6677;
+      line-height: 1.7;
+    }
+
+    .success {
+      color: #19743a;
+      font-weight: 800;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .tile {
+      background: #f8fafc;
+      border: 1px solid #e8edf5;
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .tile strong,
+    .tile span {
+      display: block;
+    }
+
+    .tile span {
+      margin-top: 6px;
+      color: #475467;
+      overflow-wrap: anywhere;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .actions a {
+      text-decoration: none;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-weight: 700;
+    }
+
+    .primary {
+      background: #ff7a00;
+      color: #fff;
+    }
+
+    .secondary {
+      background: #fff5ea;
+      color: #8c4600;
+      border: 1px solid #ffd8b0;
+    }
+
+    @media (max-width: 640px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .actions a {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrap">
+    <section class="card">
+      <a class="brand" href="index.html" aria-label="FlashFit Home"><img src="50x100logo.png" alt="FlashFit Logo" /></a>
+      <div class="success">Payment Completed</div>
+      <h1>Order received</h1>
+      <p id="statusCopy">Your order has been created successfully. Please check the packet with the delivery partner at
+        handover time. After acceptance, return may not be allowed except approved issue cases.</p>
+      <div id="summaryGrid" class="grid"></div>
+      <div class="actions">
+        <a class="primary" href="index.html">Back to Home</a>
+        <a class="secondary" href="contact-us.html">Contact Support</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="notification-config.js"></script>
+  <script src="notification-service.js"></script>
+  <script>
+    const summaryGrid = document.getElementById("summaryGrid");
+    const statusCopy = document.getElementById("statusCopy");
+    const PAYMENT_SESSION_KEY = "flashfitPendingPayment";
+    const CART_KEY = "flashfitCart";
+    const summary = (() => {
+      try {
+        return JSON.parse(localStorage.getItem("flashfitCheckoutSummary")) || {};
+      } catch (_) {
+        return {};
+      }
+    })();
+
+    async function syncPayuSuccess() {
+      const params = new URLSearchParams(window.location.search);
+      const status = (params.get("status") || "").toLowerCase();
+      const mihpayid = params.get("mihpayid") || "";
+      const txnid = params.get("txnid") || "";
+      let pending = null;
+      try {
+        pending = JSON.parse(sessionStorage.getItem(PAYMENT_SESSION_KEY) || "null");
+      } catch (_) {
+        pending = null;
+      }
+
+      if (!pending || (pending.paymentMode !== "PAYU" && pending.paymentMode !== "UPI")) return;
+
+      const flags = await window.flashfitDB?.getSecurityFeatureFlags?.() || {};
+      if (flags.secure_payu_v1 && pending.paymentIntentId) {
+        const payment = await window.flashfitDB?.getSecurePaymentStatus?.(pending.paymentIntentId);
+        statusCopy.textContent = payment?.status === "paid"
+          ? "Payment has been verified securely."
+          : payment?.status === "failed"
+            ? "Payment was not verified. Please check My Orders."
+            : "Payment is being verified securely. Refresh this page shortly to see the final status.";
+        return;
+      }
+
+      if (status === "success" || !status) {
+        const client = window.flashfitDB && window.flashfitDB.getSupabaseClient ? window.flashfitDB.getSupabaseClient() : null;
+        if (client && pending.orderNumbers && pending.orderNumbers.length) {
+          await client
+            .from("seller_orders")
+            .update({
+              payment_status: "paid",
+              payment_reference: mihpayid || txnid || pending.txnid,
+              payment_received_at: new Date().toISOString()
+            })
+            .in("order_number", pending.orderNumbers);
+        }
+        if (window.flashfitNotifications && pending.orderNumbers && pending.orderNumbers.length) {
+          await Promise.allSettled(pending.orderNumbers.map((orderNumber) => window.flashfitNotifications.create("payment_success", {
+            title: `Payment Success ${orderNumber}`,
+            body: `${pending.customerName || "Customer"} completed payment for order ${orderNumber}.`,
+            orderNumber,
+            userId: pending.userId || null,
+            entityType: "seller_orders",
+            entityId: orderNumber,
+            metadata: {
+              payment_mode: pending.paymentMode || "PAYU",
+              txnid: txnid || pending.txnid || "",
+              amount: pending.amount || ""
+            }
+          })));
+        }
+        sessionStorage.removeItem(PAYMENT_SESSION_KEY);
+        localStorage.removeItem(CART_KEY);
+        statusCopy.textContent = "PayU payment was completed and your order has been marked as paid.";
+      }
+    }
+
+    function renderSummary() {
+      const rows = [
+        ["Order Numbers", (summary.orderNumbers || []).join(", ") || "Pending"],
+        ["Customer", summary.customerName || "Guest User"],
+        ["Mobile", summary.customerMobile || "-"],
+        ["Address", summary.customerAddress || "-"],
+        ["Items", String(summary.itemCount || 0)],
+        ["Subtotal", `Rs ${Number(summary.subtotal || 0)}`],
+        ["Delivery", Number(summary.delivery || 0) > 0 ? `Rs ${Number(summary.delivery || 0)}` : "Free"],
+        ["Total", `Rs ${Number(summary.total || 0)}`],
+        ["Payment Mode", summary.paymentMode || "PayU Online Payment"],
+        ["Nearest Shop", summary.nearestShopName || "Will be assigned by serviceable pincode"]
+      ];
+
+      summaryGrid.innerHTML = rows.map(([label, value]) => `
+        <article class="tile">
+          <strong>${label}</strong>
+          <span>${value}</span>
+        </article>
+      `).join("");
+    }
+
+    syncPayuSuccess().finally(renderSummary);
+  </script>
+</body>
+
+</html>
+

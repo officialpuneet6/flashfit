@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /admin-panel/
+Disallow: /shopfit/
+Disallow: /delevery_patner/
+Disallow: /flashfitshop/auth.html
+Disallow: /flashfitshop/cart.html
+Disallow: /flashfitshop/profile.html
+Disallow: /flashfitshop/my-orders.html
+Disallow: /flashfitshop/track.html
+Disallow: /flashfitshop/payment-success.html
+Disallow: /flashfitshop/payment-failed.html
+
+Sitemap: https://flashfit.online/sitemap.xml

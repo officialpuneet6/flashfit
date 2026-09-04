@@ -1,0 +1,72 @@
+table_schema,table_name,column_name,data_type,is_nullable,column_default
+storage,buckets,id,text,NO,null
+storage,buckets,name,text,NO,null
+storage,buckets,owner,uuid,YES,null
+storage,buckets,created_at,timestamp with time zone,YES,now()
+storage,buckets,updated_at,timestamp with time zone,YES,now()
+storage,buckets,public,boolean,YES,false
+storage,buckets,avif_autodetection,boolean,YES,false
+storage,buckets,file_size_limit,bigint,YES,null
+storage,buckets,allowed_mime_types,ARRAY,YES,null
+storage,buckets,owner_id,text,YES,null
+storage,buckets,type,USER-DEFINED,NO,'STANDARD'::storage.buckettype
+storage,buckets,versioning_status,text,NO,'DISABLED'::text
+storage,buckets_analytics,name,text,NO,null
+storage,buckets_analytics,type,USER-DEFINED,NO,'ANALYTICS'::storage.buckettype
+storage,buckets_analytics,format,text,NO,'ICEBERG'::text
+storage,buckets_analytics,created_at,timestamp with time zone,NO,now()
+storage,buckets_analytics,updated_at,timestamp with time zone,NO,now()
+storage,buckets_analytics,id,uuid,NO,gen_random_uuid()
+storage,buckets_analytics,deleted_at,timestamp with time zone,YES,null
+storage,buckets_vectors,id,text,NO,null
+storage,buckets_vectors,type,USER-DEFINED,NO,'VECTOR'::storage.buckettype
+storage,buckets_vectors,created_at,timestamp with time zone,NO,now()
+storage,buckets_vectors,updated_at,timestamp with time zone,NO,now()
+storage,migrations,id,integer,NO,null
+storage,migrations,name,character varying,NO,null
+storage,migrations,hash,character varying,NO,null
+storage,migrations,executed_at,timestamp without time zone,YES,CURRENT_TIMESTAMP
+storage,objects,id,uuid,NO,gen_random_uuid()
+storage,objects,bucket_id,text,YES,null
+storage,objects,name,text,YES,null
+storage,objects,owner,uuid,YES,null
+storage,objects,created_at,timestamp with time zone,YES,now()
+storage,objects,updated_at,timestamp with time zone,YES,now()
+storage,objects,last_accessed_at,timestamp with time zone,YES,now()
+storage,objects,metadata,jsonb,YES,null
+storage,objects,path_tokens,ARRAY,YES,null
+storage,objects,version,text,YES,null
+storage,objects,owner_id,text,YES,null
+storage,objects,user_metadata,jsonb,YES,null
+storage,objects,archived_at,timestamp with time zone,YES,null
+storage,objects,is_delete_marker,boolean,NO,false
+storage,objects,is_versioned,boolean,NO,false
+storage,s3_multipart_uploads,id,text,NO,null
+storage,s3_multipart_uploads,in_progress_size,bigint,NO,0
+storage,s3_multipart_uploads,upload_signature,text,NO,null
+storage,s3_multipart_uploads,bucket_id,text,NO,null
+storage,s3_multipart_uploads,key,text,NO,null
+storage,s3_multipart_uploads,version,text,NO,null
+storage,s3_multipart_uploads,owner_id,text,YES,null
+storage,s3_multipart_uploads,created_at,timestamp with time zone,NO,now()
+storage,s3_multipart_uploads,user_metadata,jsonb,YES,null
+storage,s3_multipart_uploads,metadata,jsonb,YES,null
+storage,s3_multipart_uploads_parts,id,uuid,NO,gen_random_uuid()
+storage,s3_multipart_uploads_parts,upload_id,text,NO,null
+storage,s3_multipart_uploads_parts,size,bigint,NO,0
+storage,s3_multipart_uploads_parts,part_number,integer,NO,null
+storage,s3_multipart_uploads_parts,bucket_id,text,NO,null
+storage,s3_multipart_uploads_parts,key,text,NO,null
+storage,s3_multipart_uploads_parts,etag,text,NO,null
+storage,s3_multipart_uploads_parts,owner_id,text,YES,null
+storage,s3_multipart_uploads_parts,version,text,NO,null
+storage,s3_multipart_uploads_parts,created_at,timestamp with time zone,NO,now()
+storage,vector_indexes,id,text,NO,gen_random_uuid()
+storage,vector_indexes,name,text,NO,null
+storage,vector_indexes,bucket_id,text,NO,null
+storage,vector_indexes,data_type,text,NO,null
+storage,vector_indexes,dimension,integer,NO,null
+storage,vector_indexes,distance_metric,text,NO,null
+storage,vector_indexes,metadata_configuration,jsonb,YES,null
+storage,vector_indexes,created_at,timestamp with time zone,NO,now()
+storage,vector_indexes,updated_at,timestamp with time zone,NO,now()

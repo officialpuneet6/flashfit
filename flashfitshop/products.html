@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FlashFit Products | Live Fashion Collection</title>
+  <meta name="description" content="Browse FlashFit live fashion products from verified local shops with fast delivery, transparent pricing, COD, and online checkout in serviceable pincodes." />
+  <meta name="theme-color" content="#ff7a00" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  
+  <link rel="canonical" href="https://flashfit.online/products.html" />
+  <meta property="og:url" content="https://flashfit.online/products.html" />
+  <meta name="creator" content="Puneet Rajput" />
+  <meta name="publisher" content="FlashFit" />
+  <meta name="author" content="Puneet Rajput, Founder and Developer of FlashFit" />
+  <meta property="og:site_name" content="FlashFit" />
+  <meta property="og:locale" content="en_IN" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="FlashFit Products | Live Fashion Collection" />
+  <meta property="og:description" content="Browse FlashFit live fashion products from verified local shops with fast delivery, transparent pricing, COD, and online checkout in serviceable pincodes." />
+  <meta property="og:image" content="https://flashfit.online/50x100logo.png" />
+  <meta property="og:image:alt" content="FlashFit logo" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://flashfit.online/50x100logo.png" />
+  <meta name="twitter:title" content="FlashFit Products | Live Fashion Collection" />
+  <meta name="twitter:description" content="Browse FlashFit live fashion products from verified local shops with fast delivery, transparent pricing, COD, and online checkout in serviceable pincodes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="site.webmanifest" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="shortcut icon" href="ft.png" type="image/png">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXMT95C1Z5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-YXMT95C1Z5');
+  </script>
+</head>
+
+<body>
+  <div class="page-loader" id="pageLoader" aria-live="polite" aria-label="Loading FlashFit">
+    <div class="page-loader-card">
+      <div class="page-loader-logo"><img src="50x100logo.png" alt="FlashFit Logo" /></div>
+      <div class="page-loader-orbit"><span></span><span></span><span></span></div>
+      <h2>Preparing your product collection</h2>
+      <p id="pageLoaderText">Checking delivery area and loading live local inventory.</p>
+      <div class="page-loader-bar"><span></span></div>
+    </div>
+  </div>
+
+  <div class="pincode-modal modal-hidden" id="pincodeModal" aria-modal="true" role="dialog">
+    <div class="modal-card">
+      <div class="modal-badge"><img src="50x100logo.png" alt="FlashFit Logo" /></div>
+      <h2>Enter Delivery Pincode</h2>
+      <p>Check whether 45-50 min delivery is available in your area.</p>
+      <label class="sr-only" for="pincodeInput">Enter your delivery pincode</label>
+      <input id="pincodeInput" type="text" maxlength="6" inputmode="numeric" placeholder="Enter your delivery pincode" />
+      <button id="checkPincodeBtn" class="btn btn-primary">Check Availability</button>
+      <button id="useLocationBtn" class="btn btn-secondary">Use my location</button>
+      <p id="modalMessage" class="modal-message"></p>
+    </div>
+  </div>
+
+  <header class="navbar">
+    <input class="mobile-search-toggle" id="mobileSearchToggle" type="checkbox" aria-hidden="true" />
+    <a class="logo" href="index.html" aria-label="FlashFit Home"><img src="50x100logo.png" alt="FlashFit Logo" /></a>
+    <div class="header-center">
+      <div class="pincode-top-wrap">
+        <button id="pincodeTopBtn" class="pincode-top-btn" type="button" aria-label="Delivery pincode options"><i class="fa-solid fa-location-dot"></i><span id="currentPincodeText">Set Pincode</span></button>
+        <p id="nearestShopLabel" class="nearest-shop-label">Nearest shop: Detecting...</p>
+        <div id="pincodeTopMenu" class="pincode-top-menu"><button id="changePincodeBtn" type="button">Change Pincode</button></div>
+      </div>
+      <div class="search-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input id="searchInput" type="text" placeholder="Search kurtis, tops, jeans, sizes, colors..." />
+        <div id="searchSuggest" class="search-suggest"></div>
+      </div>
+    </div>
+    <div class="nav-icons">
+      <label for="mobileSearchToggle" id="mobileSearchBtn" class="mobile-search-btn" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></label>
+      <button id="profileBtn" aria-label="Account notice"><i class="fa-solid fa-user"></i></button>
+      <button id="cartBtn" class="nav-action-btn nav-cart-btn" aria-label="Cart"><i class="fa-solid fa-cart-shopping"></i><span class="nav-btn-label">Cart</span><span id="cartCount" class="cart-count">0</span></button>
+      <button id="menuBtn" class="nav-action-btn nav-menu-btn" aria-label="Menu"><i class="fa-solid fa-bars"></i><span class="nav-btn-label">Menu</span></button>
+    </div>
+  </header>
+
+  <section id="quickPanel" class="quick-panel" aria-live="polite">
+    <h4 id="quickPanelTitle">Panel</h4>
+    <div id="quickPanelBody" class="quick-panel-body"></div>
+  </section>
+
+  <main class="meesho-homepage">
+    <section class="launch-strip" aria-label="FlashFit shopping highlights">
+      <div class="launch-strip-track">
+        <span><i class="fa-solid fa-gift"></i> New user style deals</span>
+        <span><i class="fa-solid fa-truck-fast"></i> Fast delivery in active pincodes</span>
+        <span><i class="fa-solid fa-wallet"></i> Clear pricing before checkout</span>
+      </div>
+    </section>
+
+    <section id="serviceStatusBanner" class="service-status-banner" aria-live="polite"></section>
+
+    <section class="social-proof meesho-proof" aria-label="Collection intro">
+      <div class="section-head">
+        <div>
+          <p class="section-label">Live Collection</p>
+          <h3>Browse products matched to your delivery area</h3>
+          <p class="section-subline">Use category filters and search to narrow the live local catalog without leaving the shopping flow.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="category-strip meesho-filter-strip">
+      <button class="filter-btn active" data-filter="all"><i class="fa-solid fa-bag-shopping"></i> All</button>
+      <button class="filter-btn" data-filter="women"><i class="fa-solid fa-venus"></i> Women</button>
+      <button class="filter-btn" data-filter="men"><i class="fa-solid fa-mars"></i> Men</button>
+      <button class="filter-btn" data-filter="kurtis"><i class="fa-solid fa-shirt"></i> Kurtis</button>
+      <button class="filter-btn" data-filter="tops"><i class="fa-solid fa-crown"></i> Tops</button>
+      <button class="filter-btn" data-filter="t-shirts"><i class="fa-solid fa-shirt"></i> T-Shirts</button>
+      <button class="filter-btn" data-filter="jeans"><i class="fa-solid fa-socks"></i> Jeans</button>
+      <button class="filter-btn" data-filter="dresses"><i class="fa-solid fa-wand-magic-sparkles"></i> Dresses</button>
+      <button class="filter-btn" data-filter="kids"><i class="fa-solid fa-child"></i> Kids</button>
+      <button class="filter-btn" data-filter="unisex"><i class="fa-solid fa-user-group"></i> Unisex</button>
+      <button class="filter-btn" data-filter="new-arrivals"><i class="fa-solid fa-star"></i> New Arrivals</button>
+      <button class="filter-btn" data-filter="under-499"><i class="fa-solid fa-indian-rupee-sign"></i> Under Rs 499</button>
+    </section>
+
+    <section class="best-sellers meesho-products" id="bestSellersSection">
+      <div class="section-head">
+        <div>
+          <p class="section-label">Products For You</p>
+          <h3>All-in-One Fashion Store</h3>
+          <p class="section-subline">Dense product-first browsing with local inventory, personalized ranking, and category-led discovery.</p>
+          <p id="recommendationNote" class="recommendation-note">Set your pincode to unlock personalized picks.</p>
+        </div>
+      </div>
+      <div class="products-grid"></div>
+      <p id="emptyState" class="empty-state show">No products available right now.</p>
+    </section>
+
+    <section class="browse-rail meesho-benefits" aria-label="Shopping benefits">
+      <article class="browse-card"><div class="browse-icon"><i class="fa-solid fa-bolt"></i></div><div><strong>Fast local dispatch</strong><span>Products stay tied to active serviceable areas.</span></div></article>
+      <article class="browse-card"><div class="browse-icon"><i class="fa-solid fa-percent"></i></div><div><strong>Budget-led discovery</strong><span>Under-Rs-499 and trend-first browsing remains easy.</span></div></article>
+      <article class="browse-card"><div class="browse-icon"><i class="fa-solid fa-lock"></i></div><div><strong>Checkout clarity</strong><span>Pricing, payment, returns and support flow are visible.</span></div></article>
+    </section>
+
+    <section class="cta-banner" aria-label="Continue shopping">
+      <div>
+        <p class="kicker"><i class="fa-solid fa-bolt"></i> Need Another Route?</p>
+        <h3>Explore categories first or continue through the live local product collection.</h3>
+      </div>
+      <div class="cta-actions">
+        <a class="shop-btn" href="categories.html">View Categories</a>
+        <button class="hero-secondary-btn" type="button" onclick="document.getElementById('pincodeTopBtn').click()">Update Pincode</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div>
+        <a class="footer-logo" href="index.html" aria-label="FlashFit Home"><img src="50x100logo.png" alt="FlashFit Logo" /></a>
+        <p>45-50 min fashion delivery. Trending clothes delivered fast at your doorstep.</p>
+        <div class="footer-pills"><span>Fast delivery</span><span>Live catalog</span><span>Easy support</span></div>
+        <a href="about-us.html">About FlashFit</a>
+        <a href="contact-us.html">Contact Us</a>
+      </div>
+      <div>
+        <h5>Shop</h5>
+        <a href="index.html">Home</a>
+        <a href="categories.html">Categories</a>
+        <a href="products.html?filter=new-arrivals">New Arrivals</a>
+        <a href="products.html">Products</a>
+      </div>
+      <div>
+        <h5>Customer</h5>
+        <a href="cart.html">My Cart</a>
+        <a href="payment-success.html">Payment Success Page</a>
+        <a href="payment-failed.html">Payment Failed Page</a>
+        <a href="return-refund-policy.html">Returns & Refunds</a>
+        <a href="contact-us.html">Support</a>
+      </div>
+      <div>
+        <h5>Legal</h5>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-and-conditions.html">Terms & Conditions</a>
+        <a href="return-refund-policy.html">Refund & Return Policy</a>
+        <a href="shipping-delivery-policy.html">Shipping & Delivery</a>
+        <a href="cancellation-policy.html">Cancellation Policy</a>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <a href="mailto:flashfithelp@gmail.com" data-site-setting="support_email" data-setting-mode="mailto">flashfithelp@gmail.com</a>
+        <a href="tel:+919625250352" data-site-setting="support_phone_display" data-setting-mode="tel">+91 96252 50352</a>
+        <a href="contact-us.html" data-site-setting="support_hours">9:00 AM - 9:00 PM IST</a>
+        <p class="footer-address" data-site-setting="support_address">Shop No. 1, Main Market, Narela, Delhi - 110040</p>
+      </div>
+    </div>
+    <p class="copyright" data-site-setting="copyright_text">Copyright 2026 FlashFit</p>
+  </footer>
+
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a class="mobile-nav-item" href="cart.html"><i class="fa-solid fa-cart-shopping"></i><span>Cart</span></a>
+    <a class="mobile-nav-item" href="categories.html"><i class="fa-solid fa-bag-shopping"></i><span>Categories</span></a>
+    <a class="mobile-nav-item mobile-nav-item-center is-active" href="products.html"><i class="fa-solid fa-bolt"></i><span>Products</span></a>
+    <a class="mobile-nav-item" href="my-orders.html"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+    <a class="mobile-nav-item" href="profile.html"><i class="fa-regular fa-user"></i><span>Profile</span></a>
+  </nav>
+
+  <div class="delivery-pill" id="deliveryPill" aria-live="polite"></div>
+
+  <div class="ai-widget">
+    <button id="aiToggleBtn" class="ai-toggle-btn" type="button"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Picks</button>
+    <section id="aiPanel" class="ai-panel" aria-live="polite">
+      <div class="ai-head"><div><strong>FlashFit AI</strong><p>Personalized recommendations based on search, cart, and interests.</p></div><button id="aiCloseBtn" type="button" aria-label="Close AI panel"><i class="fa-solid fa-xmark"></i></button></div>
+      <div id="aiMessages" class="ai-messages"></div>
+      <div class="ai-quick-actions">
+        <button class="ai-chip" type="button" data-ai-query="recommend for me">Recommend for me</button>
+        <button class="ai-chip" type="button" data-ai-query="show kurtis under 1000">Kurtis under 1000</button>
+        <button class="ai-chip" type="button" data-ai-query="tops like my cart">Tops like my cart</button>
+        <button class="ai-chip" type="button" data-ai-query="what is available on my pincode">Service on my pincode</button>
+      </div>
+      <form id="aiForm" class="ai-form"><input id="aiInput" type="text" placeholder="Ask for personalized catalog suggestions" /><button type="submit" aria-label="Send AI query"><i class="fa-solid fa-paper-plane"></i></button></form>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="notification-config.js"></script>
+  <script src="notification-service.js"></script>
+  <script src="flashfit-business-extension.js"></script>
+  <script src="site-settings-ui.js"></script>
+  <script src="featured-products.js"></script>
+  <script src="script.js"></script>
+  <script src="admin-visibility-extension.js"></script>
+</body>
+
+</html>
+
+
+

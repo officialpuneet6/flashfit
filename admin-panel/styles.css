@@ -1,0 +1,128 @@
+/* Standalone Custom Stylesheet for FlashFit Portal */
+
+/* Font styles fallback styling */
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: 'Outfit', sans-serif;
+}
+
+.mono, .font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Scrollbar customizations */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.25);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.45);
+}
+
+/* Shipping cargo label style (Only for printed media) */
+.shipping-label {
+  border: 4px solid #000;
+  padding: 15px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  background: #fff;
+  color: #000;
+}
+
+.shipping-label .header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 3px solid #000;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.shipping-label .logo {
+  font-size: 20px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+}
+
+.shipping-label .pay-badge {
+  font-weight: 800;
+  font-size: 14px;
+  border: 3px solid #000;
+  padding: 2px 8px;
+  text-transform: uppercase;
+}
+
+.shipping-label .pincode {
+  font-size: 32px;
+  font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  text-align: center;
+  border: 3px solid #000;
+  padding: 5px;
+  margin: 10px 0;
+}
+
+.shipping-label .field {
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.shipping-label .field label {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 10px;
+  color: #444;
+  display: block;
+}
+
+.shipping-label .field strong {
+  font-size: 14px;
+}
+
+.shipping-label .footer {
+  border-top: 3px solid #000;
+  padding-top: 10px;
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.shipping-label .qr-box img {
+  width: 80px;
+  height: 80px;
+}
+
+/* Smooth fade-in and hover transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+/* Custom dark mode tweaks */
+.dark .dark\:bg-slate-900 {
+  background-color: #0f172a;
+}
+.dark .dark\:bg-slate-950 {
+  background-color: #020617;
+}
+.dark .dark\:border-slate-800 {
+  border-color: #1e293b;
+}

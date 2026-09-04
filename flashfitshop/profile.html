@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile | FlashFit</title>
+  <meta name="description" content="Manage your FlashFit profile, saved details, and account preferences." />
+  <meta name="theme-color" content="#ff7a00" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <meta name="author" content="FlashFit" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="shortcut icon" href="ft.png" type="image/png">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXMT95C1Z5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-YXMT95C1Z5');
+  </script>
+
+  <style>
+    :root {
+      --brand: #ff7a00;
+      --text: #1f1f1f;
+      --muted: #666;
+      --card: #fff;
+      --bg: #f5f7fb;
+      --shadow: 0 12px 30px rgba(16, 24, 40, 0.09);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Outfit", sans-serif;
+      color: var(--text);
+      background: radial-gradient(circle at 10% -10%, #fff2e4 0%, var(--bg) 40%, var(--bg) 100%);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid #ebeef4;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 20px;
+    }
+
+    .brand {
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .brand img {
+      width: 110px;
+      height: 54px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .home-link {
+      text-decoration: none;
+      color: #fff;
+      background: var(--brand);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 14px 40px;
+    }
+
+    .profile-hero {
+      background: linear-gradient(130deg, #fff 8%, #fff2e4 58%, #ffe1c1 100%);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      background: #ffe5cb;
+      display: grid;
+      place-items: center;
+      color: var(--brand);
+      font-size: 1.6rem;
+    }
+
+    .profile-hero h1 {
+      margin: 0 0 5px;
+      font-size: 1.9rem;
+    }
+
+    .profile-hero p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .logout-btn {
+      border: 0;
+      background: #1f2533;
+      color: #fff;
+      border-radius: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .kpi-grid {
+      margin-top: 16px;
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .kpi-card {
+      background: #fff;
+      border: 1px solid #e8edf7;
+      border-radius: 14px;
+      padding: 12px;
+      box-shadow: 0 8px 22px rgba(17, 24, 39, 0.06);
+    }
+
+    .kpi-card p {
+      margin: 0 0 6px;
+      color: #5e6881;
+      font-size: 0.88rem;
+    }
+
+    .kpi-card strong {
+      font-size: 1rem;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background: #edf2fc;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, #ff9d40, #ff7a00);
+      transition: width 0.25s ease;
+    }
+
+    .grid {
+      margin-top: 16px;
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 1.1fr 1fr;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+      border: 1px solid #edf1f8;
+    }
+
+    .card h3 {
+      margin: 0 0 12px;
+    }
+
+    .rows {
+      display: grid;
+      gap: 10px;
+    }
+
+    .row {
+      background: #fbfcff;
+      border: 1px solid #edf0f7;
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .status {
+      background: #e8f8eb;
+      color: #1d7d34;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      padding: 5px 9px;
+      font-weight: 700;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field-full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      font-size: 0.9rem;
+      color: #4f5a73;
+      font-weight: 600;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border: 1px solid #dde3ef;
+      background: #fcfdff;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font: inherit;
+      color: var(--text);
+    }
+
+    .field textarea {
+      min-height: 74px;
+      resize: vertical;
+    }
+
+    .save-btn {
+      border: 0;
+      background: var(--brand);
+      color: #fff;
+      border-radius: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .address-msg,
+    .interest-msg,
+    .logout-msg {
+      margin-top: 10px;
+      font-size: 0.92rem;
+      min-height: 18px;
+      color: #1d7d34;
+    }
+
+    .interests {
+      display: grid;
+      gap: 8px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .interest-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #fbfcff;
+      border: 1px solid #e2e8f5;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 0.92rem;
+    }
+
+    .footer-note {
+      margin-top: 20px;
+      color: #76809a;
+      text-align: center;
+    }
+
+    @media (max-width: 840px) {
+      .profile-hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .avatar {
+        margin: 0 auto;
+      }
+
+      .logout-btn {
+        width: 100%;
+      }
+
+      .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .interests {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="FlashFit Home"><img src="50x100logo.png" alt="FlashFit Logo" /></a>
+    <a class="home-link" href="index.html"><i class="fa-solid fa-house"></i> Back to Home</a>
+  </header>
+
+  <main>
+    <section class="profile-hero">
+      <div class="avatar"><i class="fa-solid fa-user"></i></div>
+      <div>
+        <h1>My Profile</h1>
+        <p id="profileSubtext">Manage your account, address, interests and history.</p>
+      </div>
+      <button id="logoutBtn" class="logout-btn" type="button">Logout</button>
+    </section>
+    <p id="logoutMsg" class="logout-msg"></p>
+
+    <section class="kpi-grid">
+      <article class="kpi-card">
+        <p>Auth Status</p>
+        <strong id="kpiAuth">Logged In</strong>
+      </article>
+      <article class="kpi-card">
+        <p>Address Status</p>
+        <strong id="kpiAddress">Incomplete</strong>
+      </article>
+      <article class="kpi-card">
+        <p>Interests Saved</p>
+        <strong id="kpiInterests">0 selected</strong>
+      </article>
+      <article class="kpi-card">
+        <p>Profile Complete</p>
+        <strong id="kpiProgressText">0%</strong>
+        <div class="progress-track">
+          <div id="kpiProgressFill" class="progress-fill"></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h3>Account Details</h3>
+        <div class="rows">
+          <div class="row"><span>Name</span><strong id="accountName">FlashFit User</strong></div>
+          <div class="row"><span>Email</span><strong id="accountEmail">Not set</strong></div>
+          <div class="row"><span>Phone</span><strong id="accountPhone">Not set</strong></div>
+          <div class="row"><span>Default Pincode</span><strong id="savedPincode">Not set</strong></div>
+        </div>
+      </article>
+      <article class="card">
+        <h3>Recent Orders Preview</h3>
+        <p style="margin:0 0 12px;color:var(--muted);"><a href="my-orders.html">Open full My Orders page</a></p>
+        <div id="ordersWrap" class="rows"></div>
+      </article>
+    </section>
+
+    <section class="card">
+      <h3>Address (A to Z)</h3>
+      <form id="addressForm" class="form-grid">
+        <div class="field">
+          <label for="fullName">Full Name</label>
+          <input id="fullName" type="text" placeholder="Enter full name" required />
+        </div>
+        <div class="field">
+          <label for="mobile">Mobile Number</label>
+          <input id="mobile" type="tel" placeholder="+91 96252 50352" required />
+        </div>
+        <div class="field field-full">
+          <label for="houseNo">House No / Building</label>
+          <input id="houseNo" type="text" placeholder="Flat, floor, building name" required />
+        </div>
+        <div class="field field-full">
+          <label for="street">Street / Area</label>
+          <textarea id="street" placeholder="Street name, area, colony"></textarea>
+        </div>
+        <div class="field">
+          <label for="landmark">Landmark</label>
+          <input id="landmark" type="text" placeholder="Near school, mall, etc." />
+        </div>
+        <div class="field">
+          <label for="city">City</label>
+          <input id="city" type="text" placeholder="Enter city" required />
+        </div>
+        <div class="field">
+          <label for="state">State (A to Z)</label>
+          <select id="state" required>
+            <option value="">Select state</option>
+            <option>Andhra Pradesh</option>
+            <option>Arunachal Pradesh</option>
+            <option>Assam</option>
+            <option>Bihar</option>
+            <option>Chhattisgarh</option>
+            <option>delhi</option>
+            <option>Goa</option>
+            <option>Gujarat</option>
+            <option>Haryana</option>
+            <option>Himachal Pradesh</option>
+            <option>Jharkhand</option>
+            <option>Karnataka</option>
+            <option>Kerala</option>
+            <option>Madhya Pradesh</option>
+            <option>Maharashtra</option>
+            <option>Manipur</option>
+            <option>Meghalaya</option>
+            <option>Mizoram</option>
+            <option>Nagaland</option>
+            <option>Odisha</option>
+            <option>Punjab</option>
+            <option>Rajasthan</option>
+            <option>Sikkim</option>
+            <option>Tamil Nadu</option>
+            <option>Telangana</option>
+            <option>Tripura</option>
+            <option>Uttar Pradesh</option>
+            <option>Uttarakhand</option>
+            <option>West Bengal</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="addressPincode">Pincode</label>
+          <input id="addressPincode" type="text" maxlength="6" pattern="[0-9]{6}" placeholder="6-digit pincode"
+            required />
+        </div>
+        <div class="field field-full">
+          <button class="save-btn" type="submit">Save Address</button>
+        </div>
+      </form>
+      <p id="addressMsg" class="address-msg"></p>
+    </section>
+
+    <section class="card">
+      <h3>Fashion Interests</h3>
+      <div class="interests">
+        <label class="interest-item"><input class="interest-checkbox" type="checkbox" value="Kurtis" /> Kurtis</label>
+        <label class="interest-item"><input class="interest-checkbox" type="checkbox" value="Tops" /> Tops</label>
+        <label class="interest-item"><input class="interest-checkbox" type="checkbox" value="T-Shirts" />
+          T-Shirts</label>
+        <label class="interest-item"><input class="interest-checkbox" type="checkbox" value="Jeans" /> Jeans</label>
+        <label class="interest-item"><input class="interest-checkbox" type="checkbox" value="Dresses" /> Dresses</label>
+        <label class="interest-item"><input class="interest-checkbox" type="checkbox" value="Ethnic" /> Ethnic</label>
+        <label class="interest-item"><input class="interest-checkbox" type="checkbox" value="Under 499" /> Under
+          499</label>
+        <label class="interest-item"><input class="interest-checkbox" type="checkbox" value="New Arrivals" /> New
+          Arrivals</label>
+      </div>
+      <div style="margin-top:10px;">
+        <button id="saveInterestBtn" class="save-btn" type="button">Save Interests</button>
+      </div>
+      <p id="interestMsg" class="interest-msg"></p>
+    </section>
+
+    <section class="card">
+      <h3>Product Reviews</h3>
+      <form id="reviewForm" class="form-grid">
+        <div class="field">
+          <label for="reviewProductId">Product ID</label>
+          <input id="reviewProductId" type="number" min="1" placeholder="Enter product ID" required />
+        </div>
+        <div class="field">
+          <label for="reviewRating">Rating</label>
+          <select id="reviewRating" required>
+            <option value="">Select rating</option>
+            <option value="5">5 - Excellent</option>
+            <option value="4">4 - Good</option>
+            <option value="3">3 - Average</option>
+            <option value="2">2 - Poor</option>
+            <option value="1">1 - Bad</option>
+          </select>
+        </div>
+        <div class="field field-full">
+          <label for="reviewText">Review</label>
+          <textarea id="reviewText" placeholder="Write product quality, fit, fabric and delivery feedback"></textarea>
+        </div>
+        <div class="field field-full">
+          <button class="save-btn" type="submit">Submit Review</button>
+        </div>
+      </form>
+      <p id="reviewMsg" class="interest-msg"></p>
+      <div id="myReviewsWrap" class="rows"></div>
+    </section>
+
+    <p class="footer-note" data-site-setting="copyright_text">Copyright 2026 FlashFit</p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="notification-config.js"></script>
+  <script src="notification-service.js"></script>
+  <script>
+    const pincodeTarget = document.getElementById("savedPincode");
+    const subtext = document.getElementById("profileSubtext");
+    const addressForm = document.getElementById("addressForm");
+    const addressMsg = document.getElementById("addressMsg");
+    const ordersWrap = document.getElementById("ordersWrap");
+    const accountName = document.getElementById("accountName");
+    const accountEmail = document.getElementById("accountEmail");
+    const accountPhone = document.getElementById("accountPhone");
+    const saveInterestBtn = document.getElementById("saveInterestBtn");
+    const interestMsg = document.getElementById("interestMsg");
+    const interestChecks = [...document.querySelectorAll(".interest-checkbox")];
+    const kpiAuth = document.getElementById("kpiAuth");
+    const kpiAddress = document.getElementById("kpiAddress");
+    const kpiInterests = document.getElementById("kpiInterests");
+    const kpiProgressText = document.getElementById("kpiProgressText");
+    const kpiProgressFill = document.getElementById("kpiProgressFill");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const logoutMsg = document.getElementById("logoutMsg");
+    const reviewForm = document.getElementById("reviewForm");
+    const reviewMsg = document.getElementById("reviewMsg");
+    const myReviewsWrap = document.getElementById("myReviewsWrap");
+
+    function sanitizeInput(value) {
+      return (value || "").toString().replace(/<|>/g, "").trim();
+    }
+
+    function statusLabel(status) {
+      const s = (status || "").toLowerCase();
+      if (s === "pending") return "Order Confirmed";
+      if (s === "accepted") return "Accepted";
+      if (s === "packed") return "Packed";
+      if (s === "out_for_delivery") return "Out for Delivery";
+      if (s === "delivered") return "Delivered";
+      if (s === "rejected") return "Rejected";
+      return status || "Pending";
+    }
+
+    function renderOrders(rows) {
+      if (!rows || !rows.length) {
+        ordersWrap.innerHTML = '<div class="row"><div><strong>No orders yet</strong><br /><small>Place an order from cart to start tracking.</small></div><span class="status">Info</span></div>';
+        return;
+      }
+      ordersWrap.innerHTML = rows.map((row) => `
+        <div class="row">
+          <div>
+            <strong>${row.order_number || "-"}</strong><br />
+            <small>${new Date(row.created_at).toLocaleString()}</small>
+          </div>
+          <span class="status">${statusLabel(row.status)}</span>
+        </div>
+      `).join("");
+    }
+
+    function renderMyReviews(rows) {
+      if (!rows.length) {
+        myReviewsWrap.innerHTML = '<div class="row"><div><strong>No reviews yet</strong><br /><small>Review add karoge to yahan show hoga.</small></div><span class="status">Info</span></div>';
+        return;
+      }
+      myReviewsWrap.innerHTML = rows.map((row) => `
+        <div class="row">
+          <div>
+            <strong>Product #${row.product_id || "-"}</strong><br />
+            <small>${(row.review_text || "No comment").toString().slice(0, 120)}</small>
+          </div>
+          <span class="status">${row.rating || 0}/5</span>
+        </div>
+      `).join("");
+    }
+
+    function fillAddress(data) {
+      document.getElementById("fullName").value = data.fullName || "";
+      document.getElementById("mobile").value = data.mobile || "";
+      document.getElementById("houseNo").value = data.houseNo || "";
+      document.getElementById("street").value = data.street || "";
+      document.getElementById("landmark").value = data.landmark || "";
+      document.getElementById("city").value = data.city || "";
+      document.getElementById("state").value = data.state || "";
+      document.getElementById("addressPincode").value = data.pincode || "";
+    }
+
+    function updateKpis() {
+      const selected = interestChecks.filter((cb) => cb.checked).length;
+      kpiInterests.textContent = `${selected} selected`;
+      const required = [
+        document.getElementById("fullName").value.trim(),
+        document.getElementById("mobile").value.trim(),
+        document.getElementById("houseNo").value.trim(),
+        document.getElementById("city").value.trim(),
+        document.getElementById("state").value.trim(),
+        document.getElementById("addressPincode").value.trim(),
+        selected > 0 ? "yes" : ""
+      ];
+      const done = required.filter(Boolean).length;
+      const percent = Math.round((done / required.length) * 100);
+      kpiProgressText.textContent = `${percent}%`;
+      kpiProgressFill.style.width = `${percent}%`;
+      kpiAddress.textContent = done >= 6 ? "Complete" : "Incomplete";
+    }
+
+    async function ensureAuthenticated() {
+      const user = await window.flashfitDB.getCurrentUser();
+      if (!user) {
+        window.location.href = "auth.html?next=profile&message=login_required";
+        return null;
+      }
+      kpiAuth.textContent = "Logged In";
+      accountEmail.textContent = user.email || "Not set";
+      return user;
+    }
+
+    async function hydrateProfile() {
+      const user = await ensureAuthenticated();
+      if (!user) return;
+
+      const pincode = await window.flashfitDB.loadDefaultPincode() || localStorage.getItem("flashfitPincode") || "";
+      if (pincode) {
+        pincodeTarget.textContent = pincode;
+        subtext.textContent = `Default delivery area: ${pincode}. Fast 45-50 min slots enabled.`;
+      }
+
+      const userProfile = await window.flashfitDB.loadUserProfile();
+      if (userProfile) {
+        if (userProfile.fullName) accountName.textContent = userProfile.fullName;
+        if (userProfile.mobile) accountPhone.textContent = userProfile.mobile;
+      }
+
+      const dbAddress = await window.flashfitDB.loadAddress();
+      if (dbAddress) {
+        fillAddress(dbAddress);
+      }
+
+      const interests = await window.flashfitDB.loadInterests();
+      if (interests.length) {
+        interestChecks.forEach((cb) => { cb.checked = interests.includes(cb.value); });
+      }
+
+      const myReviews = await window.flashfitDB.loadMyProductReviews();
+      renderMyReviews(myReviews || []);
+
+      const orders = await window.flashfitDB.loadOrders();
+      renderOrders(orders || []);
+      updateKpis();
+    }
+
+    addressForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const payload = {
+        fullName: document.getElementById("fullName").value.trim(),
+        mobile: document.getElementById("mobile").value.trim(),
+        houseNo: document.getElementById("houseNo").value.trim(),
+        street: document.getElementById("street").value.trim(),
+        landmark: document.getElementById("landmark").value.trim(),
+        city: document.getElementById("city").value.trim(),
+        state: document.getElementById("state").value,
+        pincode: document.getElementById("addressPincode").value.trim()
+      };
+
+      if (!/^\d{6}$/.test(payload.pincode)) {
+        addressMsg.style.color = "#c53b2f";
+        addressMsg.textContent = "Please enter a valid 6-digit pincode.";
+        return;
+      }
+
+      localStorage.setItem("flashfitPincode", payload.pincode);
+      await window.flashfitDB.saveAddress(payload);
+      await window.flashfitDB.saveDefaultPincode(payload.pincode);
+      await window.flashfitDB.saveUserProfile({
+        fullName: payload.fullName,
+        email: accountEmail.textContent,
+        mobile: payload.mobile,
+        defaultPincode: payload.pincode
+      });
+      accountName.textContent = payload.fullName;
+      accountPhone.textContent = payload.mobile;
+      pincodeTarget.textContent = payload.pincode;
+      addressMsg.style.color = "#1d7d34";
+      addressMsg.textContent = "Address saved successfully.";
+      updateKpis();
+    });
+
+    saveInterestBtn.addEventListener("click", async () => {
+      const selected = interestChecks.filter((cb) => cb.checked).map((cb) => cb.value);
+      const ok = await window.flashfitDB.saveInterests(selected);
+      if (!ok) {
+        interestMsg.style.color = "#c53b2f";
+        interestMsg.textContent = "Unable to save interests.";
+        return;
+      }
+      interestMsg.style.color = "#1d7d34";
+      interestMsg.textContent = "Interests saved.";
+      updateKpis();
+    });
+
+    reviewForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const payload = {
+        productId: Number(sanitizeInput(document.getElementById("reviewProductId").value) || 0),
+        rating: Number(document.getElementById("reviewRating").value || 0),
+        reviewText: sanitizeInput(document.getElementById("reviewText").value)
+      };
+      if (!payload.productId || payload.rating < 1 || payload.rating > 5) {
+        reviewMsg.style.color = "#c53b2f";
+        reviewMsg.textContent = "Valid Product ID and rating required.";
+        return;
+      }
+
+      const reviewResult = await window.flashfitDB.addProductReview(payload);
+      if (!reviewResult.ok) {
+        reviewMsg.style.color = "#c53b2f";
+        reviewMsg.textContent = reviewResult.error || "Unable to submit review.";
+        return;
+      }
+
+      reviewMsg.style.color = "#1d7d34";
+      reviewMsg.textContent = "Review submitted successfully.";
+      reviewForm.reset();
+      const myReviews = await window.flashfitDB.loadMyProductReviews();
+      renderMyReviews(myReviews || []);
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      const res = await window.flashfitDB.signOut();
+      if (!res.ok) {
+        logoutMsg.style.color = "#c53b2f";
+        logoutMsg.textContent = res.error || "Logout failed.";
+        return;
+      }
+      logoutMsg.style.color = "#1d7d34";
+      logoutMsg.textContent = "Logged out. Redirecting...";
+      setTimeout(() => {
+        window.location.href = "auth.html?next=profile";
+      }, 450);
+    });
+
+    [
+      document.getElementById("fullName"),
+      document.getElementById("mobile"),
+      document.getElementById("houseNo"),
+      document.getElementById("city"),
+      document.getElementById("state"),
+      document.getElementById("addressPincode")
+    ].forEach((el) => {
+      el.addEventListener("input", updateKpis);
+      el.addEventListener("change", updateKpis);
+    });
+
+    interestChecks.forEach((cb) => cb.addEventListener("change", updateKpis));
+
+    hydrateProfile();
+    if (window.flashfitDB && window.flashfitDB.applySiteSettings) {
+      window.flashfitDB.applySiteSettings();
+    }
+  </script>
+</body>
+
+</html>
+

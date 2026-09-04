@@ -1,0 +1,13 @@
+table_schema,table_name,constraint_name,constraint_type,column_name,foreign_table_schema,foreign_table_name,foreign_column_name
+storage,buckets,buckets_pkey,PRIMARY KEY,id,,,
+storage,buckets,buckets_versioning_dark_check,CHECK,,,,
+storage,buckets,buckets_versioning_standard_only_check,CHECK,,,,
+storage,buckets,buckets_versioning_status_check,CHECK,,,,
+storage,buckets_analytics,buckets_analytics_pkey,PRIMARY KEY,id,,,
+storage,objects,objects_bucketId_fkey,FOREIGN KEY,bucket_id,storage,buckets,id
+storage,objects,objects_pkey,PRIMARY KEY,id,,,
+storage,s3_multipart_uploads,s3_multipart_uploads_bucket_id_fkey,FOREIGN KEY,bucket_id,storage,buckets,id
+storage,s3_multipart_uploads,s3_multipart_uploads_pkey,PRIMARY KEY,id,,,
+storage,s3_multipart_uploads_parts,s3_multipart_uploads_parts_bucket_id_fkey,FOREIGN KEY,bucket_id,storage,buckets,id
+storage,s3_multipart_uploads_parts,s3_multipart_uploads_parts_pkey,PRIMARY KEY,id,,,
+storage,s3_multipart_uploads_parts,s3_multipart_uploads_parts_upload_id_fkey,FOREIGN KEY,upload_id,storage,s3_multipart_uploads,id

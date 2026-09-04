@@ -1,0 +1,381 @@
+FLASHFIT NETLIFY FREE DEPLOY GUIDE
+Domain: https://flashfit.online
+Founder / Developer: Puneet Rajput
+
+==================================================
+1. IMPORTANT PROJECT STRUCTURE
+==================================================
+
+Your project has multiple panels:
+
+1. Customer Website:
+   flashfitshop/
+
+2. Admin Panel:
+   admin-panel/
+
+3. Shopkeeper Panel:
+   shopfit/
+
+4. Delivery Partner Panel:
+   delevery_patner/
+
+You said these panels can be deployed separately. That is OK.
+
+Recommended domains:
+
+Customer site:
+https://flashfit.online
+
+Admin panel:
+https://admin.flashfit.online
+
+Shopkeeper panel:
+https://seller.flashfit.online
+
+Delivery partner panel:
+https://delivery.flashfit.online
+
+==================================================
+2. NETLIFY FREE DEPLOY - CUSTOMER SITE
+==================================================
+
+For customer website on flashfit.online:
+
+Netlify publish folder should be:
+
+flashfitshop
+
+But IMPORTANT:
+
+Some files are currently shared from project root using ../ paths:
+
+../notification-config.js
+../notification-service.js
+../flashfit-business-extension.js
+../admin-visibility-extension.js
+
+If you deploy only flashfitshop folder, these ../ files will NOT be available.
+
+Before deploy, do ONE of these:
+
+Option A - Recommended:
+Copy these files into flashfitshop folder:
+
+notification-config.js
+notification-service.js
+flashfit-business-extension.js
+admin-visibility-extension.js
+notification-sw.js
+
+Then update script paths inside flashfitshop HTML files:
+
+../notification-config.js        -> notification-config.js
+../notification-service.js       -> notification-service.js
+../flashfit-business-extension.js -> flashfit-business-extension.js
+../admin-visibility-extension.js -> admin-visibility-extension.js
+
+Also service worker must be available at:
+
+https://flashfit.online/notification-sw.js
+
+Option B:
+Deploy full project root and configure redirects carefully.
+This is more confusing. Use Option A for simple Netlify deploy.
+
+==================================================
+3. NETLIFY DEPLOY STEPS
+==================================================
+
+1. Login to Netlify.
+
+2. Click:
+Add new site -> Deploy manually
+
+3. Drag and drop the prepared customer site folder:
+flashfitshop
+
+4. After deploy, Netlify will give a free URL like:
+https://random-name.netlify.app
+
+5. Open the site and check:
+Home page
+Products page
+Categories page
+Product details page
+Cart page
+Login page
+Orders page
+
+==================================================
+4. CUSTOM DOMAIN SETUP
+==================================================
+
+In Netlify:
+
+Site settings -> Domain management -> Add custom domain
+
+Add:
+flashfit.online
+
+Also add:
+www.flashfit.online
+
+Netlify will show DNS records.
+
+If your domain DNS is managed outside Netlify:
+
+For root domain flashfit.online:
+Add A record:
+
+Name: @
+Value: 75.2.60.5
+
+For www:
+Add CNAME:
+
+Name: www
+Value: your-netlify-site-name.netlify.app
+
+Alternative:
+Use Netlify DNS nameservers if you want Netlify to manage all DNS.
+
+After DNS update, wait 5 minutes to 24 hours.
+
+==================================================
+5. HTTPS SSL
+==================================================
+
+In Netlify:
+
+Domain management -> HTTPS
+
+Click:
+Verify DNS configuration
+
+Then:
+Provision certificate
+
+Final site must open on:
+
+https://flashfit.online
+
+Not only http.
+
+==================================================
+6. SUPABASE SETTINGS AFTER DEPLOY
+==================================================
+
+Go to Supabase Dashboard:
+
+Authentication -> URL Configuration
+
+Set Site URL:
+
+https://flashfit.online
+
+Add Redirect URLs:
+
+https://flashfit.online/*
+https://www.flashfit.online/*
+https://admin.flashfit.online/*
+https://seller.flashfit.online/*
+https://delivery.flashfit.online/*
+http://127.0.0.1:5500/*
+http://localhost:5500/*
+
+IMPORTANT:
+Do NOT put SUPABASE_SECRET_KEY in frontend code.
+Only use publishable/anon key in browser.
+
+==================================================
+7. SEO FILES
+==================================================
+
+These files must be accessible after deploy:
+
+https://flashfit.online/robots.txt
+https://flashfit.online/sitemap.xml
+https://flashfit.online/site.webmanifest
+
+Submit sitemap in Google Search Console:
+
+https://flashfit.online/sitemap.xml
+
+Also check:
+
+https://search.google.com/search-console
+
+Add property:
+flashfit.online
+
+Verify using DNS TXT record or HTML file.
+
+==================================================
+8. WEB PUSH NOTIFICATION IMPORTANT
+==================================================
+
+Web Push works per domain.
+
+If all panels are separate domains:
+
+Customer site:
+flashfit.online
+
+Admin:
+admin.flashfit.online
+
+Shopkeeper:
+seller.flashfit.online
+
+Delivery:
+delivery.flashfit.online
+
+Then notification permission must be granted separately on each domain.
+
+Service worker must exist at each domain root:
+
+https://flashfit.online/notification-sw.js
+https://admin.flashfit.online/notification-sw.js
+https://seller.flashfit.online/notification-sw.js
+https://delivery.flashfit.online/notification-sw.js
+
+Before final deploy, update role URLs in:
+
+notification-service.js
+notification-sw.js
+
+Use:
+
+admin: https://admin.flashfit.online/
+shopkeeper: https://seller.flashfit.online/
+delivery_partner: https://delivery.flashfit.online/
+user: https://flashfit.online/
+
+==================================================
+9. ADMIN / SELLER / DELIVERY DEPLOY
+==================================================
+
+Deploy each panel as a separate Netlify site:
+
+Admin publish folder:
+admin-panel
+
+Shopkeeper publish folder:
+shopfit
+
+Delivery publish folder:
+delevery_patner
+
+But each panel also uses shared root files:
+
+notification-config.js
+notification-service.js
+flashfit-business-extension.js
+notification-sw.js
+
+So copy required shared files into each panel folder before deploying, or adjust paths.
+
+Recommended simple method:
+
+Copy these into each panel folder:
+
+notification-config.js
+notification-service.js
+flashfit-business-extension.js
+notification-sw.js
+
+Then update script paths from ../file.js to file.js.
+
+==================================================
+10. DATABASE SQL FILES
+==================================================
+
+Before production launch, run these SQL files in Supabase SQL Editor if not already done:
+
+database-notifications.sql
+database-business-system.sql
+database-product-visibility.sql
+database-shopkeeper-product-edit-fields.sql
+
+After running SQL:
+
+Supabase Dashboard -> API Docs
+Refresh schema cache if needed.
+
+If error says:
+Could not find column in schema cache
+
+Then wait 1-2 minutes and refresh browser with Ctrl + F5.
+
+==================================================
+11. FINAL CHECKLIST BEFORE LAUNCH
+==================================================
+
+Customer website:
+[ ] Home opens on https://flashfit.online
+[ ] Products load
+[ ] Product detail page opens
+[ ] Product images show
+[ ] No duplicate products
+[ ] Pincode check works
+[ ] Cart works
+[ ] Checkout flow works
+[ ] Orders page works
+[ ] SEO title/meta/canonical present
+[ ] robots.txt opens
+[ ] sitemap.xml opens
+
+Admin:
+[ ] Admin panel opens
+[ ] Products visible
+[ ] Visibility tab works
+[ ] Product moderation inspect works
+[ ] Reject reason notification works
+
+Shopkeeper:
+[ ] Login works
+[ ] Product add works
+[ ] Product image upload works
+[ ] Product edit works
+[ ] Save Changes clears form
+
+Delivery:
+[ ] Login works
+[ ] Assigned order shows
+[ ] COD cash collected works
+[ ] OTP settlement works
+[ ] Wallet/settlement history works
+
+Notifications:
+[ ] Browser permission asks
+[ ] In-app notification panel works
+[ ] Push notification works when browser is closed
+[ ] Correct role opens correct panel URL
+
+==================================================
+12. AFTER DEPLOY
+==================================================
+
+1. Hard refresh:
+Ctrl + F5
+
+2. Test in Chrome Incognito with extensions off.
+
+This avoids fake errors from browser extensions like:
+chrome-extension://...
+BHK widget...
+
+3. Submit sitemap to Google Search Console.
+
+4. Test Lighthouse:
+Chrome DevTools -> Lighthouse
+
+Target:
+Performance: 90+
+SEO: 95-100
+Best Practices: 90+
+Accessibility: 90+
+
+Note:
+SEO 100/100 also depends on image sizes, HTTPS, correct domain DNS, robots.txt, sitemap.xml, page speed, and Google indexing.
