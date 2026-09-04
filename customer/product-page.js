@@ -99,11 +99,6 @@ function getCart() {
 }
 
 
-
- ];
-  }
-}
-
 function setCart(items) {
   localStorage.setItem(CART_KEY, JSON.stringify(items));
   if (window.flashfitDB && window.flashfitDB.saveCart) {
@@ -186,19 +181,7 @@ function buildDetailFacts(product) {
   if (product.weight) facts.push(["Weight Feel", product.weight]);
   return facts;
 }
-  return [
-    ["Fabric", product.fabric || "Soft blended fabric"],
-    ["Color", product.color || "As shown in image"],
-    ["Pattern", product.print_pattern || "Daily wear pattern"],
-    ["Fit", product.fit_type || "Regular fit"],
-    ["Sleeve", product.sleeve_type || "Standard sleeve"],
-    ["Neck", product.neck_type || "Classic neck"],
-    ["Occasion", product.occasion || "Casual and outing wear"],
-    ["Size Chart", product.size_chart || "S, M, L, XL available depending on stock"],
-    ["Care", product.care_instructions || "Gentle wash recommended"],
-    ["Weight Feel", product.weight || "Lightweight and easy to carry"]
-  ];
-}
+
 
 function buildReviewPayload(product) {
   const price = Number(product.customer_price || product.price || 0);
@@ -583,14 +566,6 @@ async function loadProductPage() {
     // Additive: pull attribute display names/order so dynamic specs read nicely.
     // Missing table (pre-migration) degrades to humanized keys — never blocks the page.
     try {
-     return JSON.parse(localStorage.getItem(CART_KEY)) || [];
-   } catch (_) {
-     return [];
-   }
-     return JSON.parse(localStorage.getItem(CART_KEY)) || [];
-   } catch (_) {
-     return [];
-   }
       const { data: attrMeta } = await client
         .from("category_attributes")
         .select("attribute_key,name,sort_order")

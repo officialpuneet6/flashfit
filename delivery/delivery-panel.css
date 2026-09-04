@@ -1,13 +1,27 @@
 :root {
-    --primary: #ff7a00;
-    --bg: #09090b;
-    --card: #18181b;
-    --card-2: #202024;
+    --brand-primary: #FF6A00;
+    --brand-secondary: #FF8A2A;
+    --brand-primary-soft: #FFF3E8;
+    --text-main: #111111;
+    --text-secondary: #666666;
+    --page-background: #FAFAFA;
+    --surface: #FFFFFF;
+    --border-token: #EAEAEA;
+    --success-token: #16803C;
+    --warning-token: #D97706;
+    --error-token: #DC2626;
+
+    /* Delivery panel dark-mode variables */
+    --primary: var(--brand-primary, #FF6A00);
+    --primary-hover: var(--brand-secondary, #FF8A2A);
+    --bg: #0d0d0d;
+    --card: #171717;
+    --card-2: #212121;
     --text: #ffffff;
-    --muted: #a1a1aa;
-    --border: #27272a;
-    --success: #22c55e;
-    --danger: #ef4444;
+    --muted: #a3a3a3;
+    --border: #292929;
+    --success: var(--success-token, #16803C);
+    --danger: var(--error-token, #DC2626);
 }
 
 body {

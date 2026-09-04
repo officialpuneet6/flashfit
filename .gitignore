@@ -1,0 +1,17 @@
+# Environment and secrets
+.env
+.env.*
+*.local
+staging/.env.staging
+customer/.env
+shop/.env
+delivery/.env
+admin/.env
+
+# Dependencies and build output
+node_modules/
+customer/dist/
+shop/dist/
+delivery/dist/
+admin/dist/
+
