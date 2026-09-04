@@ -15,3 +15,7 @@ shop/dist/
 delivery/dist/
 admin/dist/
 
+# Editor and temporary files
+.claude/
+.idea/
+.vscode/
