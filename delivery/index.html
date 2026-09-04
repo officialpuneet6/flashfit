@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Partner Login | FlashFit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="delivery-panel.css">
+    <script>
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+    const session = JSON.parse(
+        localStorage.getItem("flashfit_rider_session")
+    );
+
+    if (!session) return;
+
+    const client = window.flashfitDB.getSupabaseClient();
+
+    if (!client) return;
+
+    const { data } = await client
+        .from("delivery_partners")
+        .select("id")
+        .eq("id", session.partner_id)
+        .eq("active", true)
+        .maybeSingle();
+
+    if (data) {
+
+        location.href = "delivery-panel.html";
+
+    } else {
+
+        localStorage.removeItem("flashfit_rider_session");
+
+    }
+
+});
+
+</script>
+</head>
+<body class="rider-theme ff-app ff-delivery">
+    <div class="auth-screen">
+        <div class="auth-content">
+            <img src="50x100logo.png" alt="FlashFit" class="auth-logo">
+            <h1>Partner Login</h1>
+            <p>Sign in to start your shift</p>
+            
+            <div class="input-stack">
+                <div class="input-box">
+                    <i class="fa-solid fa-phone"></i>
+                    <input type="tel" id="loginMobile" maxlength="10" placeholder="Mobile Number">
+                </div>
+                <div class="input-box">
+
+    <i class="fa-solid fa-lock"></i>
+
+    <input
+        type="password"
+        id="loginPass"
+        placeholder="Password">
+
+    <i
+        id="togglePass"
+        class="fa-solid fa-eye"
+        style="cursor:pointer">
+    </i>
+
+</div>
+            </div>
+            <button id="btnConnect" class="btn-login">Sign In <i class="fa-solid fa-arrow-right"></i></button>
+            
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+    <script src="notification-config.js"></script>
+    <script src="notification-service.js"></script>
+    <script src="delivery-panel.js"></script>
+    <script src="flashfit-business-extension.js"></script>
+    <script src="notification-sw.js"></script>
+        <script src="admin-visibility-extension.js"></script>
+
+</body>
+</html>

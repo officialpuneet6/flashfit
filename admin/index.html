@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlashFit Hub & Seller Portal - Standalone Edition</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#fff7ed',
+              100: '#ffedd5',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Supabase CDN Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Custom CSS link -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="ff-app ff-admin bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+  <!-- Site Announcement Banner -->
+  <div id="announcement-banner" class="bg-brand-500 text-white py-2 px-4 text-center text-xs font-bold tracking-wide flex items-center justify-center gap-2 z-40">
+    <i data-lucide="alert-circle" class="w-4 h-4 animate-bounce"></i>
+    <span id="announcement-text">Flash sale is active across all regional hubs! Portal online.</span>
+  </div>
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 h-16 px-4 md:px-8 flex items-center justify-between z-30 shadow-sm">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-brand-500 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-md shadow-brand-500/20 font-display">
+        FF
+      </div>
+      <div>
+        <h1 class="font-extrabold text-lg tracking-tight font-display text-slate-900 dark:text-white leading-tight">
+          FlashFit Portal
+        </h1>
+        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+          Control & Seller Center
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <!-- Theme Switcher -->
+      <button id="theme-toggle-btn" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer">
+        <i data-lucide="moon" class="w-4 h-4 hidden dark:block"></i>
+        <i data-lucide="sun" class="w-4 h-4 block dark:hidden"></i>
+      </button>
+
+      <!-- Role switching dropdown -->
+      <div id="role-selector-container" class="hidden flex items-center gap-2">
+        <select id="panel-role-selector" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 dark:text-slate-200 focus:outline-none cursor-pointer">
+          <option value="admin">Admin Panel</option>
+          <option value="seller">Seller Portal</option>
+        </select>
+
+        <button id="logout-btn" class="bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/20 dark:hover:bg-rose-950/40 text-rose-600 dark:text-rose-400 text-xs font-bold px-3.5 py-2 rounded-xl border border-rose-100 dark:border-rose-900/30 cursor-pointer">
+          Sign out
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace Frame -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 flex flex-col gap-6">
+    
+    <!-- GUEST VIEW: LOGIN SCREENS -->
+    <section id="guest-view" class="block max-w-4xl w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center py-10 md:py-16">
+      
+      <!-- Promo Left Column -->
+      <div class="flex flex-col gap-4 text-center md:text-left pr-0 md:pr-6">
+        <span class="text-xs bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 px-3 py-1 rounded-full font-bold w-fit uppercase tracking-wider mx-auto md:mx-0">
+          Command Center Hub
+        </span>
+        <h2 class="text-3xl md:text-5xl font-black text-slate-900 dark:text-white leading-tight font-display">
+          One Unified Premium Control Panel.
+        </h2>
+        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+          Onboard sellers, manage dynamic pricing sheets, dispatch nearest regional riders, and configure commission settings in real-time.
+        </p>
+        <div class="flex flex-wrap gap-2 justify-center md:justify-start mt-2">
+          <button id="demo-admin-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold px-4 py-2.5 rounded-xl shadow-md transition-colors cursor-pointer">
+            Open Admin Demo
+          </button>
+          <button id="demo-seller-btn" class="bg-white hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 transition-colors cursor-pointer">
+            Open Seller Demo
+          </button>
+        </div>
+      </div>
+
+      <!-- Login Forms Right Column -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col gap-6">
+        <div class="flex bg-slate-100 dark:bg-slate-950 p-1 rounded-xl">
+          <button id="tab-btn-admin" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-white dark:bg-slate-900 text-brand-500 shadow-sm cursor-pointer">
+            Admin Login
+          </button>
+          <button id="tab-btn-seller" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 cursor-pointer">
+            Seller Portal
+          </button>
+        </div>
+
+        <!-- Admin Form -->
+        <form id="admin-login-form" class="block flex flex-col gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Admin Email Address</label>
+            <input type="email" id="admin-email" required placeholder="admin@flashfit.in" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Access Password</label>
+            <input type="password" id="admin-password" required placeholder="••••••••" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+          </div>
+          <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-white font-bold py-2.5 rounded-xl text-sm transition-colors mt-2 shadow cursor-pointer">
+            Sign In as Admin
+          </button>
+        </form>
+
+        <!-- Seller Form -->
+        <form id="seller-login-form" class="hidden flex flex-col gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Seller Login ID</label>
+            <input type="text" id="seller-login-id" required placeholder="e.g. shop_narela" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Store Password</label>
+            <input type="password" id="seller-password" required placeholder="••••••••" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+          </div>
+          <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-white font-bold py-2.5 rounded-xl text-sm transition-colors mt-2 shadow cursor-pointer">
+            Authorize Store Login
+          </button>
+        </form>
+      </div>
+    </section>
+
+
+    <!-- ADMIN PANEL VIEW -->
+    <section id="admin-view" class="hidden flex flex-col gap-6">
+      
+      <!-- Metrics Overview -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-sm">
+          <div>
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Gross Revenue (GMV)</span>
+            <h3 id="admin-stat-gmv" class="text-2xl font-bold text-slate-800 dark:text-slate-100 mt-1">₹0</h3>
+            <span id="admin-stat-gmv-sub" class="text-xs text-brand-500 font-medium">0 Total Orders</span>
+          </div>
+          <div class="p-3 bg-brand-50 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400 rounded-xl">
+            <i data-lucide="trending-up" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-sm">
+          <div>
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Platform Earnings</span>
+            <h3 id="admin-stat-earnings" class="text-2xl font-bold text-slate-800 dark:text-slate-100 mt-1">₹0</h3>
+            <span class="text-xs text-slate-400">Net Commission + Gateway</span>
+          </div>
+          <div class="p-3 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-xl">
+            <i data-lucide="dollar-sign" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-sm">
+          <div>
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Active Sellers</span>
+            <h3 id="admin-stat-sellers" class="text-2xl font-bold text-slate-800 dark:text-slate-100 mt-1">0</h3>
+            <span id="admin-stat-sellers-sub" class="text-xs text-slate-400">0 shops pending review</span>
+          </div>
+          <div class="p-3 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-xl">
+            <i data-lucide="store" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-sm">
+          <div>
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Pending Catalog Items</span>
+            <h3 id="admin-stat-products" class="text-2xl font-bold text-slate-800 dark:text-slate-100 mt-1">0</h3>
+            <span class="text-xs text-slate-400">Awaiting quality moderation</span>
+          </div>
+          <div class="p-3 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 rounded-xl">
+            <i data-lucide="file-text" class="w-6 h-6"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="flex flex-wrap gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
+        <button data-admin-tab="dashboard" class="admin-tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all bg-brand-500 text-white shadow-md cursor-pointer">
+          <i data-lucide="store" class="w-4 h-4"></i> Dashboard
+        </button>
+        <button data-admin-tab="pincodes" class="admin-tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+          <i data-lucide="compass" class="w-4 h-4"></i> Service Areas
+        </button>
+        <button data-admin-tab="riders" class="admin-tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+          <i data-lucide="users" class="w-4 h-4"></i> Courier Partners
+        </button>
+        <button data-admin-tab="shops" class="admin-tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+          <i data-lucide="store" class="w-4 h-4"></i> Hubs Management
+        </button>
+        <button data-admin-tab="products" class="admin-tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+          <i data-lucide="file-text" class="w-4 h-4"></i> Catalog & Moderation
+        </button>
+        <button data-admin-tab="orders" class="admin-tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+          <i data-lucide="shopping-bag" class="w-4 h-4"></i> Orders Dispatch
+        </button>
+        <button data-admin-tab="settings" class="admin-tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+          <i data-lucide="sliders" class="w-4 h-4"></i> Global Config
+        </button>
+        <button data-admin-tab="reports" class="admin-tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+          <i data-lucide="bar-chart-3" class="w-4 h-4"></i> Reports & Control
+        </button>
+        <button data-admin-tab="categories" class="admin-tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+          <i data-lucide="folder-tree" class="w-4 h-4"></i> Categories
+        </button>
+        <button data-admin-tab="attributes" class="admin-tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+          <i data-lucide="tags" class="w-4 h-4"></i> Attributes
+        </button>
+      </div>
+
+      <!-- Admin Tab Windows -->
+      <div class="min-h-[400px]">
+        <!-- LOADING CONTAINER -->
+        <div id="admin-loading" class="hidden flex flex-col items-center justify-center py-20 gap-3">
+          <div class="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
+          <span class="text-sm font-medium text-slate-400">Loading control database...</span>
+        </div>
+
+        <!-- 1. DASHBOARD -->
+        <div id="admin-panel-dashboard" class="admin-tab-window block grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 flex flex-col gap-6">
+            <!-- Simulated Live Tracking map -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm">
+              <div class="flex justify-between items-center mb-3">
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                  <i data-lucide="compass" class="text-brand-500 w-5 h-5"></i>
+                  <span>Regional Delivery Proximity Map</span>
+                </h3>
+                <span class="text-[10px] bg-brand-100 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-0.5 rounded-full font-bold uppercase">Real-Time</span>
+              </div>
+              
+              <!-- Standalone SVG map element -->
+              <div class="relative w-full bg-slate-50 dark:bg-slate-950 border border-slate-150 dark:border-slate-800 rounded-xl h-[300px] overflow-hidden flex items-center justify-center">
+                <!-- Grid background -->
+                <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#ff6a00 1.5px, transparent 1.5px); background-size: 20px 20px;"></div>
+                <svg class="absolute inset-0 w-full h-full">
+                  <path d="M 50 150 Q 150 50 300 250 T 550 120" fill="none" stroke="#f97316" stroke-width="2" stroke-dasharray="6 4" />
+                </svg>
+                <!-- Interactive Markers -->
+                <div class="absolute" style="left: 15%; top: 30%">
+                  <div class="p-1.5 bg-indigo-500 text-white rounded-full shadow-lg cursor-pointer hover:scale-125 transition-transform" onclick="alert('Delhi Narela Hub: 4 Pending Deliveries')">
+                    <i data-lucide="store" class="w-4 h-4"></i>
+                  </div>
+                </div>
+                <div class="absolute" style="left: 45%; top: 40%">
+                  <div class="p-1.5 bg-amber-500 text-white rounded-full shadow-lg animate-bounce cursor-pointer" onclick="alert('Courier Amit: On Delivery Route 110001')">
+                    <i data-lucide="truck" class="w-4 h-4"></i>
+                  </div>
+                </div>
+                <div class="absolute" style="left: 75%; top: 65%">
+                  <div class="p-1.5 bg-emerald-500 text-white rounded-full shadow-lg cursor-pointer hover:scale-125 transition-transform" onclick="alert('Customer Residence Sector 12: Paid Order')">
+                    <i data-lucide="home" class="w-4 h-4"></i>
+                  </div>
+                </div>
+                <div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm">
+                  <div class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></div>
+                  <span>Regional proximity tracker running</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Activity Logs Feed -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm">
+              <h3 class="font-bold text-slate-800 dark:text-slate-100 mb-4 flex items-center gap-1.5">
+                <i data-lucide="database" class="text-brand-500 w-5 h-5"></i>
+                <span>Database Administration Operations Feed</span>
+              </h3>
+              <div id="admin-logs-container" class="flex flex-col gap-3 max-h-[250px] overflow-y-auto">
+                <!-- JS Populated logs -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Sandbox Performance Stats -->
+          <div class="flex flex-col gap-6">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm flex flex-col gap-4">
+              <h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
+                <i data-lucide="trending-up" class="text-brand-500 w-5 h-5"></i>
+                <span>Hub Settlement Rates</span>
+              </h3>
+              
+              <div class="p-4 bg-brand-50/50 dark:bg-brand-950/20 border border-brand-100 dark:border-brand-900/30 rounded-xl text-xs text-brand-800 dark:text-brand-300">
+                Settlements represent <strong>Net Shop Earnings</strong> disbursed automatically post delivery.
+              </div>
+
+              <!-- SVG bar graph placeholder -->
+              <div class="h-40 flex items-end justify-between px-4 pt-4 border-b border-slate-200 dark:border-slate-800">
+                <div class="flex flex-col items-center gap-1 w-1/4">
+                  <div class="w-8 bg-brand-500 rounded-t-md transition-all duration-500" style="height: 120px;"></div>
+                  <span class="text-[9px] text-slate-400 font-bold">Narela</span>
+                </div>
+                <div class="flex flex-col items-center gap-1 w-1/4">
+                  <div class="w-8 bg-brand-600 rounded-t-md transition-all duration-500" style="height: 60px;"></div>
+                  <span class="text-[9px] text-slate-400 font-bold">Rohini</span>
+                </div>
+                <div class="flex flex-col items-center gap-1 w-1/4">
+                  <div class="w-8 bg-indigo-500 rounded-t-md transition-all duration-500" style="height: 90px;"></div>
+                  <span class="text-[9px] text-slate-400 font-bold">Pitampura</span>
+                </div>
+                <div class="flex flex-col items-center gap-1 w-1/4">
+                  <div class="w-8 bg-emerald-500 rounded-t-md transition-all duration-500" style="height: 40px;"></div>
+                  <span class="text-[9px] text-slate-400 font-bold">Karol Bagh</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. SERVICE AREAS -->
+        <div id="admin-panel-pincodes" class="admin-tab-window hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+            <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+              <h3 class="font-bold text-slate-800 dark:text-slate-100">Serviceable Regions Coverage</h3>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm">
+                <thead class="bg-slate-50 dark:bg-slate-950/20 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                  <tr>
+                    <th class="px-5 py-3">Pincode</th>
+                    <th class="px-5 py-3">Flat Shipping Charge</th>
+                    <th class="px-5 py-3">Coverage State</th>
+                    <th class="px-5 py-3 text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="pincodes-table-body" class="divide-y divide-slate-100 dark:divide-slate-800">
+                  <!-- JS Populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div>
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm flex flex-col gap-4">
+              <h3 class="font-bold text-slate-800 dark:text-slate-100">Add Serviceable Region</h3>
+              <form id="add-pincode-form" class="flex flex-col gap-3">
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">6-Digit Zip/Pincode</label>
+                  <input type="text" id="pincode-input" required placeholder="e.g. 110001" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Standard Delivery Charge (₹)</label>
+                  <input type="number" id="pincode-charge" required value="90" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                </div>
+                <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-white font-bold py-2 rounded-xl text-xs transition-colors cursor-pointer">
+                  Activate Region Coverage
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. COURIER PARTNERS -->
+        <div id="admin-panel-riders" class="admin-tab-window hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+            <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-950/20">
+              <h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                <i data-lucide="truck" class="text-indigo-500 w-5 h-5"></i>
+                <span>Registered Dispatch Rider Fleet</span>
+              </h3>
+              <span class="text-xs text-slate-500 font-mono font-bold" id="admin-riders-count">0 Drivers</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm">
+                <thead class="bg-slate-50 dark:bg-slate-950/20 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                  <tr>
+                    <th class="px-5 py-3">Partner Name</th>
+                    <th class="px-5 py-3">Phone</th>
+                    <th class="px-5 py-3">Base Hub Pincode</th>
+                    <th class="px-5 py-3">Vehicle No</th>
+                    <th class="px-5 py-3">Duty State</th>
+                    <th class="px-5 py-3">Settlement</th>
+                    <th class="px-5 py-3 text-center">Duty & Operations</th>
+                  </tr>
+                </thead>
+                <tbody id="riders-table-body" class="divide-y divide-slate-100 dark:divide-slate-800">
+                  <!-- JS Populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div>
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm flex flex-col gap-4">
+              <div class="flex justify-between items-center border-b border-slate-150 dark:border-slate-800 pb-2">
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5" id="rider-form-title">
+                  <i data-lucide="user-plus" class="text-brand-500 w-5 h-5"></i>
+                  <span>Onboard Dispatch Rider</span>
+                </h3>
+                <button id="cancel-edit-rider-btn" class="hidden text-xs text-rose-500 font-bold hover:underline" onclick="resetRiderForm()">Cancel Edit</button>
+              </div>
+              <form id="onboard-rider-form" class="flex flex-col gap-3">
+                <input type="hidden" id="rider-edit-id" value="">
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Full Legal Name</label>
+                  <input type="text" id="rider-name" required placeholder="Amit Kumar" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Mobile Phone No</label>
+                  <input type="text" id="rider-phone" required placeholder="e.g. 9625250352" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Default Service Pincode</label>
+                  <input type="text" id="rider-pincode" required placeholder="110001" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Vehicle License No</label>
+                  <input type="text" id="rider-vehicle" required placeholder="DL-01-AB-1234" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1" id="rider-password-label">Access Password</label>
+                  <input type="password" id="rider-password" placeholder="temp1234" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                </div>
+                <button type="submit" id="rider-submit-btn" class="bg-brand-500 hover:bg-brand-600 text-white font-bold py-2 rounded-xl text-xs transition-colors cursor-pointer">
+                  Complete Fleet Registry
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. HUB & SELLER MANAGEMENT -->
+        <div id="admin-panel-shops" class="admin-tab-window hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+            <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-950/20">
+              <h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                <i data-lucide="store" class="text-brand-500 w-5 h-5"></i>
+                <span>Registered Seller Hubs & Shops</span>
+              </h3>
+              <span class="text-xs text-slate-400 font-semibold uppercase">Total Hubs: <span id="admin-shops-count">0</span></span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm">
+                <thead class="bg-slate-50 dark:bg-slate-950/20 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                  <tr>
+                    <th class="px-4 py-3">Store Details</th>
+                    <th class="px-4 py-3">Owner Details</th>
+                    <th class="px-4 py-3">Pincode</th>
+                    <th class="px-4 py-3">Login ID</th>
+                    <th class="px-4 py-3">Status</th>
+                    <th class="px-4 py-3 text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="shops-table-body" class="divide-y divide-slate-100 dark:divide-slate-800">
+                  <!-- JS Populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div>
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm flex flex-col gap-4">
+              <div class="flex items-center justify-between border-b border-slate-150 dark:border-slate-800 pb-2">
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5" id="shop-form-title">
+                  <i data-lucide="plus-circle" class="text-brand-500 w-5 h-5"></i>
+                  <span>Register Seller Hub</span>
+                </h3>
+                <button id="cancel-edit-shop-btn" class="hidden text-xs text-rose-500 font-bold hover:underline" onclick="resetShopForm()">Cancel Edit</button>
+              </div>
+              <form id="add-shop-form" class="flex flex-col gap-3">
+                <input type="hidden" id="shop-edit-id" value="">
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Store / Hub Name</label>
+                  <input type="text" id="shop-name" required placeholder="e.g. FlashFit Hub Karol Bagh" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Operator / Owner Name</label>
+                  <input type="text" id="shop-owner" required placeholder="e.g. Puneet Gupta" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Mobile Phone No</label>
+                  <input type="text" id="shop-mobile" required placeholder="e.g. +91 96252 50352" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Coverage Pincode</label>
+                  <input type="text" id="shop-pincode" required placeholder="e.g. 110005" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Store Physical Address</label>
+                  <textarea id="shop-address" required placeholder="e.g. Shop No 15, DDA Market, Delhi" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none min-h-[50px]"></textarea>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Unique Login ID</label>
+                  <input type="text" id="shop-login-id" required placeholder="e.g. shop_narela" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1" id="shop-password-label">Store Password</label>
+                  <input type="password" id="shop-password" required placeholder="e.g. pass1234" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                </div>
+                <button type="submit" id="shop-submit-btn" class="bg-brand-500 hover:bg-brand-600 text-white font-bold py-2.5 rounded-xl text-xs transition-colors cursor-pointer">
+                  Register Seller Hub
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. PRODUCT CATALOG & QUALITY MODERATION -->
+        <div id="admin-panel-products" class="admin-tab-window hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+            <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 bg-slate-50/50 dark:bg-slate-950/20">
+              <div>
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                  <i data-lucide="shirt" class="text-violet-500 w-5 h-5"></i>
+                  <span>Catalog Inventory & Quality Moderation</span>
+                </h3>
+              </div>
+              <div class="flex items-center gap-2 flex-wrap w-full md:w-auto">
+                <select id="admin-product-status-filter" onchange="renderProductsTable()" class="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-1.5 text-xs font-semibold focus:outline-none cursor-pointer">
+                  <option value="all">All Products</option>
+                  <option value="pending" selected>Pending Review</option>
+                  <option value="approved">Approved & Active</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+                <input type="text" id="admin-product-search" oninput="renderProductsTable()" placeholder="Search catalog..." class="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-1.5 text-xs focus:outline-none">
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm">
+                <thead class="bg-slate-50 dark:bg-slate-950/20 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                  <tr>
+                    <th class="px-4 py-3">Product Name</th>
+                    <th class="px-4 py-3">Category</th>
+                    <th class="px-4 py-3">Supplier Price</th>
+                    <th class="px-4 py-3">Retail Price</th>
+                    <th class="px-4 py-3">Stock Units</th>
+                    <th class="px-4 py-3">Hub Owner</th>
+                    <th class="px-4 py-3">Status</th>
+                    <th class="px-4 py-3 text-center">Quality Actions & Admin Operations</th>
+                  </tr>
+                </thead>
+                <tbody id="products-table-body" class="divide-y divide-slate-100 dark:divide-slate-800">
+                  <!-- JS Populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div>
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm flex flex-col gap-4">
+              <div class="flex items-center justify-between border-b border-slate-150 dark:border-slate-800 pb-2">
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5" id="admin-prod-form-title">
+                  <i data-lucide="sparkles" class="text-violet-500 w-5 h-5"></i>
+                  <span>Add Product to Catalog</span>
+                </h3>
+                <button id="cancel-edit-admin-prod-btn" class="hidden text-xs text-rose-500 font-bold hover:underline" onclick="resetAdminProductForm()">Cancel Edit</button>
+              </div>
+              <form id="admin-add-product-form" class="flex flex-col gap-3">
+                <input type="hidden" id="admin-prod-edit-id" value="">
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Select Target Seller Hub</label>
+                  <select id="admin-prod-shop-id" required class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-sm focus:outline-none cursor-pointer">
+                    <!-- Loaded dynamically in JS -->
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Product Title / Label</label>
+                  <input type="text" id="admin-prod-title" required placeholder="e.g. Slim Fit Denim Blazer" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Fabric Category</label>
+                  <select id="admin-prod-category" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-sm focus:outline-none cursor-pointer">
+                    <option value="Denim Jackets">Denim Jackets</option>
+                    <option value="Jeans & Denims">Jeans & Denims</option>
+                    <option value="Casual Shirts">Casual Shirts</option>
+                    <option value="Athletic T-Shirts">Athletic T-Shirts</option>
+                    <option value="Premium Outerwear">Premium Outerwear</option>
+                  </select>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-2">
+                  <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Base Price (₹)</label>
+                    <input type="number" id="admin-prod-price" required placeholder="499" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-2 py-2 text-xs focus:outline-none">
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Markup %</label>
+                    <input type="number" id="admin-prod-markup" value="15" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-2 py-2 text-xs focus:outline-none">
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Stock Units</label>
+                    <input type="number" id="admin-prod-stock" required placeholder="50" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-2 py-2 text-xs focus:outline-none">
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Color Variant</label>
+                    <input type="text" id="admin-prod-color" placeholder="Indigo Blue" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs focus:outline-none">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Fabric Blend</label>
+                    <input type="text" id="admin-prod-fabric" placeholder="98% Cotton 2% Lycra" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs focus:outline-none">
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Visual Asset URL</label>
+                  <input type="text" id="admin-prod-image" placeholder="https://images.unsplash.com/photo-..." class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Detailed Description</label>
+                  <textarea id="admin-prod-desc" placeholder="Product specs, features, fitment, care instructions..." class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none min-h-[50px]"></textarea>
+                </div>
+
+                <button type="submit" id="admin-prod-submit-btn" class="bg-violet-600 hover:bg-violet-700 text-white font-bold py-2 rounded-xl text-xs transition-colors cursor-pointer">
+                  Publish to Marketplace Catalog
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div id="admin-product-inspector" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm p-4 overflow-y-auto">
+          <div class="min-h-full flex items-center justify-center">
+            <section class="w-full max-w-6xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden">
+              <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
+                <div>
+                  <h3 class="font-black text-slate-900 dark:text-white">Product Quality Inspector</h3>
+                  <p id="admin-product-inspector-subtitle" class="text-xs text-slate-400">Full catalog review</p>
+                </div>
+                <button type="button" onclick="closeProductInspector()" class="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-500 hover:text-rose-500 font-black cursor-pointer">X</button>
+              </div>
+              <div id="admin-product-inspector-body" class="p-4">
+                <!-- JS Populated -->
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <!-- Reusable catalog modal (category + attribute forms) -->
+        <div id="admin-catalog-modal" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm p-4 overflow-y-auto">
+          <div class="min-h-full flex items-center justify-center">
+            <section class="w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden">
+              <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
+                <div>
+                  <h3 id="admin-catalog-modal-title" class="font-black text-slate-900 dark:text-white">Catalog</h3>
+                  <p id="admin-catalog-modal-subtitle" class="text-xs text-slate-400">Manage taxonomy</p>
+                </div>
+                <button type="button" onclick="closeCatalogModal()" class="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-500 hover:text-rose-500 font-black cursor-pointer">X</button>
+              </div>
+              <div id="admin-catalog-modal-body" class="p-4">
+                <!-- JS Populated -->
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <!-- 6. ORDERS DISPATCH -->
+        <div id="admin-panel-orders" class="admin-tab-window hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+          <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+            <div>
+              <h3 class="font-bold text-slate-800 dark:text-slate-100">Global Sales & Delivery Dispatch Center</h3>
+            </div>
+            <div class="flex gap-2">
+              <input type="text" id="admin-orders-search" placeholder="Search orders..." class="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-1.5 text-xs focus:outline-none">
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-slate-50 dark:bg-slate-950/20 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                <tr>
+                  <th class="px-5 py-3">Order Number</th>
+                  <th class="px-5 py-3">Client Name</th>
+                  <th class="px-5 py-3">Product details</th>
+                  <th class="px-5 py-3">GMV Value</th>
+                  <th class="px-5 py-3">Order Stage</th>
+                  <th class="px-5 py-3">Payment</th>
+                  <th class="px-5 py-3">Assigned Courier</th>
+                  <th class="px-5 py-3 text-center">Lifecycle Operations</th>
+                </tr>
+              </thead>
+              <tbody id="orders-table-body" class="divide-y divide-slate-100 dark:divide-slate-800">
+                <!-- JS Populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 7. GLOBAL CONFIG -->
+        <div id="admin-panel-settings" class="admin-tab-window hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-2xl shadow-sm flex flex-col gap-6">
+          <h3 class="font-bold text-slate-800 dark:text-slate-100 pb-2 border-b border-slate-100 dark:border-slate-800">Platform Settings & Dynamic Formula Configurations</h3>
+          <form id="global-settings-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Base Platform Commission Percentage (%)</label>
+              <input type="number" id="setting-commission" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Gateway Charge Percentage (%)</label>
+              <input type="number" id="setting-gateway" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Flat Delivery Shipping Charge (₹)</label>
+              <input type="number" id="setting-delivery" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Support Email Address</label>
+              <input type="email" id="setting-email" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Support Helpline Hotline</label>
+              <input type="text" id="setting-phone" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Global Site Announcement Banner Text</label>
+              <input type="text" id="setting-announcement" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none col-span-1 md:col-span-2">
+            </div>
+            <div class="flex justify-end col-span-1 md:col-span-2">
+              <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition-colors cursor-pointer">
+                Commit Config Changes
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- 8. REPORTS & CONTROL -->
+        <div id="admin-panel-reports" class="admin-tab-window hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-2xl shadow-sm flex flex-col gap-6">
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
+            <div>
+              <h3 class="font-bold text-slate-800 dark:text-slate-100">Live Reports & System Controls</h3>
+              <p class="text-xs text-slate-400">View real-time audits, log-ins, clothing sales analytics, and override shop/partner hours.</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="switchActiveReport('activity')" id="rep-tab-activity" class="report-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-brand-500 text-white shadow-sm cursor-pointer transition-all">Who Did What (Activity)</button>
+              <button onclick="switchActiveReport('delivery')" id="rep-tab-delivery" class="report-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-all">Who Went Where (Delivery)</button>
+              <button onclick="switchActiveReport('logins')" id="rep-tab-logins" class="report-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-all">Who Logged In (Logins)</button>
+              <button onclick="switchActiveReport('sales')" id="rep-tab-sales" class="report-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-all">Clothes Bought (Sales)</button>
+              <button onclick="switchActiveReport('visibility')" id="rep-tab-visibility" class="report-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-all">Shop Visibility Controls</button>
+            </div>
+          </div>
+
+          <!-- Dynamic Report Content Windows -->
+          
+          <!-- SUB-WINDOW A: Who Did What Work (Activity Logs) -->
+          <div id="report-window-activity" class="report-window block flex flex-col gap-4">
+            <div class="flex justify-between items-center">
+              <h4 class="font-bold text-sm text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                <i data-lucide="activity" class="w-4 h-4 text-brand-500"></i> Operation Audit Logs (Who did what work)
+              </h4>
+              <button onclick="refreshReportData()" class="text-xs text-brand-500 hover:underline flex items-center gap-1 font-bold">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh Logs
+              </button>
+            </div>
+            <div class="overflow-x-auto border border-slate-100 dark:border-slate-800 rounded-xl">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 dark:bg-slate-950/20 text-slate-400 font-bold uppercase tracking-wider">
+                  <tr>
+                    <th class="px-4 py-3">Timestamp</th>
+                    <th class="px-4 py-3">Operator</th>
+                    <th class="px-4 py-3">Operation Action</th>
+                    <th class="px-4 py-3">Target Table</th>
+                    <th class="px-4 py-3">Entity ID</th>
+                    <th class="px-4 py-3">Payload Data Details</th>
+                  </tr>
+                </thead>
+                <tbody id="report-activity-body" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+                  <!-- Dynamic JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- SUB-WINDOW B: Who Went Where (Rider Delivery Transit Tracker) -->
+          <div id="report-window-delivery" class="report-window hidden flex flex-col gap-4">
+            <div class="flex justify-between items-center">
+              <h4 class="font-bold text-sm text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                <i data-lucide="navigation" class="w-4 h-4 text-emerald-500"></i> Rider Transit Tracker (Who went where)
+              </h4>
+              <button onclick="refreshReportData()" class="text-xs text-brand-500 hover:underline flex items-center gap-1 font-bold">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh Tracker
+              </button>
+            </div>
+            <div class="overflow-x-auto border border-slate-100 dark:border-slate-800 rounded-xl">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 dark:bg-slate-950/20 text-slate-400 font-bold uppercase tracking-wider">
+                  <tr>
+                    <th class="px-4 py-3">Rider/Courier</th>
+                    <th class="px-4 py-3">Order Code</th>
+                    <th class="px-4 py-3">From Seller Origin</th>
+                    <th class="px-4 py-3">To Customer Destination</th>
+                    <th class="px-4 py-3">Status State</th>
+                    <th class="px-4 py-3">OTP Verification</th>
+                    <th class="px-4 py-3">Dispatch/Arrival Timing</th>
+                  </tr>
+                </thead>
+                <tbody id="report-delivery-body" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+                  <!-- Dynamic JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- SUB-WINDOW C: Who Logged In (Login Registry Logs) -->
+          <div id="report-window-logins" class="report-window hidden flex flex-col gap-4">
+            <div class="flex justify-between items-center">
+              <h4 class="font-bold text-sm text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                <i data-lucide="shield-check" class="w-4 h-4 text-indigo-500"></i> Security Access Log (Who logged in)
+              </h4>
+              <button onclick="refreshReportData()" class="text-xs text-brand-500 hover:underline flex items-center gap-1 font-bold">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh List
+              </button>
+            </div>
+            <div class="overflow-x-auto border border-slate-100 dark:border-slate-800 rounded-xl">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 dark:bg-slate-950/20 text-slate-400 font-bold uppercase tracking-wider">
+                  <tr>
+                    <th class="px-4 py-3">Login Timestamp</th>
+                    <th class="px-4 py-3">User Key Account</th>
+                    <th class="px-4 py-3">System Access Role</th>
+                    <th class="px-4 py-3">Platform/Browser Agent</th>
+                    <th class="px-4 py-3">Access Security</th>
+                  </tr>
+                </thead>
+                <tbody id="report-logins-body" class="divide-y divide-slate-100 dark:divide-slate-800 font-mono">
+                  <!-- Dynamic JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- SUB-WINDOW D: Which Clothes Were Bought (Clothing Sales Report) -->
+          <div id="report-window-sales" class="report-window hidden flex flex-col gap-4">
+            <div class="flex justify-between items-center">
+              <h4 class="font-bold text-sm text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                <i data-lucide="shirt" class="w-4 h-4 text-violet-500"></i> Clothing & Wearables Sales Metrics (Which clothes were bought)
+              </h4>
+              <button onclick="refreshReportData()" class="text-xs text-brand-500 hover:underline flex items-center gap-1 font-bold">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh Analytics
+              </button>
+            </div>
+            
+            <!-- Clothing sales statistics metrics dashboard cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-2">
+              <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                <span class="text-[10px] uppercase font-bold text-slate-400">Total Apparel Sold</span>
+                <h5 id="sales-stat-total-qty" class="text-xl font-black text-slate-800 dark:text-slate-100 mt-1">0 Pcs</h5>
+              </div>
+              <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                <span class="text-[10px] uppercase font-bold text-slate-400">Apparel Sales Revenue</span>
+                <h5 id="sales-stat-total-rev" class="text-xl font-black text-emerald-500 mt-1">₹0</h5>
+              </div>
+              <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                <span class="text-[10px] uppercase font-bold text-slate-400">Avg Basket Value</span>
+                <h5 id="sales-stat-avg-basket" class="text-xl font-black text-brand-500 mt-1">₹0</h5>
+              </div>
+              <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                <span class="text-[10px] uppercase font-bold text-slate-400">Leading Apparel Type</span>
+                <h5 id="sales-stat-top-cat" class="text-xl font-black text-violet-500 mt-1">N/A</h5>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto border border-slate-100 dark:border-slate-800 rounded-xl">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 dark:bg-slate-950/20 text-slate-400 font-bold uppercase tracking-wider">
+                  <tr>
+                    <th class="px-4 py-3">Order Date</th>
+                    <th class="px-4 py-3">Clothing Apparel Item Details</th>
+                    <th class="px-4 py-3">Category Type</th>
+                    <th class="px-4 py-3">Store Origin</th>
+                    <th class="px-4 py-3">Pincode Hub</th>
+                    <th class="px-4 py-3 text-center">Qty Unit</th>
+                    <th class="px-4 py-3">Total Sold Price</th>
+                    <th class="px-4 py-3">Customer Target Address</th>
+                  </tr>
+                </thead>
+                <tbody id="report-sales-body" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+                  <!-- Dynamic JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- SUB-WINDOW E: Shop Visibility & Delivery Partners Duty Controls -->
+          <div id="report-window-visibility" class="report-window hidden flex flex-col gap-6">
+            
+            <!-- Section 1: Store Hub Visibility Switches -->
+            <div class="flex flex-col gap-3">
+              <div class="flex justify-between items-center">
+                <div>
+                  <h4 class="font-bold text-sm text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                    <i data-lucide="eye-off" class="w-4 h-4 text-amber-500"></i> Store Hub Visibility Override Controls
+                  </h4>
+                  <p class="text-[11px] text-slate-400">Toggle immediate online visibility. Invisible shops will be hidden from shoppers temporarily (e.g. working hours over).</p>
+                </div>
+                <button onclick="refreshReportData()" class="text-xs text-brand-500 hover:underline flex items-center gap-1 font-bold">
+                  <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh List
+                </button>
+              </div>
+
+              <div class="overflow-x-auto border border-slate-100 dark:border-slate-800 rounded-xl">
+                <table class="w-full text-left text-xs">
+                  <thead class="bg-slate-50 dark:bg-slate-950/20 text-slate-400 font-bold uppercase tracking-wider">
+                    <tr>
+                      <th class="px-4 py-3">Store Hub details</th>
+                      <th class="px-4 py-3">Owner Contact</th>
+                      <th class="px-4 py-3">Regional Coverage</th>
+                      <th class="px-4 py-3">Registered Operating Hours</th>
+                      <th class="px-4 py-3">Live Status state</th>
+                      <th class="px-4 py-3 text-center">Live Visibility override Switch</th>
+                    </tr>
+                  </thead>
+                  <tbody id="report-shops-visibility-body" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+                    <!-- Dynamic JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Section 2: Delivery Partner On-Duty Hours Override Switches -->
+            <div class="flex flex-col gap-3 border-t border-slate-100 dark:border-slate-800 pt-6">
+              <div>
+                <h4 class="font-bold text-sm text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                  <i data-lucide="truck" class="w-4 h-4 text-indigo-500"></i> Delivery Partners Dispatch Shift Duty Control
+                </h4>
+                <p class="text-[11px] text-slate-400">Quick override switch for delivery partners' shift schedules. Turn offline when active shift hours are over.</p>
+              </div>
+
+              <div class="overflow-x-auto border border-slate-100 dark:border-slate-800 rounded-xl">
+                <table class="w-full text-left text-xs">
+                  <thead class="bg-slate-50 dark:bg-slate-950/20 text-slate-400 font-bold uppercase tracking-wider">
+                    <tr>
+                      <th class="px-4 py-3">Courier Rider Name</th>
+                      <th class="px-4 py-3">Registered Mobile No</th>
+                      <th class="px-4 py-3">Transit Vehicle No</th>
+                      <th class="px-4 py-3">Postal Coverage</th>
+                      <th class="px-4 py-3">Current Duty Shift Status</th>
+                      <th class="px-4 py-3 text-center">Duty Status Shift Override Switch</th>
+                    </tr>
+                  </thead>
+                  <tbody id="report-riders-visibility-body" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+                    <!-- Dynamic JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CATEGORIES (dynamic taxonomy) -->
+        <div id="admin-panel-categories" class="admin-tab-window hidden flex flex-col gap-4">
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm">
+            <div class="flex items-center justify-between mb-4 gap-3 flex-wrap">
+              <h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                <i data-lucide="folder-tree" class="text-brand-500 w-5 h-5"></i> Product Categories
+              </h3>
+              <button onclick="openCategoryForm()" class="bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-xl px-4 py-2 text-sm cursor-pointer">+ New Category</button>
+            </div>
+            <p class="text-xs text-slate-400 mb-3">Database-driven taxonomy. Adding a category here makes it available in the shop product form — no code change needed.</p>
+            <div id="admin-categories-root" class="flex flex-col gap-3">
+              <p class="text-sm text-slate-400">Loading categories…</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ATTRIBUTES (per-category, drives the dynamic product form) -->
+        <div id="admin-panel-attributes" class="admin-tab-window hidden flex flex-col gap-4">
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm">
+            <div class="flex items-center justify-between mb-4 gap-3 flex-wrap">
+              <h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                <i data-lucide="tags" class="text-brand-500 w-5 h-5"></i> Category Attributes
+              </h3>
+              <button id="admin-attribute-new-btn" onclick="openAttributeForm()" class="bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-xl px-4 py-2 text-sm cursor-pointer hidden">+ New Attribute</button>
+            </div>
+            <p class="text-xs text-slate-400 mb-3">Pick a category, then define only the fields that category needs (a watch shows Dial Color; a shirt shows Sleeve). The shop product form loads exactly these.</p>
+            <div id="admin-attributes-root" class="flex flex-col gap-3">
+              <p class="text-sm text-slate-400">Loading attributes…</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+
+    <!-- SELLER PORTAL VIEW -->
+    <section id="seller-view" class="hidden flex flex-col gap-6">
+      
+      <!-- Seller Hub Profile Banner -->
+      <div class="bg-brand-500 text-white px-5 py-3 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-md">
+        <div>
+          <span class="text-[10px] font-extrabold uppercase tracking-wider opacity-85">Active Seller Hub</span>
+          <h2 id="seller-profile-name" class="font-bold text-lg">Loading Shop Name...</h2>
+          <p id="seller-profile-address" class="text-xs opacity-75">Loading Shop address...</p>
+        </div>
+        <div id="seller-profile-meta" class="bg-white/10 px-3.5 py-1.5 rounded-xl text-xs font-bold border border-white/10 w-fit">
+          Owner: ... • Pincode: ...
+        </div>
+      </div>
+
+      <!-- Seller Metrics Overview -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-sm">
+          <div>
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Settled Payouts</span>
+            <h3 id="seller-stat-payouts" class="text-2xl font-bold text-slate-800 dark:text-slate-100 mt-1">₹0</h3>
+            <span id="seller-stat-payouts-sub" class="text-xs text-emerald-500 font-medium">0 Completed orders</span>
+          </div>
+          <div class="p-3 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-xl">
+            <i data-lucide="dollar-sign" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-sm">
+          <div>
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Sales (GMV)</span>
+            <h3 id="seller-stat-gmv" class="text-2xl font-bold text-slate-800 dark:text-slate-100 mt-1">₹0</h3>
+            <span class="text-xs text-slate-400">Platform base GMV</span>
+          </div>
+          <div class="p-3 bg-brand-50 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400 rounded-xl">
+            <i data-lucide="trending-up" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-sm">
+          <div>
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Active Catalog Items</span>
+            <h3 id="seller-stat-products" class="text-2xl font-bold text-slate-800 dark:text-slate-100 mt-1">0</h3>
+            <span id="seller-stat-products-sub" class="text-xs text-slate-400">0 pending quality approvals</span>
+          </div>
+          <div class="p-3 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-xl">
+            <i data-lucide="check-circle" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-sm">
+          <div>
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Pending Orders</span>
+            <h3 id="seller-stat-orders" class="text-2xl font-bold text-slate-800 dark:text-slate-100 mt-1">0</h3>
+            <span class="text-xs text-slate-400">Needs prompt packaging dispatch</span>
+          </div>
+          <div class="p-3 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 rounded-xl">
+            <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seller Navigation Tabs -->
+      <div class="flex flex-wrap gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
+        <button data-seller-tab="dashboard" class="seller-tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all bg-brand-500 text-white shadow-md cursor-pointer">
+          <i data-lucide="store" class="w-4 h-4"></i> Dashboard Hub
+        </button>
+        <button data-seller-tab="products" class="seller-tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+          <i data-lucide="file-text" class="w-4 h-4"></i> Product Management
+        </button>
+        <button data-seller-tab="orders" class="seller-tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+          <i data-lucide="shopping-bag" class="w-4 h-4"></i> Orders Command Center
+        </button>
+      </div>
+
+      <!-- Seller Tab Windows -->
+      <div class="min-h-[400px]">
+        <!-- LOADING CONTAINER -->
+        <div id="seller-loading" class="hidden flex flex-col items-center justify-center py-20 gap-3">
+          <div class="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
+          <span class="text-sm font-medium text-slate-400">Syncing with cloud database...</span>
+        </div>
+
+        <!-- 1. DASHBOARD HUB -->
+        <div id="seller-panel-dashboard" class="seller-tab-window block grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 flex flex-col gap-6">
+            <!-- Settled earnings trend -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm">
+              <h3 class="font-bold text-slate-800 dark:text-slate-100 mb-4 flex items-center gap-2">
+                <i data-lucide="trending-up" class="text-brand-500 w-5 h-5"></i>
+                <span>Weekly Settled Disbursals</span>
+              </h3>
+              <!-- Mini SVG Graph line -->
+              <div class="h-44 flex items-end justify-between px-4 pt-4 border-b border-slate-200 dark:border-slate-800 relative">
+                <div class="absolute inset-x-0 bottom-10 h-[1px] bg-slate-100 dark:bg-slate-800 pointer-events-none"></div>
+                <div class="absolute inset-x-0 bottom-20 h-[1px] bg-slate-100 dark:bg-slate-800 pointer-events-none"></div>
+                <!-- Data plots -->
+                <div class="flex flex-col items-center gap-1 w-1/7">
+                  <div class="w-6 bg-emerald-500 rounded-t-sm" style="height: 30px;"></div>
+                  <span class="text-[9px] text-slate-400 font-bold">Mon</span>
+                </div>
+                <div class="flex flex-col items-center gap-1 w-1/7">
+                  <div class="w-6 bg-emerald-500 rounded-t-sm" style="height: 55px;"></div>
+                  <span class="text-[9px] text-slate-400 font-bold">Tue</span>
+                </div>
+                <div class="flex flex-col items-center gap-1 w-1/7">
+                  <div class="w-6 bg-emerald-500 rounded-t-sm" style="height: 40px;"></div>
+                  <span class="text-[9px] text-slate-400 font-bold">Wed</span>
+                </div>
+                <div class="flex flex-col items-center gap-1 w-1/7">
+                  <div class="w-6 bg-emerald-500 rounded-t-sm" style="height: 90px;"></div>
+                  <span class="text-[9px] text-slate-400 font-bold">Thu</span>
+                </div>
+                <div class="flex flex-col items-center gap-1 w-1/7">
+                  <div class="w-6 bg-emerald-500 rounded-t-sm" style="height: 120px;"></div>
+                  <span class="text-[9px] text-slate-400 font-bold">Fri</span>
+                </div>
+                <div class="flex flex-col items-center gap-1 w-1/7">
+                  <div class="w-6 bg-emerald-500 rounded-t-sm" style="height: 70px;"></div>
+                  <span class="text-[9px] text-slate-400 font-bold">Sat</span>
+                </div>
+                <div class="flex flex-col items-center gap-1 w-1/7">
+                  <div class="w-6 bg-emerald-500 rounded-t-sm" style="height: 100px;"></div>
+                  <span class="text-[9px] text-slate-400 font-bold">Sun</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Customer Reviews Feed -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm">
+              <h3 class="font-bold text-slate-800 dark:text-slate-100 mb-4 flex items-center gap-1.5">
+                <i data-lucide="book-open" class="text-brand-500 w-5 h-5"></i>
+                <span>Recent Buyer Reviews & Ratings</span>
+              </h3>
+              <div id="seller-reviews-container" class="flex flex-col gap-3 max-h-[200px] overflow-y-auto">
+                <!-- JS Populated reviews -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Sandbox Pricing Formulas Tool -->
+          <div>
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm flex flex-col gap-4">
+              <h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
+                <i data-lucide="sliders" class="text-brand-500 w-5 h-5"></i>
+                <span>Pricing Sandbox Tool</span>
+              </h3>
+              <div class="p-3.5 bg-brand-50/50 dark:bg-brand-950/20 border border-brand-100 dark:border-brand-900/30 rounded-xl text-xs text-brand-800 dark:text-brand-300">
+                Live calculation formulas: <br>
+                <strong id="sandbox-formula-metrics" class="font-bold text-slate-900 dark:text-white">Loading formula metrics...</strong>
+              </div>
+
+              <!-- Input test cost -->
+              <div>
+                <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Testing Supplier Base Price (₹)</label>
+                <input type="number" id="sandbox-price-input" value="500" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+              </div>
+
+              <div class="flex flex-col gap-3 pt-2">
+                <div class="flex justify-between text-xs">
+                  <span class="text-slate-500">Gateway Fee</span>
+                  <strong id="sandbox-gateway-fee" class="font-semibold">₹0</strong>
+                </div>
+                <div class="flex justify-between text-xs">
+                  <span class="text-slate-500">Platform Commission</span>
+                  <strong id="sandbox-commission-fee" class="font-semibold">₹0</strong>
+                </div>
+                <div class="flex justify-between text-xs">
+                  <span class="text-slate-500">Flat Logistics Shipping Charge</span>
+                  <strong id="sandbox-shipping-fee" class="font-semibold">₹0</strong>
+                </div>
+                <div class="border-t border-slate-100 dark:border-slate-800 pt-3 flex justify-between items-center">
+                  <div>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Buyer Display Price</span>
+                    <strong id="sandbox-buyer-price" class="block text-xl font-black text-brand-500">₹0</strong>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Your Net Settlement Payout</span>
+                    <strong id="sandbox-seller-payout" class="block text-md font-bold text-slate-800 dark:text-slate-200">₹0</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. PRODUCT MANAGEMENT -->
+        <div id="seller-panel-products" class="seller-tab-window hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 flex flex-col gap-6">
+            <!-- Draft Import listing block -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm">
+              <h3 class="font-bold text-slate-800 dark:text-slate-100 mb-2 flex items-center gap-1.5">
+                <i data-lucide="trending-up" class="text-brand-500 w-5 h-5"></i>
+                <span>Structured Draft Import Listing</span>
+              </h3>
+              <p class="text-xs text-slate-400 mb-3">Paste structured product text details or JSON mapping schema to populate listing forms quickly.</p>
+              <textarea id="import-listing-text" placeholder='Paste structured listing JSON object, e.g. { "title": "Floral Silk Kurti", "price": 450, "stock": 50 }' class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-xs focus:outline-none min-h-[70px] font-mono"></textarea>
+              <button id="import-listing-btn" class="mt-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-200 text-xs font-bold px-4 py-2 rounded-lg cursor-pointer">
+                Apply & Populate Draft Attributes
+              </button>
+            </div>
+
+            <!-- Add Product Form -->
+            <form id="add-product-form" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm flex flex-col gap-4">
+              <h3 class="font-bold text-slate-800 dark:text-slate-100 pb-2 border-b border-slate-100 dark:border-slate-800">
+                New Marketplace Listing Setup
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Product Title</label>
+                  <input type="text" id="prod-title" required placeholder="e.g. Yellow Silk Premium Kurti" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Product Category</label>
+                  <select id="prod-category" required class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-sm focus:outline-none text-slate-700 dark:text-slate-300">
+                    <option value="">Select category...</option>
+                    <option value="Kurtis">Kurtis</option>
+                    <option value="Tops">Tops</option>
+                    <option value="T-Shirts">T-Shirts</option>
+                    <option value="Jeans">Jeans</option>
+                    <option value="Dresses">Dresses</option>
+                    <option value="Sarees">Sarees</option>
+                    <option value="Ethnic Sets">Ethnic Sets</option>
+                  </select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Cost Price (₹)</label>
+                    <input type="number" id="prod-cost" placeholder="Cost" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Profit Margin (₹)</label>
+                    <input type="number" id="prod-profit" placeholder="Profit" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Supplier Base Price (₹)</label>
+                  <input type="number" id="prod-price" required placeholder="Seller Base Price" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Stock Unit Qty</label>
+                    <input type="number" id="prod-stock" required placeholder="e.g. 50" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Material Fabric</label>
+                    <input type="text" id="prod-fabric" placeholder="Cotton, Rayon, Silk..." class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Color Theme</label>
+                  <input type="text" id="prod-color" placeholder="Yellow, Indigo Blue, Black..." class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Primary Display Image URL</label>
+                <input type="url" id="prod-image" placeholder="https://images.unsplash.com/photo-1544005313-94ddf0286df2..." class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Product Description</label>
+                <textarea id="prod-desc" placeholder="Provide laundry care instructions, attributes, material descriptions..." class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none min-h-[60px]"></textarea>
+              </div>
+              <div class="flex justify-end pt-2">
+                <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm shadow transition-colors cursor-pointer">
+                  Submit Product For Review
+                </button>
+              </div>
+            </form>
+
+            <!-- Seller Catalog List -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
+              <div class="p-4 border-b border-slate-100 dark:border-slate-800">
+                <h3 class="font-bold text-slate-800 dark:text-slate-100">My Uploaded Catalog Items</h3>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                  <thead class="bg-slate-50 dark:bg-slate-950/20 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                    <tr>
+                      <th class="px-5 py-3">ID</th>
+                      <th class="px-5 py-3">Product Name</th>
+                      <th class="px-5 py-3">Category</th>
+                      <th class="px-5 py-3">Settlement (Base)</th>
+                      <th class="px-5 py-3">Buyer Price</th>
+                      <th class="px-5 py-3">Stock Units</th>
+                      <th class="px-5 py-3">Verification</th>
+                      <th class="px-5 py-3 text-center">Operational</th>
+                    </tr>
+                  </thead>
+                  <tbody id="seller-products-table-body" class="divide-y divide-slate-100 dark:divide-slate-800">
+                    <!-- JS Populated -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Stock and Price updating sidebar -->
+          <div>
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm flex flex-col gap-4">
+              <h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
+                <i data-lucide="file-text" class="text-brand-500 w-5 h-5"></i>
+                <span>Quick Stock Update</span>
+              </h3>
+              <form id="quick-update-form" class="flex flex-col gap-3.5">
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Product ID</label>
+                  <input type="number" id="quick-prod-id" required placeholder="e.g. 101" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-1.5 text-xs focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">New Supplier Price (₹)</label>
+                  <input type="number" id="quick-prod-price" required placeholder="Price" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-1.5 text-xs focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 uppercase mb-1">New Stock Units Count</label>
+                  <input type="number" id="quick-prod-stock" required placeholder="Stock Qty" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-1.5 text-xs focus:outline-none">
+                </div>
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded-xl text-xs transition-colors cursor-pointer">
+                  Adjust Stock Metrics
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. ORDERS COMMAND CENTER -->
+        <div id="seller-panel-orders" class="seller-tab-window hidden flex flex-col gap-4">
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl shadow-sm flex flex-col md:flex-row gap-3">
+            <div class="relative flex-1">
+              <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+              <input type="text" id="seller-orders-search" placeholder="Search active shop orders by ID, Customer mobile, title details..." class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl pl-9 pr-4 py-2 text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand-500">
+            </div>
+
+            <!-- Quick Filter tabs -->
+            <div class="flex flex-wrap gap-1 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-1 rounded-xl">
+              <button data-seller-order-filter="all" class="seller-order-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 shadow-sm cursor-pointer">All</button>
+              <button data-seller-order-filter="pending" class="seller-order-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 cursor-pointer">New Orders</button>
+              <button data-seller-order-filter="ready" class="seller-order-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 cursor-pointer">Awaiting Courier</button>
+              <button data-seller-order-filter="shipped" class="seller-order-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 cursor-pointer">Out for Delivery</button>
+            </div>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm">
+                <thead class="bg-slate-50 dark:bg-slate-950/20 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                  <tr>
+                    <th class="px-5 py-3">Order Number</th>
+                    <th class="px-5 py-3">Client details</th>
+                    <th class="px-5 py-3">Product Name</th>
+                    <th class="px-5 py-3">Value</th>
+                    <th class="px-5 py-3">Order Status</th>
+                    <th class="px-5 py-3">Payment</th>
+                    <th class="px-5 py-3">Assigned Courier</th>
+                    <th class="px-5 py-3 text-center">Packaging Operations</th>
+                  </tr>
+                </thead>
+                <tbody id="seller-orders-table-body" class="divide-y divide-slate-100 dark:divide-slate-800">
+                  <!-- JS Populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Shipping Cargo Label Preview Template Container (Invisible in UI, used for dynamic window popup prints) -->
+  <div id="shipping-label-template-container" class="hidden">
+    <div id="a6-shipping-label" class="shipping-label">
+      <div class="header">
+        <span class="logo">FLASHFIT LOGISTICS</span>
+        <span class="pay-badge" id="lbl-payment-mode">COD</span>
+      </div>
+      <div class="pincode" id="lbl-customer-pincode">110001</div>
+      <div class="field">
+        <label>Waybill Barcode (Order Ref)</label>
+        <strong id="lbl-order-number">ORD-5492-91</strong>
+      </div>
+      <div class="field">
+        <label>Ship To (Customer Address)</label>
+        <strong id="lbl-customer-name">Priya Singh</strong>
+        <div id="lbl-customer-address">Sector 15, Block B-3, Rohini, New Delhi</div>
+        <div id="lbl-customer-mobile">+91 96252 50352</div>
+      </div>
+      <div class="field" style="border-top: 1px dashed #000; padding-top: 5px; margin-top: 5px;">
+        <label>Sender (Dispatched From Hub)</label>
+        <strong id="lbl-shop-name">Fashion Hub Kurtis Narela</strong>
+        <div id="lbl-shop-address">Narela Market Road, New Delhi - 110040</div>
+      </div>
+      <div class="footer">
+        <div>
+          <div style="font-size: 10px; font-weight: bold; text-transform: uppercase;">Collect COD Value</div>
+          <strong style="font-size: 20px;" id="lbl-order-total">₹1,290</strong>
+        </div>
+        <div class="qr-box">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=ORD-5492-91" alt="QR code">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Professional Footer -->
+  <footer class="border-t border-slate-200 dark:border-slate-800 py-6 px-4 md:px-8 text-center text-xs text-slate-400 flex flex-col md:flex-row md:justify-between items-center gap-3 mt-auto">
+    <span class="font-semibold">FlashFit Enterprise Hub © 2026. All Rights Reserved.</span>
+    <div class="flex gap-4">
+      <span>Email: <a href="mailto:flashfithelp@gmail.com" id="footer-support-email" class="text-brand-500 hover:underline">flashfithelp@gmail.com</a></span>
+      <span>Hotline: <span id="footer-support-phone" class="font-bold text-slate-700 dark:text-slate-300">+91 96252 50352</span></span>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Bubble -->
+  <div id="toast-bubble" class="hidden fixed bottom-6 right-6 px-5 py-3 rounded-2xl text-white text-xs font-bold shadow-2xl z-50 flex items-center gap-2 max-w-sm transition-all duration-300">
+    <span id="toast-message">Notification here</span>
+  </div>
+
+  <!-- Custom JavaScript link -->
+  <script src="notification-config.js"></script>
+  <script src="notification-service.js"></script>
+  <script src="app.js"></script>
+  <script src="admin-visibility-extension.js"></script>
+  <script src="flashfit-business-extension.js"></script>
+  <script src="notification-sw.js"></script>
+</body>
+</html>

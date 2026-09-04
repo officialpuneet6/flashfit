@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Dashboard | FlashFit Partner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="delivery-panel.css">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script>
+        // Protection: Redirect to login if no session
+        if (!localStorage.getItem('flashfit_rider_session')) {
+            window.location.href = 'index.html';
+        }
+    </script>
+</head>
+<body class="rider-theme">
+    <audio id="notifSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+    <audio id="scanSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
+
+    <div id="dashboard" class="main-screen">
+        <header class="app-header">
+            <div class="profile-section">
+                <div class="rider-avatar"><i class="fa-solid fa-user-ninja"></i></div>
+                <div class="rider-info">
+                    <h2 id="partnerName">Rider Name</h2>
+                    <div id="dutyStatus" class="status-badge">Offline</div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <label class="ios-switch">
+                    <input type="checkbox" id="dutySwitch">
+                    <span class="ios-slider"></span>
+                </label>
+                <button id="btnLogout" class="logout-btn" type="button" aria-label="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </header>
+
+        <main class="content-area">
+            <p id="riderMessage" class="rider-message"></p>
+            <section class="metric-grid" aria-label="Delivery performance summary">
+                <article class="metric-card">
+                    <span>Today's Earnings</span>
+                    <strong id="metricTodayEarnings">Rs 0</strong>
+                    <small id="metricTodayOrders">0 deliveries</small>
+                </article>
+                <article class="metric-card">
+                    <span>Weekly Earnings</span>
+                    <strong id="metricWeeklyEarnings">Rs 0</strong>
+                    <small>Last 7 days</small>
+                </article>
+                <article class="metric-card">
+                    <span>COD Cash Collected</span>
+                    <strong id="metricCodCollected">Rs 0</strong>
+                    <small>Customer cash</small>
+                </article>
+                <article class="metric-card">
+                    <span>Delivery Charges Received</span>
+                    <strong id="metricDeliveryCharges">Rs 0</strong>
+                    <small>Configured rider pay</small>
+                </article>
+            </section>
+            <div class="wallet-gradient">
+                <div class="wallet-info">
+                    <small>Current Wallet</small>
+                    <h3 id="walletBalance">₹0.00</h3>
+                </div>
+                <button class="history-btn" id="btnHistory">Logs</button>
+                <div class="stats-row">
+                    <div class="stat-item"><span id="todayEarnings">₹0</span><label>Today Pay</label></div>
+                    <div class="stat-item"><span id="todayOrders">0</span><label>Deliveries</label></div>
+                </div>
+            </div>
+
+            <section class="quick-grid">
+                <article class="quick-card">
+                    <div class="quick-head">
+                        <i class="fa-solid fa-keyboard"></i>
+                        <div>
+                            <h3>Manual Order Entry</h3>
+                            <p>QR scan ke bina order ID ya order number se kaam kare.</p>
+                        </div>
+                    </div>
+                    <div class="manual-row">
+                        <input id="manualOrderInput" type="text" placeholder="Order ID / Order No / QR URL" />
+                        <button id="manualOrderBtn" type="button">Load</button>
+                    </div>
+                    <div id="manualOrderResult" class="lookup-result"></div>
+                </article>
+
+                <article class="quick-card" id="trackingPanel">
+                    <div class="quick-head">
+                        <i class="fa-solid fa-location-crosshairs"></i>
+                        <div>
+                            <h3>Live Tracking</h3>
+                            <p>Order no, partner ID ya mobile se rider location dekho.</p>
+                        </div>
+                    </div>
+                    <div id="trackingResult" class="lookup-result"></div>
+                    <div class="manual-row">
+                        <input id="trackingSearchInput" type="text" placeholder="Order no / Partner ID / Mobile" />
+                        <button id="trackingSearchBtn" type="button">Track</button>
+                    </div>
+                    <div id="trackingLookupResult" class="lookup-result"></div>
+                </article>
+            </section>
+
+            <section class="settlement-panel" id="settlementPanel">
+                <div class="settlement-head">
+                    <div>
+                        <h3>Settlement Card</h3>
+                        <p id="lastSyncText">Syncing...</p>
+                    </div>
+                    <span>Auto after delivered</span>
+                </div>
+                <div class="settlement-grid">
+                    <article><span>Today's COD</span><strong id="settlementTodayCod">Rs 0</strong></article>
+                    <article><span>Today's Delivery Charges</span><strong id="settlementTodayDelivery">Rs 0</strong></article>
+                    <article><span>Pending Settlement</span><strong id="pendingSettlement">Rs 0</strong></article>
+                    <article><span>Completed Settlement</span><strong id="settlementCompletedCount">0</strong></article>
+                    <article><span>Wallet Balance</span><strong id="settlementWalletBalance">Rs 0</strong></article>
+                    <article><span>Total Deliveries</span><strong id="totalDeliveries">0</strong></article>
+                </div>
+                <div class="settlement-total-line">
+                    <span>Successful Settlement</span>
+                    <strong id="settledAmount">Rs 0</strong>
+                </div>
+                <div id="settlementHistory" class="settlement-history"></div>
+            </section>
+
+            <div class="tab-pill-container">
+                <button class="tab-pill active" data-tab="new">New</button>
+                <button class="tab-pill" data-tab="active">Active</button>
+                <button class="tab-pill" data-tab="history">Done</button>
+            </div>
+
+            <div id="taskArea" class="task-list"></div>
+        </main>
+
+        <button id="btnStartScan" class="fab-qr">
+            <i class="fa-solid fa-qrcode"></i><span>SCAN QR</span>
+        </button>
+    </div>
+
+    <!-- Scanner Overlay -->
+    <div id="scannerOverlay" class="full-scanner">
+        <div class="scanner-header">
+            <button id="btnStopScan"><i class="fa-solid fa-xmark"></i></button>
+            <h3>Scan Order</h3>
+        </div>
+        <div id="qr-reader"></div>
+        <div class="scan-frame"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+    <script src="notification-config.js"></script>
+    <script src="notification-service.js"></script>
+    <script src="delivery-panel.js"></script>
+    <script src="flashfit-business-extension.js"></script>
+</body>
+</html>
+

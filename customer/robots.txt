@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /auth.html
+Disallow: /cart.html
+Disallow: /profile.html
+Disallow: /my-orders.html
+Disallow: /track.html
+Disallow: /payment-success.html
+Disallow: /payment-failed.html
+
+Sitemap: https://flashfit.online/sitemap.xml

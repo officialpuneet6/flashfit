@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "build:customer": "node scripts/build-app.mjs customer",
+    "build:shop": "node scripts/build-app.mjs shop",
+    "build:delivery": "node scripts/build-app.mjs delivery",
+    "build:admin": "node scripts/build-app.mjs admin",
+    "build:all": "node scripts/build-app.mjs all"
+  },
+  "dependencies": {
+    "@supabase/server": "^1.5.3"
+  },
+  "devDependencies": {
+    "supabase": "^2.116.0"
+  }
+}

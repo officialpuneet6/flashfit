@@ -1,0 +1,31 @@
+# Root config. Each of the four apps deploys as its OWN Netlify site using the
+# netlify.toml inside its folder, with that folder set as the site base:
+#
+#   customer/  -> flashfit.online
+#   shop/      -> shop.flashfit.online
+#   delivery/  -> delivery.flashfit.online
+#   admin/     -> admin.flashfit.online
+#
+# This file is the fallback for a site created at the repository root with no
+# base directory. It builds the customer app rather than publishing the legacy
+# flashfitshop/ folder, which is a rollback copy and is no longer the source of
+# truth. Required build variables (set per site, never committed):
+#   FLASHFIT_ENV, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, SUPABASE_PROJECT_REF,
+#   FLASHFIT_PRODUCTION_PROJECT_REF, FLASHFIT_STAGING_PROJECT_REF
+
+[build]
+  command = "node scripts/build-app.mjs customer"
+  publish = "customer/dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(self)"
+    X-Frame-Options = "SAMEORIGIN"
