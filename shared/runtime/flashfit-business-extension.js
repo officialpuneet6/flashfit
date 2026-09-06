@@ -14,7 +14,7 @@
     if (db) return db;
     if (window.flashfitDB && window.flashfitDB.getSupabaseClient) db = window.flashfitDB.getSupabaseClient();
     if (!db && window.supabase && typeof window.supabase.from === "function") db = window.supabase;
-    if (!db && window.supabase && typeof window.supabase.createClient === "function" && window.FLASHFIT_NOTIFICATION_CONFIG) {
+    if (!db && window.supabase && typeof window.supabase.createClient === "function" && window.FLASHFIT_NOTIFICATION_CONFIG?.supabaseUrl && window.FLASHFIT_NOTIFICATION_CONFIG?.supabaseKey) {
       db = window.supabase.createClient(
         window.FLASHFIT_NOTIFICATION_CONFIG.supabaseUrl,
         window.FLASHFIT_NOTIFICATION_CONFIG.supabaseKey

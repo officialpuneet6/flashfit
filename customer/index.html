@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -134,45 +134,44 @@
   </div>
 
   <div class="ff-announcement" role="status"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Shop the live catalog available for your delivery area.</div>
-  <header class="navbar" style="display: flex;">
+  <header class="navbar" role="banner">
     <input class="mobile-search-toggle" id="mobileSearchToggle" type="checkbox" aria-hidden="true" />
     <a class="logo" href="index.html" aria-label="FlashFit Home">
-      <img src="50x100logo.png" alt="FlashFit Logo" />
+      <img src="50x100logo.png" alt="FlashFit" />
     </a>
     <div class="header-center">
       <div class="pincode-top-wrap">
-        <button id="pincodeTopBtn" class="pincode-top-btn" type="button" aria-label="Delivery pincode options">
-          <i class="fa-solid fa-location-dot"></i>
+        <button id="pincodeTopBtn" class="pincode-top-btn" type="button" aria-label="Delivery pincode options" aria-haspopup="true" aria-expanded="false">
+          <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
           <span id="currentPincodeText">Set Pincode</span>
+          <i class="fa-solid fa-chevron-down" aria-hidden="true" style="font-size:.7rem;opacity:.6;margin-left:auto"></i>
         </button>
-        <!-- <p id="nearestShopLabel" class="nearest-shop-label">Nearest shop: Detecting...</p> -->
-        <div id="pincodeTopMenu" class="pincode-top-menu">
-          <button id="changePincodeBtn" type="button">Change Pincode</button>
+        <div id="pincodeTopMenu" class="pincode-top-menu" role="menu">
+          <button id="changePincodeBtn" type="button" role="menuitem">
+            <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> Change Pincode
+          </button>
         </div>
       </div>
-      <div class="search-wrap">                                                   
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input id="searchInput" type="text" placeholder="Search kurtis, tops, jeans, sizes, colors..." />
-        <div id="searchSuggest" class="search-suggest"></div>
+      <div class="search-wrap">
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+        <input id="searchInput" type="text" placeholder="Search fashion, sizes, colors..." aria-label="Search products" autocomplete="off" />
+        <div id="searchSuggest" class="search-suggest" role="listbox" aria-label="Search suggestions"></div>
       </div>
     </div>
     <div class="nav-icons">
-      <label for="mobileSearchToggle" id="mobileSearchBtn" class="mobile-search-btn" aria-label="Search">
-        <i class="fa-solid fa-magnifying-glass"></i>
+      <label for="mobileSearchToggle" id="mobileSearchBtn" class="mobile-search-btn nav-action-btn" aria-label="Search" title="Search">
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
       </label>
-      <button id="modeToggleBtn" class="nav-action-btn nav-mode-btn" aria-label="Toggle display mode" type="button">
-        <i class="fa-solid fa-circle-half-stroke"></i>
-        <span class="nav-btn-label">Mode</span>
+      <button id="profileBtn" class="nav-action-btn" aria-label="Account" type="button" title="Account">
+        <i class="fa-solid fa-user" aria-hidden="true"></i>
       </button>
-      <button id="profileBtn" aria-label="Account notice"><i class="fa-solid fa-user"></i></button>
-      <button id="cartBtn" class="nav-action-btn nav-cart-btn" aria-label="Cart">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <span class="nav-btn-label">Cart</span>
-        <span id="cartCount" class="cart-count">0</span>
+      <button id="cartBtn" class="nav-action-btn nav-cart-btn" aria-label="Cart" type="button" title="Cart">
+        <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
+        <span class="nav-btn-label" aria-hidden="true">Cart</span>
+        <span id="cartCount" class="cart-count" aria-label="0 items in cart">0</span>
       </button>
-      <button id="menuBtn" class="nav-action-btn nav-menu-btn" aria-label="Menu">
-        <i class="fa-solid fa-bars"></i>
-        <span class="nav-btn-label">Menu</span>
+      <button id="menuBtn" class="nav-action-btn nav-menu-btn" aria-label="Menu" type="button" title="Menu">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
       </button>
     </div>
   </header>

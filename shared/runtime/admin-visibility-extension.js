@@ -1,6 +1,7 @@
 (function () {
-  const SUPABASE_URL = "https://ydbmdiywsalkkxrqzjtx.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_udYL-2aM5WhzB5tu_gb4sA_RHnQC8Au";
+  var _cfg = window.__FLASHFIT_PUBLIC_CONFIG__ || {};
+  const SUPABASE_URL = _cfg.supabaseUrl || "";
+  const SUPABASE_KEY = _cfg.supabasePublishableKey || "";
   const MONEY = (value) => `Rs ${Math.round(Number(value || 0)).toLocaleString("en-IN")}`;
 
   let db = null;
@@ -14,8 +15,8 @@
     if (db) return db;
     if (window.flashfitDB?.getSupabaseClient) db = window.flashfitDB.getSupabaseClient();
     if (!db && window.supabase?.from) db = window.supabase;
-    if (!db && typeof window.supabase?.createClient === "function") db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    if (!db && window.FLASHFIT_NOTIFICATION_CONFIG && typeof window.supabase?.createClient === "function") {
+    if (!db && SUPABASE_URL && SUPABASE_KEY && typeof window.supabase?.createClient === "function") db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    if (!db && window.FLASHFIT_NOTIFICATION_CONFIG?.supabaseUrl && window.FLASHFIT_NOTIFICATION_CONFIG?.supabaseKey && typeof window.supabase?.createClient === "function") {
       db = window.supabase.createClient(
         window.FLASHFIT_NOTIFICATION_CONFIG.supabaseUrl,
         window.FLASHFIT_NOTIFICATION_CONFIG.supabaseKey
@@ -653,4 +654,3 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
 })();
-

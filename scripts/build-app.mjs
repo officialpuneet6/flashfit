@@ -46,8 +46,8 @@ async function build(app) {
       filter: (source) => !source.endsWith(" copy.js")
     });
   }
-  const publicRuntime = `window.__FLASHFIT_PUBLIC_CONFIG__=${JSON.stringify(config)};Object.freeze(window.__FLASHFIT_PUBLIC_CONFIG__);`;
-  await writeFile(path.join(out, "flashfit-public-config.js"), publicRuntime, "utf8");
+  // Copy shared runtime scripts BEFORE running transformTree so their legacy
+  // URL/key literals get rewritten correctly in the same pass.
   await cp(path.join(root, "shared", "ui-safe", "theme.css"), path.join(out, "flashfit-theme.css"));
   await cp(path.join(root, "shared", "config", "dynamic-platform-ui.js"), path.join(out, "flashfit-dynamic-theme.js"));
   await cp(path.join(root, "shared", "runtime", "flashfit-app-identity.js"), path.join(out, "flashfit-app-identity.js"));
@@ -55,7 +55,14 @@ async function build(app) {
   await cp(path.join(root, "shared", "runtime", "notification-service.js"), path.join(out, "notification-service.js"));
   await cp(path.join(root, "shared", "runtime", "flashfit-business-extension.js"), path.join(out, "flashfit-business-extension.js"));
   await cp(path.join(root, "shared", "runtime", "admin-visibility-extension.js"), path.join(out, "admin-visibility-extension.js"));
+  // transformTree rewrites legacy hard-coded URL/key literals across all JS/HTML
+  // files EXCEPT flashfit-public-config.js, which is written AFTER this pass so
+  // its literal values are never subject to self-referential replacement.
   await transformTree(out, config);
+  // Write flashfit-public-config.js LAST so it always contains the literal
+  // JSON values produced by JSON.stringify — never a circular self-reference.
+  const publicRuntime = `window.__FLASHFIT_PUBLIC_CONFIG__=${JSON.stringify(config)};Object.freeze(window.__FLASHFIT_PUBLIC_CONFIG__);`;
+  await writeFile(path.join(out, "flashfit-public-config.js"), publicRuntime, "utf8");
   console.log(`Built ${app} from its active app root for ${config.environment}.`);
 }
 async function transformTree(dir, config) {

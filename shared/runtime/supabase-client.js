@@ -1,6 +1,16 @@
 (function () {
-  const SUPABASE_URL = "https://ydbmdiywsalkkxrqzjtx.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_udYL-2aM5WhzB5tu_gb4sA_RHnQC8Au";
+  // Read from the canonical public config injected by build-app.mjs as
+  // flashfit-public-config.js (always the first <script> in <head>).
+  // In production builds, this object is always present and frozen.
+  // The empty-string fallbacks below are only reached when running pages
+  // directly from the source tree (no build), which is not a supported
+  // production flow — a console.warn signals this clearly.
+  var _cfg = window.__FLASHFIT_PUBLIC_CONFIG__ || {};
+  if (!_cfg.supabaseUrl) {
+    console.warn("[FlashFit] __FLASHFIT_PUBLIC_CONFIG__ is missing. Ensure flashfit-public-config.js is the first <script> in <head>.");
+  }
+  const SUPABASE_URL = _cfg.supabaseUrl || "";
+  const SUPABASE_PUBLISHABLE_KEY = _cfg.supabasePublishableKey || "";
   const DEVICE_KEY = "flashfitDeviceId";
 
   function makeId() {
@@ -20,6 +30,9 @@
 
   function getClient() {
     if (supabaseClient) return supabaseClient;
+    // A missing build config is an unavailable client, not an SDK exception.
+    // All public API methods already handle this null state safely.
+    if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) return null;
     if (!window.supabase || !window.supabase.createClient) return null;
     supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
     return supabaseClient;

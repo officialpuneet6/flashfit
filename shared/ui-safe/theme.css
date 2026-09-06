@@ -23,11 +23,11 @@
     --ff-success: var(--success);
     --ff-warning: var(--warning);
     --ff-error: var(--error);
-    --ff-radius-sm: var(--ff-radius-sm);
-    --ff-radius: var(--ff-radius);
-    --ff-radius-lg: var(--ff-radius-lg);
-    --ff-shadow: var(--ff-shadow);
-    --ff-shadow-hover: var(--ff-shadow-hover);
+    --ff-radius-sm: 10px;
+    --ff-radius: 16px;
+    --ff-radius-lg: 20px;
+    --ff-shadow: 0 10px 28px rgba(0,0,0,.07);
+    --ff-shadow-hover: 0 14px 32px rgba(0,0,0,.11);
 }
 * { box-sizing:border-box; }
 html { background:var(--page-background); scroll-behavior:smooth; }
