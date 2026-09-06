@@ -61,6 +61,7 @@ let modalInterval = null;
 let hasShownScrollPrompt = false;
 let autoLocationAttempted = false;
 let catalogLocked = false;
+let searchDebounceTimer = null;
 
 const SEARCH_RECOMMENDED = [
   "Women",
@@ -599,7 +600,12 @@ function applyFilters() {
     card.classList.toggle("is-active", isActive);
   });
 
-  emptyState.classList.toggle("show", visibleProducts === 0);
+  if (emptyState) {
+    emptyState.classList.toggle("show", visibleProducts === 0);
+    if (visibleProducts === 0 && searchTerm) {
+      emptyState.textContent = `No products match “${searchTerm}”. Try another search or category.`;
+    }
+  }
 }
 
 async function getInterestKeywords() {
@@ -697,13 +703,13 @@ function showSearchSuggestions() {
   productCards.forEach(card => {
     const title = (card.dataset.title || "").trim();
     const searchable = normalizeSearchText([card.dataset.search, title, card.dataset.category].join(" "));
-    if (searchable.includes(term) && !productList.includes(title)) {
-      productList.push(title);
+    if (searchable.includes(normalizeSearchText(term)) && !productList.some((item) => item.title === title)) {
+      productList.push({ title, id: card.dataset.id || "" });
     }
   });
 
   const finalProducts = productList.slice(0, 5);
-  const combinedList = [...categoryList, ...finalProducts];
+  const combinedList = [...categoryList.map((title) => ({ title, id: "" })), ...finalProducts];
 
   if (!combinedList.length) {
     hideSearchSuggestions();
@@ -711,7 +717,7 @@ function showSearchSuggestions() {
   }
 
   searchSuggest.innerHTML = combinedList
-    .map((item) => `<button type="button" data-value="${item}"><i class="fa-solid fa-magnifying-glass" style="margin-right:8px; opacity:0.6; font-size:0.9em;"></i>${item}</button>`)
+    .map((item) => `<button type="button" data-value="${item.title}" data-product-id="${item.id}"><i class="fa-solid fa-magnifying-glass" style="margin-right:8px; opacity:0.6; font-size:0.9em;"></i>${item.title}</button>`)
     .join("");
   searchSuggest.classList.add("show");
 }
@@ -794,17 +800,8 @@ function applyImageFallbacks(scope = document) {
   });
 }
 
-// 3. Delivery Time Prediction Algorithm
-function calculateDeliveryTime(shopId, distanceKm = 2.5) {
-  // Total Time = Shop Prep Time + Rider Arrival Time + Delivery Distance Time
-  const prepTime = 10;
-  const riderArrival = 8;
-  const travelTime = Math.ceil(distanceKm * 4); // roughly 4 mins per km in city
-  const total = prepTime + riderArrival + travelTime;
-  return { min: total - 3, max: total + 2 };
-}
-
-// 6. User Recommendation Algorithm (Netflix style)
+// Client-side preferences influence display order only; prices and delivery
+// claims remain server-authoritative.
 const INTERESTS_KEY = "flashfitUserInterests";
 function trackProductView(productId, category) {
   if (!category) return;
@@ -829,9 +826,8 @@ function getUserInterestBoost(category) {
 }
 
 function productCardTemplate(row, options = {}) {
-  // 5. Smart Pricing Algorithm (Final Price = Base + Surge)
   const basePrice = Number(row.customer_price || row.price || 0);
-  const customerPrice = Number(row.final_price || basePrice);
+  const customerPrice = basePrice;
   // Only show an MRP when it is actually supplied by the catalog.
   const oldPrice = [row.mrp, row.old_price, row.list_price]
     .map(Number)
@@ -842,8 +838,6 @@ function productCardTemplate(row, options = {}) {
   const fallbackImages = encodeFallbackImages(row);
   const badge = options.badge || "LIVE";
   
-  const timeEst = calculateDeliveryTime(row.shop_id);
-  
   return `
       <article class="product-card" data-id="${row.id}" data-shop-id="${row.shop_id || ""}" data-category="${(row.category || "").toLowerCase()}" data-title="${row.title || ""}" data-price="${customerPrice}" data-image="${imageUrl}" data-search="${productSearchText(row)}">
         <span class="sale-ribbon">${badge}</span>
@@ -851,7 +845,7 @@ function productCardTemplate(row, options = {}) {
         <h4>${row.title || "Untitled Product"}</h4>
         <p class="product-meta">${row.category || "Live catalog item"}</p>
         <p class="price">${oldPrice ? `<span class="old">Rs ${oldPrice}</span>` : ""} <span class="new">Rs ${customerPrice}</span></p>
-        <p class="rating"><i class="fa-solid fa-bolt"></i> Delivery in ${timeEst.min}-${timeEst.max} mins</p>
+        <p class="rating"><i class="fa-solid fa-location-dot"></i> Delivery availability checked by pincode</p>
         <p class="payment-note"><i class="fa-solid fa-money-bill-wave"></i> Payment options available</p>
         <button class="add-cart-btn ${outOfStock ? "login-required" : ""}" type="button" ${outOfStock ? "disabled" : ""}>${outOfStock ? "Out of Stock" : "Add to Cart"}</button>
       </article>
@@ -891,10 +885,6 @@ async function loadLiveProducts() {
     return;
   }
 
-  if (activePincode) {
-    await resolveNearestShop(activePincode);
-  }
-
   let query = client
     .from("shopkeeper_products")
     .select("id,shop_id,title,category,customer_price,shop_price,commission_amount,delivery_fee,image_url,image_url_2,image_url_3,image_url_4,description,color,sizes,fabric,print_pattern,fit_type,sleeve_type,neck_type,occasion,care_instructions,size_chart,stock_qty,status")
@@ -915,34 +905,29 @@ async function loadLiveProducts() {
     }
   }
 
-  const { data } = await query
+  const { data, error } = await query
     .order("created_at", { ascending: false })
     .limit(40);
+  if (error) {
+    console.warn("[FlashFit] Live catalog load failed:", error);
+    renderFeaturedProducts();
+    if (emptyState) emptyState.textContent = "We could not refresh the catalog. Please try again shortly.";
+    return;
+  }
 
   const rows = uniqueProducts(data || []);
   
-  // 4. Product Ranking Algorithm & 5. Smart Pricing & 6. Recommendations
+  // Personalization affects display order only; catalog prices remain real.
   const rankedRows = rows.map(row => {
     let score = 0;
-    // Base ranking on simulated rating and stock urgency
-    const rating = 4.5; 
-    score += (rating * 2);
     if (row.stock_qty > 0 && row.stock_qty < 5) score += 5; // Fast selling urgency
-
-    // User interest boost
     score += getUserInterestBoost(row.category);
-
-    // Smart pricing: high demand -> surge 5%
-    const basePrice = Number(row.customer_price || row.price || 0);
-    const demandMultiplier = (score > 15) ? 1.05 : 1.0; 
-    row.final_price = Math.ceil(basePrice * demandMultiplier);
-
     return { ...row, rankScore: score };
   }).sort((a, b) => b.rankScore - a.rankScore);
 
   const displayRows = rankedRows;
   productsGrid.innerHTML = displayRows.map((row) => productCardTemplate(row, {
-    badge: row.rankScore > 12 ? "TRENDING 🔥" : "LIVE"
+    badge: row.rankScore > 5 ? "TRENDING" : "LIVE"
   })).join("");
   applyImageFallbacks(productsGrid);
   dedupeProductCards(productsGrid);
@@ -1184,8 +1169,11 @@ pincodeInput.addEventListener("keydown", (event) => {
 
 if (searchInput) {
   searchInput.addEventListener("input", () => {
-    showSearchSuggestions();
-    applyFilters();
+    window.clearTimeout(searchDebounceTimer);
+    searchDebounceTimer = window.setTimeout(() => {
+      showSearchSuggestions();
+      applyFilters();
+    }, 120);
   });
   searchInput.addEventListener("focus", showSearchSuggestions);
   searchInput.addEventListener("keydown", (event) => {
@@ -1296,6 +1284,10 @@ if (searchSuggest) {
     const btn = event.target.closest("button[data-value]");
     if (!btn) return;
     searchInput.value = btn.dataset.value;
+    if (btn.dataset.productId) {
+      window.location.href = `product.html?id=${encodeURIComponent(btn.dataset.productId)}`;
+      return;
+    }
     applyFilters();
     hideSearchSuggestions();
     openProductsExperience({ query: searchInput.value.trim(), smooth: true });

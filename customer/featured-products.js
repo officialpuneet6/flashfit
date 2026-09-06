@@ -10,24 +10,18 @@
     if (!client) return;
 
     try {
-      // Fetch gold-badge products first (admin-curated)
-      const { data: goldProducts } = await client
+      // One request supplies both curated and recent fallback products.
+      const { data: latestProducts, error } = await client
         .from("shopkeeper_products")
         .select("id,shop_id,title,category,customer_price,shop_price,commission_amount,delivery_fee,image_url,image_url_2,image_url_3,image_url_4,stock_qty,status,is_gold_badge")
         .eq("status", "approved")
-        .eq("is_gold_badge", true)
         .order("created_at", { ascending: false })
         .limit(20);
 
-      // Fetch latest approved products as additional fallback
-      const { data: latestProducts } = await client
-        .from("shopkeeper_products")
-        .select("id,shop_id,title,category,customer_price,shop_price,commission_amount,delivery_fee,image_url,image_url_2,image_url_3,image_url_4,stock_qty,status,is_gold_badge")
-        .eq("status", "approved")
-        .order("created_at", { ascending: false })
-        .limit(20);
+      if (error) throw error;
 
       // Merge: gold-badge first, then fill with latest (no duplicates)
+      const goldProducts = (latestProducts || []).filter((p) => p.is_gold_badge);
       const goldIds = new Set((goldProducts || []).map((p) => p.id));
       const extras = (latestProducts || []).filter((p) => !goldIds.has(p.id));
       const combined = [...(goldProducts || []), ...extras].slice(0, 30);
