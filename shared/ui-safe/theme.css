@@ -1,14 +1,23 @@
 /* FlashFit presentation system. CSS-only: no data access or business logic. */
 :root {
     /* New brand tokens */
-    --brand-primary: #FF6A00;
-    --brand-secondary: #FF8A2A;
-    --brand-primary-soft: #FFF3E8;
-    --text-main: #111111;
+    --color-primary: #DFF24B;
+    --color-primary-hover: #E4F277;
+    --color-primary-soft: #ECF2BB;
+    --color-surface: #F2F2F2;
+    --color-background: #FFFFFF;
+    --color-text: #0D0D0D;
+    --color-text-secondary: #666666;
+    --color-border: #E0E0E0;
+    --color-white: #FFFFFF;
+    --brand-primary: var(--color-primary);
+    --brand-secondary: var(--color-primary-hover);
+    --brand-primary-soft: var(--color-primary-soft);
+    --text-main: var(--color-text);
     --text-secondary: #666666;
-    --page-background: #FAFAFA;
-    --surface: #FFFFFF;
-    --border: #EAEAEA;
+    --page-background: var(--color-background);
+    --surface: var(--color-surface);
+    --border: var(--color-border);
     --success: #16803C;
     --warning: #D97706;
     --error: #DC2626;
@@ -36,21 +45,21 @@ body.ff-app :focus-visible { outline:2px solid var(--brand-primary); outline-off
 body.ff-app button, body.ff-app a, body.ff-app input, body.ff-app select, body.ff-app textarea { font:inherit; }
 
 /* Safe reusable primitives: adoptable without altering any existing behavior. */
-.ff-button, .ff-btn-primary, body.ff-app .btn.primary, body.ff-app .shop-btn { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; min-height:44px; padding:.7rem 1.25rem; border:1px solid var(--brand-primary); border-radius:var(--ff-radius-sm, 12px); background:var(--brand-primary); color:#FFFFFF; font-weight:700; cursor:pointer; text-decoration:none; transition:transform .18s ease,box-shadow .18s ease,background .18s ease; }
-.ff-button:hover, .ff-btn-primary:hover, body.ff-app .btn.primary:hover, body.ff-app .shop-btn:hover { background:var(--brand-secondary); border-color:var(--brand-secondary); box-shadow:0 6px 18px rgba(255,106,0,.28); transform:translateY(-1px); }
+.ff-button, .ff-btn-primary, body.ff-app .btn.primary, body.ff-app .shop-btn { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; min-height:44px; padding:.7rem 1.25rem; border:1px solid var(--brand-primary); border-radius:var(--ff-radius-sm, 12px); background:var(--brand-primary); color:var(--color-text); font-weight:700; cursor:pointer; text-decoration:none; transition:transform .18s ease,box-shadow .18s ease,background .18s ease; }
+.ff-button:hover, .ff-btn-primary:hover, body.ff-app .btn.primary:hover, body.ff-app .shop-btn:hover { background:var(--brand-secondary); border-color:var(--brand-secondary); box-shadow:0 6px 18px rgba(13,13,13,.14); transform:translateY(-1px); }
 .ff-btn-secondary, body.ff-app .btn.ghost, body.ff-app .hero-secondary-btn { background:#fff; color:var(--text-main); border:1px solid var(--border); font-weight:600; }
 .ff-btn-danger { background:var(--error); border-color:var(--error); color:#fff; }
 .ff-card, body.ff-app .card, body.ff-app .stat-card, body.ff-app .metric-card, body.ff-app .panel, body.ff-app .task-card { border:1px solid var(--border); border-radius:var(--ff-radius, 16px); background:var(--surface); box-shadow:var(--ff-shadow, 0 10px 28px rgba(0,0,0,.07)); }
 .ff-badge, body.ff-app .badge, body.ff-app .pill, body.ff-app .status-badge { display:inline-flex; align-items:center; width:fit-content; max-width:100%; padding:.3rem .65rem; border-radius:999px; font-size:.74rem; font-weight:700; line-height:1.1; }
-.ff-badge--flash { background:var(--brand-primary); color:#FFFFFF; }
-.ff-badge--soft { background:var(--brand-primary-soft); color:var(--brand-primary); }
+.ff-badge--flash { background:var(--brand-primary); color:var(--color-text); }
+.ff-badge--soft { background:var(--brand-primary-soft); color:var(--color-text); }
 .ff-badge--success { background:#dcfce7; color:var(--success); }
 .ff-badge--warning { background:#fef3c7; color:var(--warning); }
 .ff-badge--error { background:#fee2e2; color:var(--error); }
 .ff-input, body.ff-app input:not([type="checkbox"]):not([type="radio"]), body.ff-app select, body.ff-app textarea { border:1px solid var(--border); border-radius:10px; background:#fff; color:var(--text-main); }
 .ff-input:focus, body.ff-app input:focus, body.ff-app select:focus, body.ff-app textarea:focus { border-color:var(--brand-primary)!important; outline:none; }
 .ff-empty, .ff-error, .ff-loading, body.ff-app .empty-orders, body.ff-app .msg { padding:1rem; border:1px dashed var(--border); border-radius:var(--ff-radius, 16px); background:var(--surface); color:var(--text-secondary); }
-.ff-skeleton { min-height:1rem; border-radius:8px; background:linear-gradient(90deg,#f0f0f0 25%,#fafafa 37%,#f0f0f0 63%); background-size:400% 100%; animation:ff-shimmer 1.4s infinite; }
+.ff-skeleton { min-height:1rem; border-radius:8px; background:linear-gradient(90deg,#f0f0f0 25%,#FFFFFF 37%,#f0f0f0 63%); background-size:400% 100%; animation:ff-shimmer 1.4s infinite; }
 @keyframes ff-shimmer { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
 
 /* Customer: commerce hierarchy and mobile-first reachability. */
@@ -64,8 +73,8 @@ body.ff-customer .mobile-bottom-nav { border-top:1px solid var(--border); backgr
 
 /* Shop and delivery: calm operational surfaces. */
 body.ff-shop, body.ff-delivery, body.ff-admin { background:var(--page-background); }
-body.ff-shop .sidebar, body.ff-delivery .sidebar { background:#111111; color:#fff; border-right:0; }
-body.ff-shop .sidebar .tab-btn.active, body.ff-delivery .sidebar .tab-btn.active { background:var(--brand-primary); color:#FFFFFF; border-radius:10px; font-weight:700; }
+body.ff-shop .sidebar, body.ff-delivery .sidebar { background:var(--surface); color:var(--text-main); border-right:1px solid var(--border); }
+body.ff-shop .sidebar .tab-btn.active, body.ff-delivery .sidebar .tab-btn.active { background:var(--brand-primary); color:var(--color-text); border-radius:10px; font-weight:700; }
 body.ff-shop .topbar, body.ff-delivery .topbar { border-bottom:1px solid var(--border); background:rgba(255,255,255,.95); backdrop-filter:blur(12px); }
 body.ff-shop .stats-grid > *, body.ff-delivery .metric-grid > *, body.ff-delivery .settlement-grid > *, body.ff-shop .dashboard-visuals > * { border:1px solid var(--border); border-radius:var(--ff-radius, 16px); box-shadow:0 4px 12px rgba(0,0,0,.04); }
 body.ff-shop table, body.ff-delivery table { border-collapse:separate; border-spacing:0; overflow:hidden; border:1px solid var(--border); border-radius:var(--ff-radius-sm, 12px); }
@@ -73,7 +82,7 @@ body.ff-shop th, body.ff-delivery th { background:var(--brand-primary-soft); col
 
 /* Admin uses Tailwind utilities; these stable overrides retain its scripts. */
 body.ff-admin header { border-bottom:1px solid var(--border); }
-body.ff-admin .admin-tab-btn.bg-brand-500, body.ff-admin .seller-tab-btn.bg-brand-500 { background:var(--brand-primary)!important; color:#FFFFFF!important; border-color:var(--brand-primary)!important; }
+body.ff-admin .admin-tab-btn.bg-brand-500, body.ff-admin .seller-tab-btn.bg-brand-500 { background:var(--brand-primary)!important; color:var(--color-text)!important; border-color:var(--brand-primary)!important; }
 body.ff-admin .bg-white { border-color:var(--border); }
 
 @media (max-width:767px) { body.ff-customer{padding-bottom:82px} body.ff-customer .products-grid{grid-template-columns:repeat(2,minmax(0,1fr))} body.ff-customer .product-card,body.ff-customer .product-item{min-width:0} body.ff-shop .workspace,body.ff-delivery .content-area{padding-inline:12px} body.ff-admin main{padding-inline:1rem!important} body.ff-admin .admin-tab-btn,body.ff-admin .seller-tab-btn{white-space:nowrap} }
@@ -81,7 +90,7 @@ body.ff-admin .bg-white { border-color:var(--border); }
 @media (prefers-reduced-motion:reduce) { *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important} }
 
 /* Phase 4 route-level refinement. */
-.ff-announcement { display:flex; justify-content:center; align-items:center; gap:.5rem; min-height:34px; padding:.45rem 1rem; background:#111111; color:#fff; font-size:.78rem; font-weight:700; text-align:center; }
+.ff-announcement { display:flex; justify-content:center; align-items:center; gap:.5rem; min-height:34px; padding:.45rem 1rem; background:#0D0D0D; color:#fff; font-size:.78rem; font-weight:700; text-align:center; }
 .ff-announcement i { color:var(--brand-primary); }
 .ff-customer-links { display:flex; align-items:center; justify-content:center; gap:1.5rem; min-height:44px; padding:0 .9rem; border-bottom:1px solid var(--border); background:#fff; overflow-x:auto; white-space:nowrap; }
 .ff-customer-links a { color:var(--text-main); font-size:.86rem; font-weight:700; text-decoration:none; }

@@ -598,7 +598,7 @@
         <div style="max-width:520px;text-align:center;border:1px solid #e5e7eb;border-radius:18px;padding:28px;background:#fff;">
           <h1 style="font-size:28px;margin:0 0 10px;color:#111827;">Product unavailable</h1>
           <p style="margin:0 0 18px;color:#64748b;">This product is currently hidden or outside its visibility schedule.</p>
-          <a href="products.html" style="display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 18px;border-radius:999px;background:#ff5a00;color:#fff;font-weight:800;text-decoration:none;">Browse products</a>
+          <a href="products.html" style="display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 18px;border-radius:999px;background:#DFF24B;color:#0D0D0D;font-weight:800;text-decoration:none;">Browse products</a>
         </div>
       </section>
     `;

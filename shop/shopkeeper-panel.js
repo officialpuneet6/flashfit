@@ -2016,7 +2016,7 @@ async function renderEarnings() {
     };
     const statusBadge = `<span class="pill ${statusColors[status] || 'pending'}">${status.replace(/_/g, ' ')}</span>`;
     const paymentBadge_ = isCOD
-      ? `<span style="background:#fff5eb;color:var(--brand);padding:3px 8px;border-radius:99px;font-size:0.75rem;font-weight:700;">COD</span>`
+      ? `<span style="background:#ECF2BB;color:var(--brand);padding:3px 8px;border-radius:99px;font-size:0.75rem;font-weight:700;">COD</span>`
       : `<span style="background:#ecfdf3;color:#027a48;padding:3px 8px;border-radius:99px;font-size:0.75rem;font-weight:700;">Online</span>`;
 
     return [
@@ -2165,13 +2165,13 @@ async function updateEarningsChart() {
         {
           label: 'Earnings (Rs)',
           data: earnings,
-          borderColor: '#ff7a00',
+          borderColor: '#DFF24B',
           backgroundColor: 'rgba(255, 122, 0, 0.1)',
           fill: true,
           tension: 0.4,
           borderWidth: 3,
           pointBackgroundColor: '#fff',
-          pointBorderColor: '#ff7a00',
+          pointBorderColor: '#DFF24B',
           pointBorderWidth: 2,
           yAxisID: 'y'
         },

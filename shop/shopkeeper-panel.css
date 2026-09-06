@@ -1,30 +1,30 @@
 :root {
-  --brand-primary: #FF6A00;
-  --brand-secondary: #FF8A2A;
-  --brand-primary-soft: #FFF3E8;
-  --text-main: #111111;
+  --brand-primary: #DFF24B;
+  --brand-secondary: #E4F277;
+  --brand-primary-soft: #ECF2BB;
+  --text-main: #0D0D0D;
   --text-secondary: #666666;
-  --page-background: #FAFAFA;
+  --page-background: #FFFFFF;
   --surface: #FFFFFF;
-  --border: #EAEAEA;
+  --border: #E0E0E0;
   --success: #16803C;
   --warning: #D97706;
   --error: #DC2626;
 
   /* Mapped aliases */
-  --brand: var(--brand-primary, #FF6A00);
-  --brand-light: var(--brand-primary-soft, #FFF3E8);
-  --brand-dark: var(--brand-secondary, #FF8A2A);
-  --ink: var(--text-main, #111111);
+  --brand: var(--brand-primary, #DFF24B);
+  --brand-light: var(--brand-primary-soft, #ECF2BB);
+  --brand-dark: var(--brand-secondary, #E4F277);
+  --ink: var(--text-main, #0D0D0D);
   --ink-light: #222222;
   --muted: var(--text-secondary, #666666);
   --muted-light: #888888;
-  --line: var(--border, #EAEAEA);
+  --line: var(--border, #E0E0E0);
   --card: var(--surface, #FFFFFF);
-  --bg: var(--page-background, #FAFAFA);
-  --sidebar: #111111;
+  --bg: var(--page-background, #FFFFFF);
+  --sidebar: #0D0D0D;
   --sidebar-hover: #1f1f1f;
-  --sidebar-active: var(--brand-primary, #FF6A00);
+  --sidebar-active: var(--brand-primary, #DFF24B);
   --sidebar-text: #999999;
   --sidebar-text-active: #ffffff;
   --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
@@ -62,7 +62,7 @@ body {
   flex: 1;
   display: grid;
   place-items: center;
-  background: radial-gradient(circle at top right, #fff5eb, transparent),
+  background: radial-gradient(circle at top right, #ECF2BB, transparent),
               radial-gradient(circle at bottom left, #f0f9ff, transparent);
   padding: 24px;
 }
@@ -703,7 +703,7 @@ input:focus, select:focus, textarea:focus {
   border-radius: 12px;
   display: grid;
   place-items: center;
-  background: #fff5eb;
+  background: #ECF2BB;
   color: var(--brand);
   font-size: 1.2rem;
 }
@@ -1400,9 +1400,9 @@ textarea.full {
   }
 
   .tab-btn.active {
-    background: #fff1e6;
+    background: #ECF2BB;
     color: var(--brand-dark);
-    box-shadow: inset 0 0 0 1px #fed7aa;
+    box-shadow: inset 0 0 0 1px #ECF2BB;
   }
 
   .tab-btn.active i {
@@ -1597,8 +1597,8 @@ textarea.full {
   }
 
   .order-tab.active {
-    border-color: #fed7aa;
-    background: #fff1e6;
+    border-color: #ECF2BB;
+    background: #ECF2BB;
   }
 
   .order-tab.active::after {

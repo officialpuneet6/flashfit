@@ -511,7 +511,7 @@
     style.id = "flashfit-notification-styles";
     style.textContent = `
       .ff-notify-launcher{position:fixed;right:18px;bottom:90px;z-index:9999;width:52px;height:52px;border:0;border-radius:18px;background:#111827;color:#fff;box-shadow:0 18px 45px rgba(15,23,42,.28);display:flex;align-items:center;justify-content:center;cursor:pointer}
-      .ff-notify-launcher span{position:absolute;right:-5px;top:-5px;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:#ff5a00;color:#fff;font:800 12px/22px Arial;text-align:center}
+      .ff-notify-launcher span{position:absolute;right:-5px;top:-5px;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:#DFF24B;color:#0D0D0D;font:800 12px/22px Arial;text-align:center}
       .ff-notify-panel{position:fixed;right:18px;bottom:152px;z-index:9999;width:min(380px,calc(100vw - 28px));max-height:min(620px,calc(100vh - 180px));background:#fff;color:#101827;border:1px solid #e5e7eb;border-radius:18px;box-shadow:0 26px 70px rgba(15,23,42,.25);overflow:hidden;display:none}
       .ff-notify-panel.open{display:flex;flex-direction:column}
       .ff-notify-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border-bottom:1px solid #edf0f5}
