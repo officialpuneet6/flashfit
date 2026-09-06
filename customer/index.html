@@ -176,11 +176,14 @@
     </div>
   </header>
 
-  <nav class="ff-customer-links" aria-label="Customer navigation">
-    <a href="categories.html">Categories</a>
-    <a href="products.html">Shop all</a>
-    <a href="my-orders.html">Orders</a>
-    <a href="contact-us.html">Help</a>
+  <nav class="customer-nav" aria-label="Shop departments">
+    <a class="customer-nav__all" href="categories.html"><i class="fa-solid fa-grid-2" aria-hidden="true"></i> Categories</a>
+    <a href="products.html?filter=men">Men</a>
+    <a href="products.html?filter=women">Women</a>
+    <a href="products.html?filter=kids">Kids</a>
+    <a href="products.html?filter=new-arrivals">New arrivals</a>
+    <a href="products.html?filter=under-499">Top deals</a>
+    <a class="customer-nav__help" href="contact-us.html">Help</a>
   </nav>
 
   <section id="quickPanel" class="quick-panel" aria-live="polite">
@@ -188,7 +191,7 @@
     <div id="quickPanelBody" class="quick-panel-body"></div>
   </section>
 
-  <main class="meesho-homepage">
+  <main class="customer-homepage">
     <!-- <section class="launch-strip" aria-label="FlashFit shopping highlights">
       <div class="launch-strip-track">
         <span><i class="fa-solid fa-gift"></i> New user style deals</span>
@@ -197,13 +200,13 @@
       </div>
     </section> -->
 
-    <section id="homeSection" class="hero meesho-hero hero-banner-shell" style="--hero-banner-height: min(76vh, 720px);"
+    <section id="homeSection" class="hero customer-hero hero-banner-shell" style="--hero-banner-height: min(76vh, 720px);"
       data-site-setting="hero_banner_height" data-setting-mode="style-var" data-setting-target="--hero-banner-height">
       <img class="hero-banner-media" src="ban.png" alt="FlashFit" />
       <div class="ff-hero-copy">
-        <span class="ff-badge ff-badge--flash"><i class="fa-solid fa-bolt" aria-hidden="true"></i>&nbsp; FLASHFIT</span>
-        <h1>Everything You Need.<br><span>Delivered Fast.</span></h1>
-        <p>Fashion, beauty, electronics, home and daily essentials from the live catalog.</p>
+        <span class="ff-badge ff-badge--flash"><i class="fa-solid fa-bolt" aria-hidden="true"></i>&nbsp; Local stock, delivered fast</span>
+        <h1>Everything you need.<br><span>Delivered fast.</span></h1>
+        <p>Fashion, beauty, electronics, home and everyday essentials from local stock.</p>
         <div class="ff-hero-actions">
           <button id="shopNowBtn" class="shop-btn" type="button">Shop now</button>
           <a class="ff-btn-secondary" href="categories.html">Explore categories</a>
@@ -225,7 +228,7 @@
           <h1 data-site-setting="hero_title" data-setting-mode="html">Best deals on <span>trending fashion</span> with
             <span>45-50 min delivery</span>
           </h1>
-          <p class="hero-subtext" data-site-setting="hero_subtext">Meesho-style shopping flow: discover categories
+          <p class="hero-subtext" data-site-setting="hero_subtext">ff-market-style shopping flow: discover categories
             quickly, see visible price value, and shop live local stock only where delivery is active.</p>
 
           <div class="hero-actions">
@@ -259,7 +262,7 @@
 
         <aside class="hero-banner-card">
           <div class="hero-card-topline">
-            <span class="meesho-badge" data-site-setting="hero_banner_badge">FLASH OFFER</span>
+            <span class="ff-market-badge" data-site-setting="hero_banner_badge">FLASH OFFER</span>
             <span class="hero-card-live-pill"><i class="fa-solid fa-circle"></i> Live trend radar</span>
           </div>
           <h2 data-site-setting="hero_banner_title">Fresh fashion picks every day</h2>
@@ -275,7 +278,7 @@
               <strong>Easy kurtis, tops, denim sets</strong>
             </div>
           </div>
-          <div class="meesho-banner-pills">
+          <div class="ff-market-banner-pills">
             <span data-site-setting="hero_banner_chip_one">Free style inspo</span>
             <span data-site-setting="hero_banner_chip_two">Fastest local picks</span>
             <span>New drops every evening</span>
@@ -286,7 +289,7 @@
 
     <section id="serviceStatusBanner" class="service-status-banner" aria-live="polite"></section>
 
-    <section class="category-strip meesho-filter-strip" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; ">
+    <section class="category-strip customer-category-rail" aria-label="Browse categories">
       <button class="filter-btn active" data-filter="all"><i class="fa-solid fa-bag-shopping"></i> All</button>
       <button class="filter-btn" data-filter="women"><i class="fa-solid fa-venus"></i> Women</button>
       <button class="filter-btn" data-filter="men"><i class="fa-solid fa-mars"></i> Men</button>
@@ -301,66 +304,64 @@
       <button class="filter-btn" data-filter="under-499"><i class="fa-solid fa-indian-rupee-sign"></i> Under Rs 499</button>
     </section>
 
-    <section class="best-sellers meesho-products" id="bestSellersSection">
+    <section class="best-sellers customer-products" id="bestSellersSection">
       <div class="section-head">
         <div>
           <p class="section-label">Live catalog</p>
-          <h3>Nearby picks, ready to discover</h3>
+          <h3>Trending now</h3>
           <p id="recommendationNote" class="recommendation-note">Set your pincode to view products available for delivery.</p>
         </div>
       </div>
       <div class="products-grid"></div>
       <p id="emptyState" class="empty-state show">No products available right now.</p>
     </section>
-<hr style="border: none; border-top: 1px solid #e5884e; margin: 40px auto; width: 75%;" />
-
-    <section class="browse-rail meesho-benefits" aria-label="Why shop from FlashFit">
+    <section class="browse-rail customer-benefits" aria-label="Why shop from FlashFit">
       <article class="browse-card">
         <div class="browse-icon"><i class="fa-solid fa-bolt"></i></div>
         <div>
-          <strong>Fast local dispatch</strong>
-          <span>Products stay tied to active serviceable areas.</span>
+          <strong>Fast delivery</strong>
+          <span>Live products matched to your delivery area.</span>
         </div>
       </article>
       <article class="browse-card">
         <div class="browse-icon"><i class="fa-solid fa-percent"></i></div>
         <div>
-          <strong>Budget-led discovery</strong>
-          <span>Under-Rs-499 and trend-first browsing remains easy.</span>
+          <strong>Quality assured</strong>
+          <span>Clear product and pricing details before checkout.</span>
         </div>
       </article>
       <article class="browse-card">
         <div class="browse-icon"><i class="fa-solid fa-lock"></i></div>
         <div>
-          <strong>Checkout clarity</strong>
-          <span>Pricing, payment, returns and support flow are visible.</span>
+          <strong>Secure shopping</strong>
+          <span>Safe checkout, payment and support when you need it.</span>
         </div>
       </article>
     </section>
 
-    <section class="social-proof meesho-proof" aria-label="Marketplace trust">
+    <section class="social-proof customer-proof" aria-label="Shopping benefits">
       <div class="section-head">
         <div>
-          <p class="section-label">Why this layout works</p>
-          <h3>Shopping-first homepage, not brochure-first homepage</h3>
+          <p class="section-label">Shop with confidence</p>
+          <h3>Clear choices. Local availability.</h3>
   
         </div>
       </div>
       <div class="proof-grid">
         <article class="proof-card">
-          <div class="proof-stars" aria-hidden="true">?????</div>
-          <p>Category-led shopping reduces confusion for users who already know what they want.</p>
-          <strong>Faster product discovery</strong>
+          <div class="proof-stars" aria-hidden="true"><i class="fa-solid fa-bolt"></i></div>
+          <p>Browse the categories you need, then see available products quickly.</p>
+          <strong>Easy discovery</strong>
         </article>
         <article class="proof-card">
-          <div class="proof-stars" aria-hidden="true">?????</div>
-          <p>Visible product pricing and denser product cards make the homepage feel more like a marketplace.</p>
-          <strong>Stronger shopping intent</strong>
+          <div class="proof-stars" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></div>
+          <p>Your pincode keeps delivery availability clear as you shop.</p>
+          <strong>Local stock</strong>
         </article>
         <article class="proof-card proof-card-accent">
-          <span class="proof-badge">Built for conversion</span>
-          <h4>Deals, categories, then products.</h4>
-          <p>This sequence matches what most value-driven shoppers expect from a marketplace layout.</p>
+          <span class="proof-badge">Ready when you are</span>
+          <h4>Set your pincode to shop.</h4>
+          <p>We will show products available for your delivery area.</p>
           <a href="products.html">Explore products</a>
         </article>
       </div>

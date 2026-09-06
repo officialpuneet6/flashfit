@@ -466,9 +466,9 @@ body.theme-night .pincode-top-btn {
 }
 
 /* ==========================================================================
-   5. MEESHO INFRASTRUCTURE BODY AND HIGH-END COMPONENT DESIGN CANVAS
+   5. ff-market INFRASTRUCTURE BODY AND HIGH-END COMPONENT DESIGN CANVAS
    ========================================================================== */
-.meesho-homepage {
+.ff-market-homepage {
   max-width: var(--page-width);
   margin: 0 auto;
   padding: 24px var(--page-gutter) 64px;
@@ -656,7 +656,7 @@ body.theme-night .pincode-top-btn {
   margin-bottom: 18px;
 }
 
-.meesho-badge {
+.ff-market-badge {
   background: #ef4444;
   padding: 4px 12px;
   border-radius: 6px;
@@ -688,8 +688,8 @@ body.theme-night .pincode-top-btn {
 }
 .hero-style-band span { color: #ff9b37; font-weight: 700; }
 
-.meesho-banner-pills { display: flex; flex-wrap: wrap; gap: 8px; }
-.meesho-banner-pills span {
+.ff-market-banner-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.ff-market-banner-pills span {
   background: rgba(255,255,255,0.08);
   font-size: 0.78rem;
   padding: 6px 12px;
@@ -700,7 +700,7 @@ body.theme-night .pincode-top-btn {
 /* ==========================================================================
    6. HORIZONTAL FILTERS SECTOR & MICROPRODUCT SYSTEM DOCKS
    ========================================================================== */
-.meesho-filter-strip {
+.ff-market-filter-strip {
   display: flex;
   overflow-x: auto;
   gap: 14px;
@@ -708,7 +708,7 @@ body.theme-night .pincode-top-btn {
   margin: 36px 0 20px;
   scrollbar-width: none;
 }
-.meesho-filter-strip::-webkit-scrollbar { display: none; }
+.ff-market-filter-strip::-webkit-scrollbar { display: none; }
 
 .filter-btn {
   white-space: nowrap;
@@ -754,7 +754,7 @@ body.theme-night .pincode-top-btn {
   gap: 24px;
 }
 
-.meesho-products .product-card {
+.ff-market-products .product-card {
   background: var(--card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
@@ -767,14 +767,14 @@ body.theme-night .pincode-top-btn {
   transition: var(--transition);
 }
 
-.meesho-products .product-card:hover {
+.ff-market-products .product-card:hover {
   transform: translateY(-8px);
   box-shadow: var(--shadow-md);
   border-color: var(--brand);
 }
 
 /* Image Core Layout Frame Scaling Rules */
-.meesho-products .product-card img {
+.ff-market-products .product-card img {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
@@ -784,11 +784,11 @@ body.theme-night .pincode-top-btn {
   transition: var(--transition);
 }
 
-.meesho-products .product-card:hover img {
+.ff-market-products .product-card:hover img {
   transform: scale(1.04);
 }
 
-.meesho-products .product-title {
+.ff-market-products .product-title {
   font-size: 0.98rem;
   font-weight: 600;
   color: var(--text);
@@ -801,7 +801,7 @@ body.theme-night .pincode-top-btn {
   min-height: 2.8rem;
 }
 
-.meesho-products .price-block {
+.ff-market-products .price-block {
   display: flex;
   align-items: baseline;
   gap: 8px;
@@ -809,20 +809,20 @@ body.theme-night .pincode-top-btn {
   padding-bottom: 36px; /* Space allowance allocated for the dynamic bottom action bar button */
 }
 
-.meesho-products .promo-price {
+.ff-market-products .promo-price {
   font-size: 1.3rem;
   font-weight: 800;
   color: var(--text);
 }
 
-.meesho-products .old-price {
+.ff-market-products .old-price {
   font-size: 0.9rem;
   color: var(--text-muted);
   text-decoration: line-through;
 }
 
 /* High-Converting Zepto style full width inline action cards overlay triggers */
-.meesho-products .product-card::after {
+.ff-market-products .product-card::after {
   content: 'ADD TO CART +';
   position: absolute;
   bottom: 14px;
@@ -841,12 +841,12 @@ body.theme-night .pincode-top-btn {
   transition: var(--transition);
 }
 
-body.theme-night .meesho-products .product-card::after {
+body.theme-night .ff-market-products .product-card::after {
   background: rgba(255, 122, 0, 0.15);
   color: #ffa457;
 }
 
-.meesho-products .product-card:hover::after {
+.ff-market-products .product-card:hover::after {
   background: var(--brand-gradient);
   color: #fff;
   border-color: transparent;
@@ -866,7 +866,7 @@ body.theme-night .meesho-products .product-card::after {
 /* ==========================================================================
    7. TRUSTPROOF VECTORS & FOOTER REFACTOR SHEETS
    ========================================================================== */
-.meesho-benefits {
+.ff-market-benefits {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 24px;

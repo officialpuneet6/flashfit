@@ -832,7 +832,10 @@ function productCardTemplate(row, options = {}) {
   // 5. Smart Pricing Algorithm (Final Price = Base + Surge)
   const basePrice = Number(row.customer_price || row.price || 0);
   const customerPrice = Number(row.final_price || basePrice);
-  const oldPrice = Number(row.oldPrice || Math.max(customerPrice + 200, customerPrice));
+  // Only show an MRP when it is actually supplied by the catalog.
+  const oldPrice = [row.mrp, row.old_price, row.list_price]
+    .map(Number)
+    .find((value) => Number.isFinite(value) && value > customerPrice);
   const stockQty = row.stock_qty === undefined || row.stock_qty === null ? 1 : Number(row.stock_qty);
   const outOfStock = stockQty <= 0;
   const imageUrl = row.image_url || row.image || "";
@@ -846,7 +849,8 @@ function productCardTemplate(row, options = {}) {
         <span class="sale-ribbon">${badge}</span>
         <img src="${imageUrl}" alt="${row.title || "Product"}" loading="lazy" decoding="async" data-fallback-images="${fallbackImages}" />
         <h4>${row.title || "Untitled Product"}</h4>
-        <p class="price"><span class="old">Rs ${oldPrice}</span> <span class="new">Rs ${customerPrice}</span></p>
+        <p class="product-meta">${row.category || "Live catalog item"}</p>
+        <p class="price">${oldPrice ? `<span class="old">Rs ${oldPrice}</span>` : ""} <span class="new">Rs ${customerPrice}</span></p>
         <p class="rating"><i class="fa-solid fa-bolt"></i> Delivery in ${timeEst.min}-${timeEst.max} mins</p>
         <p class="payment-note"><i class="fa-solid fa-money-bill-wave"></i> Payment options available</p>
         <button class="add-cart-btn ${outOfStock ? "login-required" : ""}" type="button" ${outOfStock ? "disabled" : ""}>${outOfStock ? "Out of Stock" : "Add to Cart"}</button>
